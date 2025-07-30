@@ -19,7 +19,6 @@ const platformSchema = new Schema<IPlatform>(
   {
     uuid: {
       type: String,
-      unique: true,
       default: uuidV4,
     },
     name: {
@@ -66,7 +65,6 @@ const platformSchema = new Schema<IPlatform>(
 
 // 索引
 platformSchema.index({ uuid: 1 }, { unique: true });
-platformSchema.index({ code: 1 }, { unique: true });
 platformSchema.index({ status: 1 });
 platformSchema.index({ createdAt: -1 });
 

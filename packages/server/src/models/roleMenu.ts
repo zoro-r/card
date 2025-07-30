@@ -17,7 +17,6 @@ const roleMenuSchema = new Schema<IRoleMenu>(
   {
     uuid: {
       type: String,
-      unique: true,
       default: uuidV4,
     },
     roleId: {

@@ -18,7 +18,6 @@ const roleSchema = new Schema<IRole>(
   {
     uuid: {
       type: String,
-      unique: true,
       default: uuidV4,
     },
     name: {
@@ -57,7 +56,7 @@ const roleSchema = new Schema<IRole>(
 );
 
 roleSchema.index({ uuid: 1 }, { unique: true });
-roleSchema.index({ code: 1 }, { unique: true });
+
 roleSchema.index({ platformId: 1 });
 
 export const Role = mongoose.model<IRole>('Role', roleSchema);

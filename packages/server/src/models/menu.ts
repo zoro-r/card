@@ -23,7 +23,6 @@ const menuSchema = new Schema<IMenu>(
   {
     uuid: {
       type: String,
-      unique: true,
       default: uuidV4,
     },
     name: {

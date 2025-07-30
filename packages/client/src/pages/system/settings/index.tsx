@@ -115,7 +115,7 @@ const SystemSettings: React.FC = () => {
   const loadConfig = async () => {
     setLoading(true);
     try {
-      const response = await request('/api/config/wechat', {
+      const response = await request('/api/wechat', {
         method: 'GET',
       });
       
@@ -262,7 +262,7 @@ const SystemSettings: React.FC = () => {
     setTestLoading(type);
     
     try {
-      await request('/api/config/wechat/test', {
+      await request('/api/wechat/test', {
         method: 'POST',
         data: {
           type,
@@ -1014,7 +1014,7 @@ const SystemSettings: React.FC = () => {
   );
 
   return (
-    <div style={{ padding: '24px', background: '#f5f5f5', minHeight: '100vh' }}>
+    <div style={{ background: '#f5f5f5', minHeight: '100vh' }}>
       <Card>
         <div style={{ marginBottom: 24 }}>
           <Title level={2}>

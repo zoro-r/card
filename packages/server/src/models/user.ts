@@ -29,13 +29,11 @@ const adminUserSchema = new Schema<IAdminUser>(
   {
     uuid: {
       type: String,
-      unique: true,
       default: uuidV4,
     },
     loginName: {
       type: String,
       required: true,
-      unique: true,
     },
     nickname: {
       type: String,
@@ -109,8 +107,8 @@ const adminUserSchema = new Schema<IAdminUser>(
 );
 
 adminUserSchema.index({ uuid: 1 }, { unique: true });
-adminUserSchema.index({ email: 1 }, { unique: true, sparse: true });
-adminUserSchema.index({ phone: 1 }, { unique: true, sparse: true });
+
+
 adminUserSchema.index({ platformId: 1 });
 adminUserSchema.index({ roleIds: 1 });
 

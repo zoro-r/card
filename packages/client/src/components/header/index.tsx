@@ -85,7 +85,7 @@ function UserDropdown() {
 
   // 系统设置
   const handleSettings = () => {
-    navigate('/settings');
+    navigate('/system/settings');
   };
 
   const menuItems = [
