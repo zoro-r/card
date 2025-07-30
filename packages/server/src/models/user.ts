@@ -16,6 +16,7 @@ export interface IAdminUser extends Document {
   remark?: string;
   status: 'active' | 'disabled' | 'pending' | 'banned';
   password?: string;
+  isFirstLogin: boolean; // 是否为首次登录
   lastLoginAt?: Date;
   lastLoginIp?: string;
   createdBy: string;
@@ -82,6 +83,10 @@ const adminUserSchema = new Schema<IAdminUser>(
     password: {
       type: String,
       required: true,
+    },
+    isFirstLogin: {
+      type: Boolean,
+      default: true,
     },
     lastLoginAt: {
       type: Date,

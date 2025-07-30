@@ -276,6 +276,7 @@ async function initData() {
           remark: userData.remark,
           platformId,
           status: 'active',
+          isFirstLogin: true, // 显式设置为首次登录
           createdBy: 'system',
           updatedBy: 'system'
         });

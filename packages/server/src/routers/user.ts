@@ -10,7 +10,8 @@ import {
   updateUserRolesAPI,
   resetUserPasswordAPI,
   changePasswordAPI,
-  updateProfileAPI
+  updateProfileAPI,
+  firstTimeChangePasswordAPI
 } from '@/controller/user';
 
 export default function userRouter(router: Router) {
@@ -35,6 +36,9 @@ export default function userRouter(router: Router) {
   
   // 用户修改自己的密码接口
   router.post('/api/user/change-password', changePasswordAPI);
+  
+  // 首次修改密码接口
+  router.post('/api/user/first-time-change-password', firstTimeChangePasswordAPI);
   
   // 用户更新自己的个人信息接口
   router.put('/api/user/profile', updateProfileAPI);

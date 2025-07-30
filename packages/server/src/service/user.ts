@@ -79,6 +79,7 @@ export async function login(loginName: string, password: string, platformId: str
     phone: user.phone,
     avatar: user.avatar,
     platformId: user.platformId,
+    isFirstLogin: user.isFirstLogin, // 添加首次登录标识
     roles,
     permissions,
     menus
@@ -515,6 +516,42 @@ export async function updateUserProfile(uuid: string, profileData: Partial<IAdmi
   const updatedUser = await AdminUser.findOneAndUpdate(
     query,
     filteredData,
+    { new: true }
+  ).select('-password');
+
+  if (!updatedUser) {
+    throw new Error('用户不存在');
+  }
+
+  return updatedUser;
+}
+
+// 首次修改密码（无需验证旧密码）
+export async function firstTimeChangePassword(uuid: string, newPassword: string, platformId?: string) {
+  const query: any = { uuid };
+  if (platformId) {
+    query.platformId = platformId;
+  }
+  
+  const user = await AdminUser.findOne(query);
+  if (!user) {
+    throw new Error('用户不存在');
+  }
+  
+  if (!user.isFirstLogin) {
+    throw new Error('用户已完成首次密码修改');
+  }
+
+  const hashedPassword = hashPassword(newPassword);
+  
+  const updatedUser = await AdminUser.findOneAndUpdate(
+    query,
+    { 
+      password: hashedPassword,
+      isFirstLogin: false, // 标记为非首次登录
+      updatedAt: new Date(),
+      updatedBy: uuid
+    },
     { new: true }
   ).select('-password');
 

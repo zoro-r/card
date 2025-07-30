@@ -18,7 +18,8 @@ import {
   updateUserRoles,
   resetUserPassword,
   changeUserPassword,
-  updateUserProfile
+  updateUserProfile,
+  firstTimeChangePassword
 } from '@/service/user';
 
 // 用户登录
@@ -395,6 +396,44 @@ export async function updateProfileAPI(ctx: Context) {
     const updatedUser = await updateUserProfile(decoded.uuid, profileData, decoded.platformId);
     
     ctx.body = success(updatedUser, '个人信息更新成功');
+  } catch (err: any) {
+    ctx.body = fail(err.message);
+  }
+}
+
+// 首次修改密码
+export async function firstTimeChangePasswordAPI(ctx: Context) {
+  try {
+    const token = ctx.headers.authorization?.replace('Bearer ', '');
+    
+    if (!token) {
+      ctx.status = 401;
+      ctx.body = fail('未提供认证令牌');
+      return;
+    }
+
+    const decoded = verifyToken(token);
+    if (!decoded) {
+      ctx.status = 401;
+      ctx.body = fail('认证令牌无效');
+      return;
+    }
+
+    const { newPassword } = ctx.request.body as any;
+    
+    if (!newPassword) {
+      ctx.body = fail('新密码不能为空');
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      ctx.body = fail('密码长度不能少于6位');
+      return;
+    }
+
+    await firstTimeChangePassword(decoded.uuid, newPassword, decoded.platformId);
+    
+    ctx.body = success(null, '密码修改成功');
   } catch (err: any) {
     ctx.body = fail(err.message);
   }
