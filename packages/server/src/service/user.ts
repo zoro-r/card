@@ -145,15 +145,55 @@ export async function getUserMenus(userUuid: string, platformId: string) {
     return [];
   }
 
-  // 获取菜单
-  const menus = await Menu.find({
+  // 获取有权限的菜单
+  const authorizedMenus = await Menu.find({
     uuid: { $in: menuIds },
     platformId,
     status: 'active'
-  }).sort({ sort: 1 });
+  });
 
+  // 获取所有父级菜单ID
+  const parentMenuIds = new Set<string>();
+  const getAllParentIds = async (menus: any[]) => {
+    for (const menu of menus) {
+      if (menu.parentId) {
+        parentMenuIds.add(menu.parentId);
+        // 递归获取父级的父级
+        const parentMenu = await Menu.findOne({
+          uuid: menu.parentId,
+          platformId,
+          status: 'active'
+        });
+        if (parentMenu) {
+          await getAllParentIds([parentMenu]);
+        }
+      }
+    }
+  };
+
+  await getAllParentIds(authorizedMenus);
+
+  // 获取所有父级菜单
+  const parentMenus = parentMenuIds.size > 0 ? 
+    await Menu.find({
+      uuid: { $in: Array.from(parentMenuIds) },
+      platformId,
+      status: 'active'
+    }) : [];
+
+  // 合并有权限的菜单和父级菜单
+  const allMenus = [...authorizedMenus, ...parentMenus];
+  
+  // 去重（基于uuid）
+  const uniqueMenus = allMenus.filter((menu, index, self) => 
+    index === self.findIndex(m => m.uuid === menu.uuid)
+  );
+
+  // 排序并构建菜单树
+  uniqueMenus.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+  
   // 构建菜单树
-  return buildMenuTree(menus);
+  return buildMenuTree(uniqueMenus);
 }
 
 // 构建菜单树
