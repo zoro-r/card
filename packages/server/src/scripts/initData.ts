@@ -106,6 +106,16 @@ async function initData() {
         sort: 3,
         permission: 'menu:manage',
         parentKey: 'system'
+      },
+      {
+        name: '配置管理',
+        path: '/system/config',
+        component: './pages/system/config',
+        icon: 'ControlOutlined',
+        type: 'menu',
+        sort: 4,
+        permission: 'config:manage',
+        parentKey: 'system'
       }
     ];
     
@@ -114,7 +124,8 @@ async function initData() {
       'system': '系统管理',
       'user': '用户管理',
       'role': '角色管理',
-      'menu': '菜单管理'
+      'menu': '菜单管理',
+      'config': '配置管理'
     };
     
     // 先创建一级菜单
@@ -185,7 +196,8 @@ async function initData() {
         createdMenus['系统管理']?.uuid,
         createdMenus['用户管理']?.uuid,
         createdMenus['角色管理']?.uuid,
-        createdMenus['菜单管理']?.uuid
+        createdMenus['菜单管理']?.uuid,
+        createdMenus['配置管理']?.uuid
       ].filter(Boolean),
       'user': [ // 普通用户只有基本菜单
         createdMenus['仪表盘']?.uuid
@@ -302,6 +314,7 @@ async function initData() {
     console.log('  - 用户管理');
     console.log('  - 角色管理');
     console.log('  - 菜单管理');
+    console.log('  - 配置管理');
     console.log('\n权限通过角色菜单关系表管理');
     
   } catch (error) {

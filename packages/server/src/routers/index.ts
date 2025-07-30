@@ -2,6 +2,7 @@ import Router from '@koa/router';
 import userRouter from './user';
 import roleRouter from './role';
 import menuRouter from './menu';
+import { configRouter, publicRouter } from './config';
 
 export function initRouter(app: any) {
   const router = new Router();
@@ -10,6 +11,14 @@ export function initRouter(app: any) {
   userRouter(router);
   roleRouter(router);
   menuRouter(router);
+
+  // 注册配置路由
+  app.use(configRouter.routes());
+  app.use(configRouter.allowedMethods());
+  
+  // 注册公开配置路由
+  app.use(publicRouter.routes());
+  app.use(publicRouter.allowedMethods());
 
   app.use(router.routes());
   app.use(router.allowedMethods());
