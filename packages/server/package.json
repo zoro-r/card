@@ -1,0 +1,44 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Koa TypeScript Project",
+  "main": "dist/app.js",
+  "scripts": {
+    "start": "ts-node -r tsconfig-paths/register src/app.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register --respawn src/app.ts",
+    "build": "tsc",
+    "serve": "node dist/app.js",
+    "init-data": "ts-node -r tsconfig-paths/register src/scripts/initData.ts",
+    "reset-admin": "ts-node -r tsconfig-paths/register src/scripts/resetAdmin.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-node-dev": "^2.0.0"
+  },
+  "dependencies": {
+    "@koa/cors": "^5.0.0",
+    "@koa/router": "^13.1.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/koa": "^2.15.0",
+    "@types/koa-bodyparser": "^4.3.12",
+    "@types/koa-logger": "^3.1.5",
+    "@types/koa__cors": "^5.0.0",
+    "@types/koa__router": "^12.0.4",
+    "@types/mongoose": "^5.11.97",
+    "axios": "^1.10.0",
+    "dotenv": "^16.5.0",
+    "iconv-lite": "^0.6.3",
+    "jsonwebtoken": "^9.0.2",
+    "koa": "^3.0.0",
+    "koa-bodyparser": "^4.4.1",
+    "koa-logger": "^3.2.1",
+    "mongoose": "^8.14.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.8.3",
+    "uuid": "^11.1.0"
+  },
+  "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977"
+}

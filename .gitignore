@@ -1,0 +1,64 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+dist/
+build/
+.temp/
+.cache/
+.umirc.local.js
+.umirc.ts.local
+
+# UmiJS 缓存与构建产物
+.umi/
+.umi-production/
+.umi-test/
+.umi3/
+.mock/.cache/
+mock/.cache/
+
+# log
+logs/
+*.log
+*.log.*
+
+# 环境变量
+.env
+.env.*
+.env.local
+.env.development.local
+.env.production.local
+
+# 操作系统相关
+.DS_Store
+Thumbs.db
+
+# VSCode 编辑器配置
+.vscode/
+.idea/
+
+# TypeScript 编译产物
+*.tsbuildinfo
+
+# MongoDB 数据（如果用的是本地运行的 Mongo 容器）
+/data/db
+dump/
+
+# Dva models 快照（如有测试）
+__snapshots__/
+
+# 测试相关
+coverage/
+jest-cache/
+jest.config.js
+test-results.xml
+
+# Docker
+docker-compose.override.yml
+*.local.yml
+
+# 其他
+*.swp
+*.swo
