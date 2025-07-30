@@ -1,4 +1,5 @@
 import request from '@/utils/request';
+import { getFileDomain } from '@/utils/env';
 
 export interface FileItem {
   uuid: string;
@@ -154,7 +155,8 @@ export class FileService {
    */
   static getPreviewUrl(uuid: string): string {
     const token = localStorage.getItem('token');
-    return `http://localhost:3000/api/files/preview/${uuid}?token=${token}`;
+    const domain = getFileDomain();
+    return `${domain}/api/files/preview/${uuid}?token=${token}`;
   }
 
   /**
@@ -226,13 +228,13 @@ export class FileService {
    * 获取文件访问链接
    */
   static getFileAccessUrl(file: FileItem): string {
-    const baseUrl = window.location.origin;
+    const domain = getFileDomain();
     if (file.isPublic) {
       // 公开文件使用公开访问链接
-      return `${baseUrl}/api/files/public/preview/${file.uuid}`;
+      return `${domain}/api/files/public/preview/${file.uuid}`;
     } else {
       // 私有文件使用需要认证的链接
-      return `${baseUrl}/api/files/preview/${file.uuid}`;
+      return `${domain}/api/files/preview/${file.uuid}`;
     }
   }
 
