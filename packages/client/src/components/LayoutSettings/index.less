@@ -1,0 +1,257 @@
+.layout-settings-trigger {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  z-index: 999;
+  width: 48px;
+  height: 48px;
+  background: #1890ff;
+  color: #fff;
+  border-radius: 6px 0 0 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s;
+  transform: translateY(-50%);
+
+  &:hover {
+    background: #40a9ff;
+    transform: translateY(-50%) translateX(-3px);
+  }
+
+  .anticon {
+    font-size: 18px;
+    animation: rotate 3s linear infinite;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.layout-settings-drawer {
+  .ant-drawer-header {
+    border-bottom: 1px solid #f0f0f0;
+    
+    .ant-drawer-title {
+      font-weight: 600;
+    }
+  }
+  
+  .ant-drawer-body {
+    padding: 24px 24px 0;
+  }
+  
+  .ant-drawer-footer {
+    border-top: 1px solid #f0f0f0;
+    padding: 16px 24px;
+  }
+}
+
+.layout-settings-content {
+  .settings-section {
+    margin-bottom: 24px;
+
+    .ant-typography-title {
+      margin-bottom: 16px !important;
+      font-size: 14px !important;
+      color: #262626;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+
+  // 主题选择器
+  .theme-selector {
+    display: flex;
+    gap: 12px;
+
+    .theme-item {
+      flex: 1;
+      text-align: center;
+      cursor: pointer;
+      padding: 8px;
+      border: 2px solid transparent;
+      border-radius: 6px;
+      transition: all 0.3s;
+
+      &:hover {
+        border-color: #d9d9d9;
+      }
+
+      &.active {
+        border-color: #1890ff;
+        background: #f0f8ff;
+      }
+
+      .theme-preview {
+        width: 100%;
+        height: 60px;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+        .theme-header {
+          height: 12px;
+        }
+
+        .theme-body {
+          height: 48px;
+          display: flex;
+
+          .theme-sider {
+            width: 20px;
+          }
+
+          .theme-content {
+            flex: 1;
+          }
+        }
+
+        &.light {
+          .theme-header {
+            background: #fff;
+            border-bottom: 1px solid #f0f0f0;
+          }
+
+          .theme-sider {
+            background: #fff;
+            border-right: 1px solid #f0f0f0;
+          }
+
+          .theme-content {
+            background: #f5f5f5;
+          }
+        }
+
+        &.dark {
+          .theme-header {
+            background: #001529;
+          }
+
+          .theme-sider {
+            background: #001529;
+          }
+
+          .theme-content {
+            background: #141414;
+          }
+        }
+      }
+
+      .ant-typography {
+        font-size: 12px;
+        margin: 0;
+      }
+    }
+  }
+
+  // 颜色选择器
+  .color-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    .color-item {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+
+      &.active {
+        border-color: #fff;
+        box-shadow: 0 0 0 2px #1890ff;
+      }
+
+      &.custom {
+        border: 2px dashed #d9d9d9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+
+        &:hover {
+          border-color: #1890ff;
+          color: #1890ff;
+        }
+      }
+    }
+  }
+
+  // 布局选择器
+  .layout-selector {
+    width: 100%;
+    
+    .ant-radio-button-wrapper {
+      flex: 1;
+      text-align: center;
+      
+      &:first-child {
+        border-radius: 6px 0 0 6px;
+      }
+      
+      &:last-child {
+        border-radius: 0 6px 6px 0;
+      }
+    }
+  }
+
+  // 功能设置项
+  .settings-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+
+    .ant-typography {
+      margin: 0;
+      font-size: 14px;
+    }
+  }
+}
+
+// 暗色主题适配
+[data-theme='dark'] {
+  .layout-settings-content {
+    .settings-section {
+      .ant-typography-title {
+        color: #fff;
+      }
+    }
+
+    .theme-selector .theme-item {
+      &.active {
+        background: rgba(24, 144, 255, 0.1);
+      }
+    }
+
+    .color-selector .color-item.custom {
+      border-color: #424242;
+      color: #fff;
+
+      &:hover {
+        border-color: #1890ff;
+      }
+    }
+
+    .settings-item .ant-typography {
+      color: #fff;
+    }
+  }
+}

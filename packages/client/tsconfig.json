@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "types": ["react-dom"],
+    "typeRoots": ["./node_modules/@types"]
+  },
+  "extends": "./src/.umi/tsconfig.json"
+}

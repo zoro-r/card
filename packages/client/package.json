@@ -1,0 +1,37 @@
+{
+  "private": true,
+  "name": "client",
+  "author": "zero-r <805841744@qq.com>",
+  "scripts": {
+    "dev": "max dev",
+    "build": "max build",
+    "postinstall": "max setup",
+    "setup": "max setup",
+    "start": "npm run dev"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.6.1",
+    "@ant-design/pro-components": "^2.4.4",
+    "@ant-design/pro-layout": "^7.22.6",
+    "@types/jsoneditor": "^9.9.5",
+    "@umijs/max": "^4.4.10",
+    "ahooks": "^3.9.0",
+    "antd": "^5.4.0",
+    "axios": "^1.10.0",
+    "classnames": "^2.5.1",
+    "dayjs": "^1.11.13",
+    "jsoneditor": "^10.2.0",
+    "zustand": "^5.0.6"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.33",
+    "@types/react-dom": "^18.0.11",
+    "husky": "^9",
+    "lint-staged": "^13.2.0",
+    "prettier": "^2.8.7",
+    "prettier-plugin-organize-imports": "^3.2.2",
+    "prettier-plugin-packagejson": "^2.4.3",
+    "typescript": "^5.0.3"
+  },
+  "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977"
+}

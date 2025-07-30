@@ -1,0 +1,148 @@
+.env {
+  margin-left: 20px!important;
+  width: 100px;
+}
+
+.header {
+  @menu-width: 240px;
+  @header-height: var(--header-height);
+
+  height: @header-height;
+  position: fixed;
+  background-color: var(--primary-bg);
+  width: 100vw;
+  top: 0;
+  z-index: 99;
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 6%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  transition: all 0.3s ease;
+
+  &.dark {
+    background-color: #001529;
+    border-bottom: 1px solid #303030;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
+  }
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  color: var(--primary-selected-color);
+  transition: all 0.3s ease;
+
+  &.dark {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .icon {
+    width: 32px;
+    height: 32px;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    // 使用动态主题色
+    color: var(--ant-primary-color);
+  }
+
+  .title {
+    font-size: 20px;
+    font-family: "PingFangSC-Medium, PingFang SC";
+    font-weight: 500;
+    margin-left: 12px;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    // 使用动态主题色
+    color: var(--ant-primary-color);
+  }
+
+  &.dark {
+    .icon,
+    .title {
+      color: rgba(255, 255, 255, 0.85);
+    }
+  }
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 20px;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+
+  &.dark {
+    .userInfo {
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .userName {
+        color: rgba(255, 255, 255, 0.85);
+      }
+    }
+  }
+
+  .userInfo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: var(--ant-primary-color-light);
+    }
+
+    &.dark:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .userName {
+      font-size: 14px;
+      color: var(--ant-primary-color);
+      font-weight: 500;
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      transition: all 0.3s ease;
+    }
+
+    &.dark .userName {
+      color: rgba(255, 255, 255, 0.85);
+    }
+  }
+
+  .ant-btn {
+    color: var(--ant-primary-color);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      color: var(--ant-primary-color);
+      background-color: var(--ant-primary-color-light);
+    }
+
+    &.darkButton {
+      color: rgba(255, 255, 255, 0.65);
+      
+      &:hover {
+        color: rgba(255, 255, 255, 0.85);
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+}

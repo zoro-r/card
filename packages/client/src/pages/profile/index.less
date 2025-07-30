@@ -1,0 +1,109 @@
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+
+  .profile-actions {
+    display: flex;
+    align-items: center;
+  }
+
+  .profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 32px;
+    padding: 24px 0;
+    border-bottom: 1px solid #f0f0f0;
+
+    .profile-avatar {
+      margin-right: 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .profile-info {
+      h2 {
+        margin: 0 0 8px 0;
+        font-size: 24px;
+        font-weight: 600;
+        color: #262626;
+      }
+
+      .profile-role {
+        margin: 0;
+        color: #8c8c8c;
+        font-size: 14px;
+      }
+    }
+  }
+
+  .status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+
+    &.active {
+      background-color: #f6ffed;
+      color: #52c41a;
+      border: 1px solid #b7eb8f;
+    }
+
+    &.inactive {
+      background-color: #fff2f0;
+      color: #ff4d4f;
+      border: 1px solid #ffccc7;
+    }
+  }
+
+  .form-actions {
+    margin-bottom: 0;
+    text-align: right;
+  }
+}
+
+.ant-descriptions-bordered .ant-descriptions-item-label {
+  background-color: #fafafa;
+  font-weight: 500;
+}
+
+.ant-modal-body {
+  padding: 24px;
+
+  .ant-form-item:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// 编辑个人信息模态框的特殊样式
+.ant-modal {
+  .ant-form-item-label {
+    padding-bottom: 4px;
+    
+    > label {
+      font-weight: 500;
+    }
+  }
+
+  .ant-input,
+  .ant-select-selector,
+  .ant-picker,
+  .ant-input-affix-wrapper {
+    border-radius: 6px;
+    
+    &:hover {
+      border-color: #40a9ff;
+    }
+    
+    &:focus,
+    &.ant-input-focused,
+    &.ant-select-focused .ant-select-selector,
+    &.ant-picker-focused {
+      border-color: #40a9ff;
+      box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+    }
+  }
+
+  .ant-input-show-count-suffix {
+    color: #8c8c8c;
+  }
+}

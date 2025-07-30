@@ -1,0 +1,206 @@
+.menu-item-box {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+
+  &.horizontal {
+    .selected {
+      background: transparent !important;
+      font-size: 14px;
+      font-family: "PingFangSC-Medium, PingFang SC";
+      font-weight: 500;
+
+      &::before {
+        content: "";
+        width: 50% !important;
+        height: 3px !important;
+        background: var(--ant-primary-color);
+        position: absolute;
+        left: 50% !important;
+        border-radius: 4px;
+        bottom: 0;
+        transform: translateX(-50%);
+      }
+    }
+  
+    .menu-item {
+      min-width: 100px;
+      // width: fit-content;
+      padding: 0;
+      // margin: 0 15px;
+      // color: #000;
+      color: var(--primary-text-color);
+
+      .item {
+        margin: auto;
+      }
+    }
+  }
+
+  .children {
+    transition: all 0.2s linear;
+    overflow: hidden;
+    height: 0;
+    
+    &.open {
+      height: auto;
+    }
+  }
+
+  .menu-item {
+    width: 100%;
+    height: 60px;
+    font-size: 14px;
+    font-family: "PingFangSC-Regular, PingFang SC";
+    font-weight: 400;
+    color: var(--primary-text-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    cursor: pointer;
+    position: relative;
+
+    .item {
+      display: flex;
+      align-items: center;
+      // width: 100%;
+  
+      .icon {
+        width: 26px;
+        color: inherit;
+        
+        // 确保图标继承父元素颜色
+        :global(.anticon) {
+          color: inherit;
+        }
+      }
+  
+      .text {
+        white-space: nowrap;
+        overflow: hidden;
+        // text-overflow: ellipsis;
+        width: 100%;
+      }
+    }
+
+    .down-up-icon {
+      font-size: 10px;
+      transition: transform .3s cubic-bezier(0.645,.045,.355,1);
+      position: relative;
+
+      &::after {
+        position: absolute;
+        width: 6px;
+        height: 1.5px;
+        background-color: currentcolor;
+        border-radius: 2px;
+        transition: background .3s cubic-bezier(.645,.045,.355,1),transform .3s cubic-bezier(.645,.045,.355,1),top .3s cubic-bezier(.645,.045,.355,1),color .3s cubic-bezier(.645,.045,.355,1);
+        content: "";
+        transform: rotate(-45deg) translate(2.5px);
+      }
+
+      &::before {
+        transform: rotate(45deg) translate(-2.5px);
+        position: absolute;
+        width: 6px;
+        height: 1.5px;
+        background-color: currentcolor;
+        border-radius: 2px;
+        transition: background .3s cubic-bezier(.645,.045,.355,1),transform .3s cubic-bezier(.645,.045,.355,1),top .3s cubic-bezier(.645,.045,.355,1),color .3s cubic-bezier(.645,.045,.355,1);
+        content: "";
+      }
+
+      &.up {
+        &::after {
+          transform: rotate(-45deg) translate(-2.5px);
+        }
+
+        &::before {
+          transform: rotate(45deg) translate(2.5px);
+        }
+      }
+    }
+
+    &.open {
+      color: var(--ant-primary-color);
+      font-weight: 800;
+    }
+  
+    &.selected {
+      background: var(--ant-primary-color-active);
+      font-size: 14px;
+      font-family: "PingFangSC-Medium, PingFang SC";
+      font-weight: 500;
+      color: var(--ant-primary-color);
+  
+      &::before {
+        content: "";
+        width: 3px;
+        height: 50%;
+        background: var(--ant-primary-color);
+        position: absolute;
+        left: 2px;
+        border-radius: 4px;
+      }
+    }
+  
+    &:hover {
+      color: var(--ant-primary-color);
+      background: var(--ant-primary-color-hover);
+    }
+
+    // 深色主题适配
+    [data-theme='dark'] & {
+      color: rgba(255, 255, 255, 0.65);
+
+      &.selected {
+        background: var(--ant-primary-color);
+        color: #fff;
+
+        &::before {
+          background: #fff;
+        }
+      }
+
+      &:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      &.open {
+        color: #fff;
+      }
+    }
+  }
+}
+
+.tooltip {
+  :global {
+    .ant-tooltip-arrow-content {
+      --antd-arrow-background-color: #fff;
+    }
+  }
+}
+
+.popover {
+  padding: 0;
+
+  :global {
+    .ant-popover-inner-content,
+    .ant-popover-inner {
+      padding: 0 !important;
+    }
+
+    .ant-popover-arrow {
+      left: 4px!important;
+  
+      &::before, 
+      &::after {
+        width: 0;
+        height: 0;
+      }
+    }
+  }
+}
