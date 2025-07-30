@@ -2,6 +2,7 @@ import Router from '@koa/router';
 import userRouter from './user';
 import roleRouter from './role';
 import menuRouter from './menu';
+import fileRouter from './file';
 import { configRouter, publicRouter } from './config';
 
 export function initRouter(app: any) {
@@ -11,6 +12,7 @@ export function initRouter(app: any) {
   userRouter(router);
   roleRouter(router);
   menuRouter(router);
+  fileRouter(router);
 
   // 注册配置路由
   app.use(configRouter.routes());

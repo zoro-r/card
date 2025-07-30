@@ -11,7 +11,8 @@ const skipAuthPaths = [
 
 // 需要跳过认证的路径前缀
 const skipAuthPathPrefixes = [
-  '/public/config' // 公开配置接口无需认证
+  '/public/config', // 公开配置接口无需认证
+  '/api/files/public' // 公开文件接口无需认证
 ];
 
 // JWT认证中间件
@@ -30,8 +31,13 @@ export async function authMiddleware(ctx: Context, next: Next) {
     return;
   }
 
-  // 获取token
-  const token = ctx.headers.authorization?.replace('Bearer ', '');
+  // 获取token - 支持Header和URL参数两种方式
+  let token = ctx.headers.authorization?.replace('Bearer ', '');
+  
+  // 如果Header中没有token，尝试从URL参数中获取（用于文件预览等场景）
+  if (!token && ctx.query.token) {
+    token = ctx.query.token as string;
+  }
   
   if (!token) {
     ctx.status = 401;
