@@ -20,6 +20,12 @@ const upload = multer({
     files: 10 // 最多10个文件
   },
   fileFilter: (req, file, cb) => {
+    // 修复中文文件名编码问题
+    if (file.originalname) {
+      // 将文件名从latin1编码转换为utf8
+      file.originalname = Buffer.from(file.originalname, 'latin1').toString('utf8');
+    }
+
     // 基本的文件类型验证
     const allowedTypes = [
       'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml',

@@ -101,7 +101,6 @@ const FileUpload: React.FC<FileUploadProps> = ({
         result = await FileService.uploadFile(files[0], options);
       }
 
-      message.success('上传成功');
       handleReset();
       onSuccess();
     } catch (error: any) {

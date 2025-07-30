@@ -47,9 +47,20 @@ export async function uploadFileAPI(ctx: Context, next: Next): Promise<void> {
     // 读取文件内容
     const buffer = fs.readFileSync(file.path);
 
+    // 修复中文文件名编码问题
+    let originalName = file.originalname || 'unknown';
+    try {
+      // 尝试修复编码（如果之前没有修复）
+      if (originalName && originalName.includes('�')) {
+        originalName = Buffer.from(file.originalname, 'latin1').toString('utf8');
+      }
+    } catch (error) {
+      console.warn('文件名编码修复失败，使用原始文件名:', error);
+    }
+
     const result = await fileService.uploadFile({
       buffer,
-      originalName: file.originalname || 'unknown',
+      originalName,
       mimeType: file.mimetype || 'application/octet-stream',
       size: file.size,
       uploadBy: user.uuid,
@@ -90,17 +101,30 @@ export async function uploadMultipleFilesAPI(ctx: Context, next: Next): Promise<
 
     const { tags, description, isPublic } = ctx.request.body as Record<string, any>;
 
-    const filesData = files.map((file: MulterFile) => ({
-      buffer: fs.readFileSync(file.path),
-      originalName: file.originalname || 'unknown',
-      mimeType: file.mimetype || 'application/octet-stream',
-      size: file.size,
-      uploadBy: user.uuid,
-      platformId: user.platformId,
-      isPublic: isPublic === 'true',
-      tags: tags ? tags.split(',').map((tag: string) => tag.trim()) : [],
-      description: description || undefined
-    }));
+    const filesData = files.map((file: MulterFile) => {
+      // 修复中文文件名编码问题
+      let originalName = file.originalname || 'unknown';
+      try {
+        // 尝试修复编码（如果之前没有修复）
+        if (originalName && originalName.includes('�')) {
+          originalName = Buffer.from(file.originalname, 'latin1').toString('utf8');
+        }
+      } catch (error) {
+        console.warn('文件名编码修复失败，使用原始文件名:', error);
+      }
+
+      return {
+        buffer: fs.readFileSync(file.path),
+        originalName,
+        mimeType: file.mimetype || 'application/octet-stream',
+        size: file.size,
+        uploadBy: user.uuid,
+        platformId: user.platformId,
+        isPublic: isPublic === 'true',
+        tags: tags ? tags.split(',').map((tag: string) => tag.trim()) : [],
+        description: description || undefined
+      };
+    });
 
     const results = await fileService.uploadMultipleFiles(filesData);
 
