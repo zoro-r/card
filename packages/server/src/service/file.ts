@@ -295,10 +295,24 @@ export async function downloadFile(uuid: string, uploadBy?: string, platformId?:
   file: IFile;
   filePath: string;
 }> {
-  const file = await getFileById(uuid, uploadBy, platformId);
-
+  // 首先尝试无权限限制获取文件
+  const file = await getFileById(uuid);
+  
   if (!file) {
-    throw new Error('文件不存在或无权限访问');
+    throw new Error('文件不存在');
+  }
+
+  // 如果是私有文件，检查访问权限
+  if (!file.isPublic) {
+    // 如果没有提供用户信息，拒绝访问私有文件
+    if (!uploadBy || !platformId) {
+      throw new Error('私有文件需要认证访问');
+    }
+    
+    // 检查用户是否有权限访问该文件（文件所有者或同平台用户）
+    if (file.uploadBy !== uploadBy && file.platformId !== platformId) {
+      throw new Error('无权限访问此私有文件');
+    }
   }
 
   if (!fs.existsSync(file.fullPath)) {

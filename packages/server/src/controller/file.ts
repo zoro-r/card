@@ -209,13 +209,33 @@ export async function getFileListAPI(ctx: Context, next: Next): Promise<void> {
 export async function downloadFileAPI(ctx: Context, next: Next): Promise<void> {
   try {
     const { uuid } = ctx.params;
-    const { user } = ctx.state;
+    
+    // 尝试获取用户信息（可能为空，用于私有文件权限检查）
+    let uploadBy: string | undefined;
+    let platformId: string | undefined;
+    
+    // 如果请求包含认证信息，提取用户数据
+    if (ctx.state.user) {
+      uploadBy = ctx.state.user.uuid;
+      platformId = ctx.state.user.platformId;
+    } else {
+      // 尝试从token参数中解析用户信息
+      const token = ctx.query.token as string;
+      if (token) {
+        try {
+          const { verifyToken } = await import('@/service/user');
+          const decoded = verifyToken(token);
+          if (decoded) {
+            uploadBy = decoded.uuid;
+            platformId = decoded.platformId;
+          }
+        } catch (error) {
+          // Token验证失败，继续尝试下载（可能是公开文件）
+        }
+      }
+    }
 
-    const result = await fileService.downloadFile(
-      uuid,
-      user.uuid,
-      user.platformId
-    );
+    const result = await fileService.downloadFile(uuid, uploadBy, platformId);
 
     // 设置响应头
     ctx.set('Content-Type', result.file.fileType);
@@ -227,7 +247,16 @@ export async function downloadFileAPI(ctx: Context, next: Next): Promise<void> {
     ctx.status = 200;
   } catch (error: any) {
     console.error('文件下载失败:', error);
-    ctx.status = 404;
+    
+    // 根据错误类型设置不同的状态码
+    if (error.message.includes('需要认证') || error.message.includes('无权限')) {
+      ctx.status = 403;
+    } else if (error.message.includes('不存在')) {
+      ctx.status = 404;
+    } else {
+      ctx.status = 500;
+    }
+    
     ctx.body = fail(error.message || '文件下载失败');
   }
 }

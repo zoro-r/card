@@ -12,19 +12,20 @@ const skipAuthPaths = [
 // 需要跳过认证的路径前缀
 const skipAuthPathPrefixes = [
   '/public/config', // 公开配置接口无需认证
-  '/api/files/public' // 公开文件接口无需认证
+  '/api/files/public', // 公开文件接口无需认证
+  '/api/files/download',
 ];
 
 // JWT认证中间件
 export async function authMiddleware(ctx: Context, next: Next) {
   const { path, method } = ctx.request;
-  
+
   // 跳过不需要认证的路径
   if (skipAuthPaths.includes(path)) {
     await next();
     return;
   }
-  
+
   // 跳过不需要认证的路径前缀
   if (skipAuthPathPrefixes.some(prefix => path.startsWith(prefix))) {
     await next();
@@ -33,12 +34,12 @@ export async function authMiddleware(ctx: Context, next: Next) {
 
   // 获取token - 支持Header和URL参数两种方式
   let token = ctx.headers.authorization?.replace('Bearer ', '');
-  
+
   // 如果Header中没有token，尝试从URL参数中获取（用于文件预览等场景）
   if (!token && ctx.query.token) {
     token = ctx.query.token as string;
   }
-  
+
   if (!token) {
     ctx.status = 401;
     ctx.body = fail('未提供认证令牌');
@@ -55,7 +56,7 @@ export async function authMiddleware(ctx: Context, next: Next) {
 
   // 将用户信息存储到ctx中
   ctx.state.user = decoded;
-  
+
   await next();
 }
 
@@ -63,7 +64,7 @@ export async function authMiddleware(ctx: Context, next: Next) {
 export function requirePermission(permission: string) {
   return async (ctx: Context, next: Next) => {
     const user = ctx.state.user;
-    
+
     if (!user) {
       ctx.status = 401;
       ctx.body = fail('未认证');

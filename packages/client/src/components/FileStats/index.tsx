@@ -4,18 +4,15 @@ import {
   Col,
   Card,
   Statistic,
-  Progress,
-  List,
-  Tag,
   Spin,
   Empty,
-  Table,
   Space,
   Tooltip,
-  Avatar,
   Button,
   DatePicker,
+  Tag,
 } from 'antd';
+import { Column, Pie, Area, Bar } from '@ant-design/plots';
 import {
   FileOutlined,
   CloudOutlined,
@@ -213,54 +210,10 @@ const FileStats: React.FC<FileStatsProps> = ({ showAll = false }) => {
         </Col>
       </Row>
 
-      {/* 详细统计 */}
+      {/* 图表统计 */}
       <Row gutter={16} style={{ marginBottom: 24 }}>
-        {/* 热门文件类型 */}
-        <Col xs={24} lg={8}>
-          <Card 
-            title={
-              <Space>
-                <TrophyOutlined style={{ color: '#faad14' }} />
-                <span>热门文件类型</span>
-              </Space>
-            } 
-            size="small"
-            hoverable
-          >
-            <List
-              dataSource={topFileTypes}
-              renderItem={([type, count], index) => (
-                <List.Item>
-                  <List.Item.Meta
-                    avatar={
-                      <Avatar
-                        size={32}
-                        icon={getFileTypeIcon(type)}
-                        style={{ 
-                          backgroundColor: index === 0 ? '#faad14' : index === 1 ? '#8c8c8c' : '#d48806',
-                          border: 'none'
-                        }}
-                      />
-                    }
-                    title={
-                      <Space>
-                        <Tag color={index === 0 ? 'gold' : index === 1 ? 'default' : 'orange'}>
-                          #{index + 1}
-                        </Tag>
-                        <span style={{ fontWeight: 500 }}>{type}</span>
-                      </Space>
-                    }
-                    description={`${count} 个文件 (${Math.round((count / stats.totalFiles) * 100)}%)`}
-                  />
-                </List.Item>
-              )}
-              size="small"
-            />
-          </Card>
-        </Col>
-
-        {/* 文件类型分布 */}
-        <Col xs={24} lg={16}>
+        {/* 文件类型分布饼图 */}
+        <Col xs={24} lg={12}>
           <Card 
             title={
               <Space>
@@ -268,83 +221,119 @@ const FileStats: React.FC<FileStatsProps> = ({ showAll = false }) => {
                 <span>文件类型分布</span>
               </Space>
             } 
-            size="small"
             hoverable
           >
-            <List
-              dataSource={Object.entries(stats.fileTypeDistribution).sort(([,a], [,b]) => b - a)}
-              renderItem={([type, count]) => (
-                <List.Item>
-                  <List.Item.Meta
-                    avatar={getFileTypeIcon(type)}
-                    title={
-                      <Space>
-                        <Tag color="blue">{type}</Tag>
-                        <span style={{ fontWeight: 500 }}>{count} 个文件</span>
-                      </Space>
-                    }
-                  />
-                  <div style={{ width: 200 }}>
-                    <Progress
-                      percent={Math.round((count / stats.totalFiles) * 100)}
-                      size="small"
-                      showInfo={true}
-                      strokeColor={{
-                        '0%': '#108ee9',
-                        '100%': '#87d068',
-                      }}
-                    />
-                  </div>
-                </List.Item>
-              )}
-              size="small"
-              style={{ maxHeight: 400, overflow: 'auto' }}
+            <Pie
+              data={Object.entries(stats.fileTypeDistribution).map(([type, count]) => ({
+                type,
+                value: count,
+                percentage: ((count / stats.totalFiles) * 100).toFixed(1)
+              }))}
+              angleField="value"
+              colorField="type"
+              radius={0.8}
+              innerRadius={0.4}
+              label={{
+                type: 'inner',
+                offset: '-30%',
+                content: '{percentage}%',
+                style: {
+                  fontSize: 12,
+                  textAlign: 'center',
+                },
+              }}
+              legend={{
+                position: 'bottom',
+                itemName: {
+                  formatter: (text, item) => {
+                    return `${text}: ${item.data?.value}个`;
+                  },
+                },
+              }}
+              interactions={[
+                {
+                  type: 'element-active',
+                },
+                {
+                  type: 'pie-statistic-active',
+                },
+              ]}
+              statistic={{
+                title: {
+                  style: {
+                    whiteSpace: 'pre-wrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    fontSize: '14px',
+                  },
+                  content: '文件总数',
+                },
+                content: {
+                  style: {
+                    whiteSpace: 'pre-wrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                  },
+                  content: stats.totalFiles.toString(),
+                },
+              }}
+              height={300}
+            />
+          </Card>
+        </Col>
+
+        {/* 文件类型柱状图 */}
+        <Col xs={24} lg={12}>
+          <Card 
+            title={
+              <Space>
+                <TrophyOutlined style={{ color: '#faad14' }} />
+                <span>热门文件类型</span>
+              </Space>
+            } 
+            hoverable
+          >
+            <Column
+              data={Object.entries(stats.fileTypeDistribution)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 8)
+                .map(([type, count]) => ({
+                  type,
+                  count,
+                  percentage: ((count / stats.totalFiles) * 100).toFixed(1)
+                }))}
+              xField="type"
+              yField="count"
+              seriesField="type"
+              color={({ type }) => {
+                const colors = ['#5B8FF9', '#5AD8A6', '#5D7092', '#F6BD16', '#E8684A', '#6DC8EC', '#9270CA', '#FF9D4D'];
+                const index = Object.keys(stats.fileTypeDistribution).indexOf(type);
+                return colors[index % colors.length];
+              }}
+              label={{
+                position: 'top',
+                formatter: (datum) => `${datum.count}`,
+              }}
+              meta={{
+                type: {
+                  alias: '文件类型',
+                },
+                count: {
+                  alias: '文件数量',
+                },
+              }}
+              height={300}
+              columnWidthRatio={0.6}
             />
           </Card>
         </Col>
       </Row>
 
       <Row gutter={16}>
-        {/* 存储详情 */}
-        <Col xs={24} lg={12}>
-          <Card 
-            title={
-              <Space>
-                <CloudOutlined style={{ color: '#52c41a' }} />
-                <span>存储详情</span>
-              </Space>
-            } 
-            size="small"
-            hoverable
-          >
-            <Row gutter={16}>
-              <Col span={12}>
-                <Statistic
-                  title="单文件平均大小"
-                  value={stats.totalFiles > 0 ? ((stats.totalSize / stats.totalFiles) / (1024 * 1024)).toFixed(2) : '0'}
-                  suffix="MB"
-                  precision={2}
-                  valueStyle={{ fontSize: 16 }}
-                />
-              </Col>
-              <Col span={12}>
-                <Statistic
-                  title="存储利用率"
-                  value={Math.min(100, (stats.totalSize / (10 * 1024 * 1024 * 1024)) * 100)}
-                  suffix="%"
-                  precision={1}
-                  valueStyle={{ 
-                    fontSize: 16,
-                    color: getStorageUsageColor(stats.totalSize)
-                  }}
-                />
-              </Col>
-            </Row>
-          </Card>
-        </Col>
-
-        {/* 上传趋势 */}
-        <Col xs={24} lg={12}>
+        {/* 上传趋势线图 */}
+        <Col xs={24} lg={16}>
           <Card 
             title={
               <Space>
@@ -352,57 +341,117 @@ const FileStats: React.FC<FileStatsProps> = ({ showAll = false }) => {
                 <span>最近7天上传趋势</span>
               </Space>
             } 
-            size="small"
             hoverable
           >
-            <Table
-              columns={[
-                {
-                  title: (
-                    <Space>
-                      <CalendarOutlined />
-                      <span>日期</span>
-                    </Space>
-                  ),
-                  dataIndex: 'date',
-                  key: 'date',
-                  render: (date: string) => (
-                    <Space>
-                      <CalendarOutlined style={{ color: '#1890ff' }} />
-                      <span>{dayjs(date).format('MM-DD')}</span>
-                      <Tag color="blue">{dayjs(date).format('ddd')}</Tag>
-                    </Space>
-                  ),
+            <Area
+              data={stats.uploadTrend.map(item => ({
+                date: dayjs(item.date).format('MM-DD'),
+                count: item.count,
+                fullDate: item.date,
+                dayOfWeek: dayjs(item.date).format('ddd')
+              }))}
+              xField="date"
+              yField="count"
+              smooth={true}
+              areaStyle={{
+                fill: 'l(270) 0:#ffffff 0.5:#7ec2f3 1:#1890ff',
+              }}
+              line={{
+                color: '#1890ff',
+                size: 2,
+              }}
+              point={{
+                size: 4,
+                shape: 'circle',
+                style: {
+                  fill: '#1890ff',
+                  stroke: '#ffffff',
+                  lineWidth: 2,
                 },
-                {
-                  title: (
-                    <Space>
-                      <CloudUploadOutlined />
-                      <span>上传数量</span>
-                    </Space>
-                  ),
-                  dataIndex: 'count',
-                  key: 'count',
-                  render: (count: number) => (
-                    <Space>
-                      <Tag color={count > 5 ? 'success' : count > 2 ? 'warning' : 'default'}>
-                        {count}
-                      </Tag>
-                      <Progress
-                        percent={stats.uploadTrend.length > 0 ? Math.round((count / Math.max(...stats.uploadTrend.map(i => i.count))) * 100) : 0}
-                        size="small"
-                        showInfo={false}
-                        style={{ width: 60 }}
-                      />
-                    </Space>
-                  ),
+              }}
+              meta={{
+                date: {
+                  alias: '日期',
                 },
-              ]}
-              dataSource={stats.uploadTrend}
-              pagination={false}
-              size="small"
-              rowKey="date"
+                count: {
+                  alias: '上传数量',
+                },
+              }}
+              tooltip={{
+                formatter: (datum) => {
+                  return {
+                    name: '上传数量',
+                    value: `${datum.count}个文件`,
+                  };
+                },
+              }}
+              height={300}
             />
+          </Card>
+        </Col>
+
+        {/* 存储详情仪表盘 */}
+        <Col xs={24} lg={8}>
+          <Card 
+            title={
+              <Space>
+                <CloudOutlined style={{ color: '#52c41a' }} />
+                <span>存储详情</span>
+              </Space>
+            } 
+            hoverable
+          >
+            <div style={{ marginBottom: 16 }}>
+              <Statistic
+                title="单文件平均大小"
+                value={stats.totalFiles > 0 ? ((stats.totalSize / stats.totalFiles) / (1024 * 1024)).toFixed(2) : '0'}
+                suffix="MB"
+                precision={2}
+                valueStyle={{ fontSize: 16, color: '#1890ff' }}
+              />
+            </div>
+            <div>
+              <Statistic
+                title="存储利用率"
+                value={Math.min(100, (stats.totalSize / (10 * 1024 * 1024 * 1024)) * 100)}
+                suffix="%"
+                precision={1}
+                valueStyle={{ 
+                  fontSize: 16,
+                  color: getStorageUsageColor(stats.totalSize)
+                }}
+              />
+            </div>
+            {/* 存储使用进度条 */}
+            <div style={{ marginTop: 16 }}>
+              <div style={{ marginBottom: 8, fontSize: 12, color: '#8c8c8c' }}>存储空间使用情况</div>
+              <Bar
+                data={[
+                  {
+                    type: '已使用',
+                    value: Math.min(100, (stats.totalSize / (10 * 1024 * 1024 * 1024)) * 100),
+                  },
+                  {
+                    type: '剩余',
+                    value: Math.max(0, 100 - Math.min(100, (stats.totalSize / (10 * 1024 * 1024 * 1024)) * 100)),
+                  }
+                ]}
+                xField="value"
+                yField="type"
+                seriesField="type"
+                color={({ type }) => type === '已使用' ? getStorageUsageColor(stats.totalSize) : '#f0f0f0'}
+                height={80}
+                legend={false}
+                label={{
+                  position: 'middle',
+                  formatter: (datum: any) => `${datum?.value?.toFixed(1)}%`,
+                  style: {
+                    fill: '#fff',
+                    fontSize: 12,
+                  },
+                }}
+              />
+            </div>
           </Card>
         </Col>
       </Row>

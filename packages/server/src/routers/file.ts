@@ -130,7 +130,6 @@ export default function fileRouter(router: Router) {
    */
   router.get(
     '/api/files/download/:uuid',
-    authMiddleware,
     fileController.downloadFileAPI
   );
 

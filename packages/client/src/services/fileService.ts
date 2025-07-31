@@ -147,7 +147,12 @@ export class FileService {
    * 下载文件
    */
   static downloadFile(uuid: string): void {
-    window.open(`/api/files/download/${uuid}`);
+    const domain = getFileDomain();
+    const token = localStorage.getItem('token');
+    const downloadUrl = token 
+      ? `${domain}/api/files/download/${uuid}?token=${token}`
+      : `${domain}/api/files/download/${uuid}`;
+    window.open(downloadUrl);
   }
 
   /**
@@ -163,7 +168,8 @@ export class FileService {
    * 批量下载文件
    */
   static async downloadMultipleFiles(uuids: string[]): Promise<void> {
-    const response = await fetch('/api/files/download-multiple', {
+    const domain = getFileDomain();
+    const response = await fetch(`${domain}/api/files/download-multiple`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
