@@ -353,20 +353,33 @@ function MenuManagement() {
         open={modalVisible}
         onCancel={() => setModalVisible(false)}
         footer={null}
-        width={800}
+        width={900}
       >
         <Form
           form={form}
           layout="vertical"
           onFinish={handleSave}
         >
-          <Form.Item
-            name="name"
-            label="菜单名称"
-            rules={[{ required: true, message: '请输入菜单名称' }]}
-          >
-            <Input placeholder="请输入菜单名称" />
-          </Form.Item>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            <Form.Item
+              name="name"
+              label="菜单名称"
+              rules={[{ required: true, message: '请输入菜单名称' }]}
+            >
+              <Input placeholder="请输入菜单名称" />
+            </Form.Item>
+
+            <Form.Item
+              name="type"
+              label="菜单类型"
+              rules={[{ required: true, message: '请选择菜单类型' }]}
+            >
+              <Select placeholder="请选择菜单类型">
+                <Select.Option value="menu">菜单</Select.Option>
+                <Select.Option value="button">按钮</Select.Option>
+              </Select>
+            </Form.Item>
+          </div>
 
           <Form.Item
             name="parentId"
@@ -380,65 +393,59 @@ function MenuManagement() {
             />
           </Form.Item>
 
-          <Form.Item
-            name="type"
-            label="菜单类型"
-            rules={[{ required: true, message: '请选择菜单类型' }]}
-          >
-            <Select placeholder="请选择菜单类型">
-              <Select.Option value="menu">菜单</Select.Option>
-              <Select.Option value="button">按钮</Select.Option>
-            </Select>
-          </Form.Item>
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 16 }}>
+            <Form.Item
+              name="path"
+              label="路径"
+            >
+              <Input placeholder="请输入菜单路径，如：/system/users" />
+            </Form.Item>
 
-          <Form.Item
-            name="path"
-            label="路径"
-          >
-            <Input placeholder="请输入菜单路径，如：/system/users" />
-          </Form.Item>
+            <Form.Item
+              name="sort"
+              label="排序"
+              rules={[{ required: true, message: '请输入排序值' }]}
+            >
+              <InputNumber placeholder="请输入排序值" min={0} style={{ width: '100%' }} />
+            </Form.Item>
+          </div>
 
-          <Form.Item
-            name="icon"
-            label="图标"
-          >
-            <Input 
-              placeholder="请选择图标" 
-              value={selectedIcon}
-              readOnly
-              onClick={() => setIconSelectVisible(true)}
-              suffix={
-                selectedIcon && AntdIcons[selectedIcon as keyof typeof AntdIcons] ? 
-                React.createElement(AntdIcons[selectedIcon as keyof typeof AntdIcons] as React.ComponentType<any>) : 
-                null
-              }
-            />
-          </Form.Item>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            <Form.Item
+              name="icon"
+              label="图标"
+            >
+              <Input 
+                placeholder="请选择图标" 
+                value={selectedIcon}
+                readOnly
+                allowClear
+                onClick={() => setIconSelectVisible(true)}
+                suffix={
+                  selectedIcon && AntdIcons[selectedIcon as keyof typeof AntdIcons] ? 
+                  React.createElement(AntdIcons[selectedIcon as keyof typeof AntdIcons] as React.ComponentType<any>) : 
+                  null
+                }
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="status"
+              label="状态"
+              rules={[{ required: true, message: '请选择状态' }]}
+            >
+              <Select placeholder="请选择状态">
+                <Select.Option value="active">正常</Select.Option>
+                <Select.Option value="disabled">禁用</Select.Option>
+              </Select>
+            </Form.Item>
+          </div>
 
           <Form.Item
             name="permission"
             label="权限标识"
           >
             <Input placeholder="请输入权限标识，如：user:read" />
-          </Form.Item>
-
-          <Form.Item
-            name="sort"
-            label="排序"
-            rules={[{ required: true, message: '请输入排序值' }]}
-          >
-            <InputNumber placeholder="请输入排序值" min={0} style={{ width: '100%' }} />
-          </Form.Item>
-
-          <Form.Item
-            name="status"
-            label="状态"
-            rules={[{ required: true, message: '请选择状态' }]}
-          >
-            <Select placeholder="请选择状态">
-              <Select.Option value="active">正常</Select.Option>
-              <Select.Option value="disabled">禁用</Select.Option>
-            </Select>
           </Form.Item>
 
           <Form.Item>
@@ -461,7 +468,7 @@ function MenuManagement() {
         onCancel={() => setIconSelectVisible(false)}
         footer={null}
         width={800}
-        bodyStyle={{ maxHeight: '60vh', overflow: 'auto' }}
+        styles={{ body: { maxHeight: '60vh', overflow: 'auto' } }}
       >
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', gap: '16px', padding: '16px 0' }}>
           {getAntdIcons().map(iconName => {

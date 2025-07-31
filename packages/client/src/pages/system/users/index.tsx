@@ -387,28 +387,30 @@ function Users() {
         open={modalVisible}
         onCancel={() => setModalVisible(false)}
         footer={null}
-        width={600}
+        width={800}
       >
         <Form
           form={form}
           layout="vertical"
           onFinish={handleSave}
         >
-          <Form.Item
-            name="loginName"
-            label="登录账号"
-            rules={[{ required: true, message: '请输入登录账号' }]}
-          >
-            <Input placeholder="请输入登录账号" />
-          </Form.Item>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            <Form.Item
+              name="loginName"
+              label="登录账号"
+              rules={[{ required: true, message: '请输入登录账号' }]}
+            >
+              <Input placeholder="请输入登录账号" />
+            </Form.Item>
 
-          <Form.Item
-            name="nickname"
-            label="用户姓名"
-            rules={[{ required: true, message: '请输入用户姓名' }]}
-          >
-            <Input placeholder="请输入用户姓名" />
-          </Form.Item>
+            <Form.Item
+              name="nickname"
+              label="用户姓名"
+              rules={[{ required: true, message: '请输入用户姓名' }]}
+            >
+              <Input placeholder="请输入用户姓名" />
+            </Form.Item>
+          </div>
 
           <Form.Item
             name="email"
@@ -421,15 +423,28 @@ function Users() {
             <Input placeholder="请输入邮箱" />
           </Form.Item>
 
-          <Form.Item
-            name="phone"
-            label="手机号"
-            rules={[
-              { pattern: /^1[3-9]\d{9}$/, message: '请输入有效的手机号' }
-            ]}
-          >
-            <Input placeholder="请输入手机号" />
-          </Form.Item>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            <Form.Item
+              name="phone"
+              label="手机号"
+              rules={[
+                { pattern: /^1[3-9]\d{9}$/, message: '请输入有效的手机号' }
+              ]}
+            >
+              <Input placeholder="请输入手机号" />
+            </Form.Item>
+
+            <Form.Item
+              name="gender"
+              label="性别"
+            >
+              <Select placeholder="请选择性别">
+                <Select.Option value="male">男</Select.Option>
+                <Select.Option value="female">女</Select.Option>
+                <Select.Option value="other">其他</Select.Option>
+              </Select>
+            </Form.Item>
+          </div>
 
           {!editingUser && (
             <Form.Item
@@ -440,17 +455,6 @@ function Users() {
               <Input.Password placeholder="请输入密码" />
             </Form.Item>
           )}
-
-          <Form.Item
-            name="gender"
-            label="性别"
-          >
-            <Select placeholder="请选择性别">
-              <Select.Option value="male">男</Select.Option>
-              <Select.Option value="female">女</Select.Option>
-              <Select.Option value="other">其他</Select.Option>
-            </Select>
-          </Form.Item>
 
           <Form.Item
             name="status"
@@ -483,7 +487,7 @@ function Users() {
         open={roleModalVisible}
         onCancel={() => setRoleModalVisible(false)}
         footer={null}
-        width={600}
+        width={700}
       >
         <Form
           form={roleForm}
@@ -522,7 +526,7 @@ function Users() {
         open={resetPasswordVisible}
         onCancel={() => setResetPasswordVisible(false)}
         footer={null}
-        width={500}
+        width={600}
       >
         <Form
           form={resetPasswordForm}

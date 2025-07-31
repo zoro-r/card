@@ -12,17 +12,20 @@ import {
   message,
   Drawer,
   Descriptions,
-  Typography
+  Typography,
+  Select,
+  Card
 } from 'antd';
 import {
   UserOutlined,
   EyeOutlined,
   EditOutlined,
-  ReloadOutlined,
 } from '@ant-design/icons';
 import { getWechatUserList, updateWechatUserStatus, type WechatUser } from '@/services/wechatUserService';
+import { getPlatformWechatAccounts } from '@/services/wechatAccountService';
 
 const { Text } = Typography;
+const { Option } = Select;
 
 const WechatUserList: React.FC = () => {
   const actionRef = useRef<any>();
@@ -31,8 +34,31 @@ const WechatUserList: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<WechatUser | null>(null);
   const [form] = Form.useForm();
 
-  // 假设从路由或上下文获取 platformId
-  const [platformId] = useState('platform001');
+  // 平台和微信账号选择
+  const [platformId, setPlatformId] = useState('platform001'); // 假设从路由或上下文获取
+  const [selectedWechatAccount, setSelectedWechatAccount] = useState<string>('');
+  const [wechatAccounts, setWechatAccounts] = useState<any[]>([]);
+
+  // 获取微信账号列表
+  const fetchWechatAccounts = async (currentPlatformId: string) => {
+    try {
+      const response = await getPlatformWechatAccounts(currentPlatformId);
+      setWechatAccounts(response);
+      if (response.length > 0 && !selectedWechatAccount) {
+        setSelectedWechatAccount(response[0].accountId);
+      }
+    } catch (error) {
+      console.error('获取微信账号列表失败:', error);
+      message.error('获取微信账号列表失败');
+    }
+  };
+
+  // 初始化时获取微信账号列表
+  React.useEffect(() => {
+    if (platformId) {
+      fetchWechatAccounts(platformId);
+    }
+  }, [platformId]);
 
   const handleViewDetail = (record: WechatUser) => {
     setCurrentUser(record);
@@ -206,12 +232,220 @@ const WechatUserList: React.FC = () => {
     },
   ];
 
+  // 获取当前选中的微信账号信息
+  const currentWechatAccount = wechatAccounts.find(account => account.accountId === selectedWechatAccount);
+
   return (
     <div>
+      {/* 微信账号选择区域 */}
+      <Card 
+        style={{ 
+          marginBottom: 16,
+          background: '#fff',
+          borderRadius: '12px',
+          border: '1px solid #f0f0f0',
+          boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)'
+        }}
+        styles={{ body: { padding: '20px 24px' } }}
+      >
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 20 
+        }}>
+          {/* 左侧选择区域 */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, flex: 1 }}>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center',
+              gap: 12
+            }}>
+              <Text style={{ 
+                fontSize: '14px', 
+                fontWeight: 600, 
+                color: '#262626',
+                whiteSpace: 'nowrap'
+              }}>
+                选择微信账号
+              </Text>
+              <Select
+                style={{ width: 320 }}
+                value={selectedWechatAccount}
+                onChange={setSelectedWechatAccount}
+                placeholder="请选择微信账号"
+                size="large"
+                variant="filled"
+                popupMatchSelectWidth={false}
+                popupClassName="custom-dropdown"
+                dropdownRender={(originNode) => (
+                  <div style={{
+                    boxShadow: '0 6px 16px 0 rgba(0, 0, 0, 0.08)',
+                    borderRadius: '8px',
+                    minWidth: '360px'
+                  }}>
+                    {originNode}
+                  </div>
+                )}
+                optionRender={(option) => {
+                  // 从 wechatAccounts 中找到对应的账号数据
+                  const account = wechatAccounts.find(acc => acc.accountId === option.value);
+                  if (!account) return option.label;
+                  
+                  return (
+                    <div style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: 12,
+                      padding: '8px 4px'
+                    }}>
+                      <div style={{
+                        width: '8px',
+                        height: '8px',
+                        borderRadius: '50%',
+                        background: account.typeText === '小程序' ? '#722ed1' : '#1890ff',
+                        flexShrink: 0
+                      }} />
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ 
+                          display: 'flex', 
+                          alignItems: 'center',
+                          gap: 8,
+                          marginBottom: 2
+                        }}>
+                          <span style={{ 
+                            fontWeight: 500,
+                            fontSize: '14px',
+                            color: '#262626'
+                          }}>
+                            {account.displayName}
+                          </span>
+                          <Tag 
+                            color={account.typeText === '小程序' ? 'purple' : 'blue'}
+                            style={{ 
+                              margin: 0,
+                              fontSize: '11px',
+                              padding: '0 6px',
+                              height: '18px',
+                              lineHeight: '18px',
+                              borderRadius: '9px'
+                            }}
+                          >
+                            {account.typeText}
+                          </Tag>
+                          {account.enablePayment && (
+                            <Tag 
+                              color="green"
+                              style={{ 
+                                margin: 0,
+                                fontSize: '11px',
+                                padding: '0 6px',
+                                height: '18px',
+                                lineHeight: '18px',
+                                borderRadius: '9px'
+                              }}
+                            >
+                              支付
+                            </Tag>
+                          )}
+                        </div>
+                        <div style={{ 
+                          fontSize: '12px', 
+                          color: '#8c8c8c',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 8
+                        }}>
+                          <span>{account.name}</span>
+                          <span>•</span>
+                          <span style={{ fontFamily: 'Monaco, Consolas, monospace' }}>
+                            {account.appId ? `${account.appId.substring(0, 12)}...` : 'N/A'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }}
+              >
+                {wechatAccounts.map(account => (
+                  <Option 
+                    key={account.accountId} 
+                    value={account.accountId}
+                    data={account}
+                  >
+                    {account.displayName}
+                  </Option>
+                ))}
+              </Select>
+            </div>
+          </div>
+          
+          {/* 右侧信息展示区域 */}
+          {currentWechatAccount && (
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center',
+              background: 'linear-gradient(135deg, #f6f9ff 0%, #f0f5ff 100%)',
+              padding: '10px 16px',
+              borderRadius: '8px',
+              border: '1px solid #e6f4ff',
+              gap: 12
+            }}>
+              <div>
+                <Text style={{ 
+                  fontSize: '12px', 
+                  color: '#595959',
+                  display: 'block',
+                  marginBottom: '2px'
+                }}>
+                  当前账号 AppID
+                </Text>
+                <Text 
+                  copyable={{ 
+                    text: currentWechatAccount.appId,
+                    tooltips: ['复制 AppID', '已复制']
+                  }} 
+                  style={{ 
+                    fontFamily: 'Monaco, Consolas, monospace',
+                    fontSize: '13px',
+                    fontWeight: 500,
+                    color: '#262626'
+                  }}
+                >
+                  {currentWechatAccount.appId}
+                </Text>
+              </div>
+              {currentWechatAccount.enablePayment && (
+                <div style={{
+                  background: '#f6ffed',
+                  border: '1px solid #b7eb8f',
+                  borderRadius: '4px',
+                  padding: '2px 6px',
+                  fontSize: '11px',
+                  color: '#389e0d',
+                  fontWeight: 500
+                }}>
+                  支持支付
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </Card>
+
       <ProTable<WechatUser>
         actionRef={actionRef}
         columns={columns}
         request={async (params) => {
+          if (!selectedWechatAccount) {
+            return {
+              data: [],
+              success: true,
+              total: 0,
+            };
+          }
+
           try {
             const response = await getWechatUserList({
               platformId,
@@ -220,7 +454,6 @@ const WechatUserList: React.FC = () => {
               keyword: params.keyword,
             });
             
-            // request工具已经处理了响应格式，直接使用response
             return {
               data: response.users,
               success: true,
@@ -247,7 +480,7 @@ const WechatUserList: React.FC = () => {
           labelWidth: 'auto',
           defaultCollapsed: false,
         }}
-        headerTitle="微信用户列表"
+        headerTitle={`微信用户列表${currentWechatAccount ? ` - ${currentWechatAccount.displayName}` : ''}`}
       />
 
       {/* 编辑用户模态框 */}
@@ -256,7 +489,7 @@ const WechatUserList: React.FC = () => {
         open={editModalVisible}
         onOk={handleEditSubmit}
         onCancel={() => setEditModalVisible(false)}
-        width={500}
+        width={600}
       >
         <Form form={form} layout="vertical">
           <Form.Item
@@ -304,6 +537,12 @@ const WechatUserList: React.FC = () => {
               <div style={{ marginTop: 8, fontSize: 16, fontWeight: 500 }}>
                 {currentUser.nickName || '未设置昵称'}
               </div>
+              {currentWechatAccount && (
+                <div style={{ marginTop: 4, fontSize: 12, color: '#666' }}>
+                  来自: <Tag color="blue">{currentWechatAccount.typeText}</Tag>
+                  {currentWechatAccount.displayName}
+                </div>
+              )}
             </div>
 
             <Descriptions column={1} bordered>

@@ -15,7 +15,7 @@ interface OptionType extends AxiosRequestConfig {
  * @param url 请求地址
  * @param options 请求配置
  */
-export default function request(url: string, options: OptionType = {}) {
+export default function request<T = any>(url: string, options: OptionType = {}): Promise<T> {
   const {
     method = 'GET',
     alert = true,

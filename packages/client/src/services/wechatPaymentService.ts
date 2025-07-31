@@ -103,11 +103,7 @@ export interface RefundParams {
  * 获取支付记录列表
  */
 export async function getWechatPaymentList(params: WechatPaymentListParams) {
-  return request<{
-    success: boolean;
-    data: WechatPaymentListResponse;
-    message: string;
-  }>(`/api/admin/wechat/${params.platformId}/payments`, {
+  return request<WechatPaymentListResponse>(`/api/admin/wechat/${params.platformId}/payments`, {
     method: 'GET',
     params: {
       status: params.status,
@@ -124,11 +120,7 @@ export async function getWechatPaymentList(params: WechatPaymentListParams) {
  * 获取支付记录详情
  */
 export async function getWechatPaymentDetail(platformId: string, paymentId: string) {
-  return request<{
-    success: boolean;
-    data: WechatPayment;
-    message: string;
-  }>(`/api/admin/wechat/${platformId}/payments/${paymentId}`, {
+  return request<WechatPayment>(`/api/admin/wechat/${platformId}/payments/${paymentId}`, {
     method: 'GET',
   });
 }
@@ -138,12 +130,8 @@ export async function getWechatPaymentDetail(platformId: string, paymentId: stri
  */
 export async function queryWechatPaymentStatus(platformId: string, outTradeNo: string) {
   return request<{
-    success: boolean;
-    data: {
-      status: WechatPaymentStatus;
-      details: any;
-    };
-    message: string;
+    status: WechatPaymentStatus;
+    details: any;
   }>(`/api/wechat/${platformId}/payment/${outTradeNo}/query`, {
     method: 'GET',
   });
@@ -154,11 +142,7 @@ export async function queryWechatPaymentStatus(platformId: string, outTradeNo: s
  */
 export async function refundWechatPayment(platformId: string, data: RefundParams) {
   return request<{
-    success: boolean;
-    data: {
-      refundId?: string;
-    };
-    message: string;
+    refundId?: string;
   }>(`/api/wechat/${platformId}/payment/refund`, {
     method: 'POST',
     data,
@@ -173,11 +157,7 @@ export async function getWechatPaymentStats(
   startDate?: string, 
   endDate?: string
 ) {
-  return request<{
-    success: boolean;
-    data: WechatPaymentStats;
-    message: string;
-  }>(`/api/admin/wechat/${platformId}/payments/stats`, {
+  return request<WechatPaymentStats>(`/api/admin/wechat/${platformId}/payments/stats`, {
     method: 'GET',
     params: {
       startDate,

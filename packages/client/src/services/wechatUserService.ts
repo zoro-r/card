@@ -54,11 +54,7 @@ export interface UpdateUserStatusParams {
  * 获取微信用户列表
  */
 export async function getWechatUserList(params: WechatUserListParams) {
-  return request<{
-    success: boolean;
-    data: WechatUserListResponse;
-    message: string;
-  }>(`/api/admin/wechat/${params.platformId}/users`, {
+  return request<WechatUserListResponse>(`/api/admin/wechat/${params.platformId}/users`, {
     method: 'GET',
     params: {
       page: params.page || 1,
@@ -76,11 +72,7 @@ export async function updateWechatUserStatus(
   userId: string,
   data: UpdateUserStatusParams
 ) {
-  return request<{
-    success: boolean;
-    data: WechatUser;
-    message: string;
-  }>(`/api/admin/wechat/${platformId}/users/${userId}/status`, {
+  return request<WechatUser>(`/api/admin/wechat/${platformId}/users/${userId}/status`, {
     method: 'PUT',
     data,
   });
@@ -90,11 +82,7 @@ export async function updateWechatUserStatus(
  * 获取微信用户详情
  */
 export async function getWechatUserDetail(platformId: string, userId: string) {
-  return request<{
-    success: boolean;
-    data: WechatUser;
-    message: string;
-  }>(`/api/admin/wechat/${platformId}/users/${userId}`, {
+  return request<WechatUser>(`/api/admin/wechat/${platformId}/users/${userId}`, {
     method: 'GET',
   });
 }

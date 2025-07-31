@@ -5,6 +5,7 @@ import menuRouter from './menu';
 import fileRouter from './file';
 import wechatRouter from './wechat';
 import orderRouter from './order';
+import wechatAccountRouter from './wechatAccount';
 import { configRouter, publicRouter } from './config';
 
 export function initRouter(app: any) {
@@ -17,6 +18,7 @@ export function initRouter(app: any) {
   fileRouter(router);
   wechatRouter(router);
   orderRouter(router);
+  wechatAccountRouter(router);
 
   // 注册配置路由
   app.use(configRouter.routes());

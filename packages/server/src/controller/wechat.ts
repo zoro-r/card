@@ -3,8 +3,9 @@ import { success, fail } from '@/utils/tool';
 import { WechatService } from '@/service/wechat';
 import { WechatPaymentService } from '@/service/wechatPayment';
 import { WechatUser } from '@/models/wechatUser';
-import { WechatConfig } from '@/models/wechatConfig';
 import { WechatPayment } from '@/models/wechatPayment';
+import { WechatAccountService } from '@/service/wechatAccount';
+import { WechatAccountType } from '@/models/wechatAccount';
 
 /**
  * 微信控制器
@@ -25,10 +26,21 @@ export class WechatController {
         return;
       }
 
-      // 获取微信配置
-      const config = await WechatConfig.findByPlatformId(platformId);
+      // 获取微信账号配置
+      const wechatAccountService = new WechatAccountService();
+      const accounts = await wechatAccountService.getWechatAccountList(
+        undefined, undefined, WechatAccountType.MINIPROGRAM, platformId, 1, 1
+      );
+      
+      if (!accounts.accounts.length) {
+        ctx.body = fail('未找到可用的微信小程序配置');
+        return;
+      }
+      
+      const account = accounts.accounts[0];
+      const config = await wechatAccountService.getAccountConfigByAppId(account.appId);
       if (!config) {
-        ctx.body = fail('平台配置不存在');
+        ctx.body = fail('微信账号配置无效');
         return;
       }
 
@@ -68,10 +80,21 @@ export class WechatController {
         return;
       }
 
-      // 获取微信配置
-      const config = await WechatConfig.findByPlatformId(platformId);
+      // 获取微信账号配置
+      const wechatAccountService = new WechatAccountService();
+      const accounts = await wechatAccountService.getWechatAccountList(
+        undefined, undefined, WechatAccountType.MINIPROGRAM, platformId, 1, 1
+      );
+      
+      if (!accounts.accounts.length) {
+        ctx.body = fail('未找到可用的微信小程序配置');
+        return;
+      }
+      
+      const account = accounts.accounts[0];
+      const config = await wechatAccountService.getAccountConfigByAppId(account.appId);
       if (!config) {
-        ctx.body = fail('平台配置不存在');
+        ctx.body = fail('微信账号配置无效');
         return;
       }
 
@@ -121,10 +144,21 @@ export class WechatController {
         return;
       }
 
-      // 获取微信配置
-      const config = await WechatConfig.findByPlatformId(platformId);
+      // 获取微信账号配置
+      const wechatAccountService = new WechatAccountService();
+      const accounts = await wechatAccountService.getWechatAccountList(
+        undefined, undefined, WechatAccountType.MINIPROGRAM, platformId, 1, 1
+      );
+      
+      if (!accounts.accounts.length) {
+        ctx.body = fail('未找到可用的微信小程序配置');
+        return;
+      }
+      
+      const account = accounts.accounts[0];
+      const config = await wechatAccountService.getAccountConfigByAppId(account.appId);
       if (!config) {
-        ctx.body = fail('平台配置不存在');
+        ctx.body = fail('微信账号配置无效');
         return;
       }
 

@@ -2,7 +2,19 @@ import axios from 'axios';
 import CryptoJS from 'crypto-js';
 import jwt from 'jsonwebtoken';
 import { WechatUser, IWechatUser } from '@/models/wechatUser';
-import { WechatConfig, IWechatConfig } from '@/models/wechatConfig';
+
+/**
+ * 微信账号配置接口
+ */
+interface WechatAccountConfig {
+  appId: string;
+  appSecret: string;
+  mchId?: string;
+  mchKey?: string;
+  enablePayment: boolean;
+  enableRefund: boolean;
+  enableMessage: boolean;
+}
 
 /**
  * 微信API响应接口
@@ -50,10 +62,10 @@ interface DecryptedPhoneInfo {
  * 微信服务类
  */
 export class WechatService {
-  private config: IWechatConfig;
+  private config: WechatAccountConfig;
   private jwtSecret: string;
 
-  constructor(config: IWechatConfig) {
+  constructor(config: WechatAccountConfig) {
     this.config = config;
     this.jwtSecret = process.env.JWT_SECRET || 'your-jwt-secret-key';
   }
@@ -291,15 +303,11 @@ export class WechatService {
   }
 
   /**
-   * 获取微信配置
+   * 获取微信配置（已废弃，使用WechatAccountService代替）
    * @param platformId 平台ID
    * @returns 微信配置
    */
-  static async getWechatConfig(platformId: string): Promise<IWechatConfig> {
-    const config = await WechatConfig.findByPlatformId(platformId);
-    if (!config) {
-      throw new Error('微信配置不存在');
-    }
-    return config;
+  static async getWechatConfig(platformId: string): Promise<WechatAccountConfig> {
+    throw new Error('该方法已废弃，请使用WechatAccountService获取配置');
   }
 }

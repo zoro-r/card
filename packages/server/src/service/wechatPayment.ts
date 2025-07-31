@@ -2,7 +2,21 @@ import axios from 'axios';
 import crypto from 'crypto';
 import xml2js from 'xml2js';
 import { WechatPayment, IWechatPayment, WechatPaymentStatus, WechatPaymentType } from '@/models/wechatPayment';
-import { WechatConfig, IWechatConfig } from '@/models/wechatConfig';
+import { WechatAccountService } from '@/service/wechatAccount';
+
+/**
+ * 微信账号配置接口
+ */
+interface WechatAccountConfig {
+  appId: string;
+  appSecret: string;
+  mchId?: string;
+  mchKey?: string;
+  enablePayment: boolean;
+  enableRefund: boolean;
+  enableMessage: boolean;
+  validatePaymentConfig(): boolean;
+}
 
 /**
  * 微信统一下单请求参数
@@ -48,9 +62,9 @@ interface PaymentNotifyData {
  * 微信支付服务类
  */
 export class WechatPaymentService {
-  private config: IWechatConfig;
+  private config: WechatAccountConfig;
 
-  constructor(config: IWechatConfig) {
+  constructor(config: WechatAccountConfig) {
     this.config = config;
   }
 
@@ -518,13 +532,27 @@ export class WechatPaymentService {
    * @returns 支付服务实例
    */
   static async create(platformId: string): Promise<WechatPaymentService> {
-    const config = await WechatConfig.findByPlatformId(platformId);
-    if (!config) {
-      throw new Error('微信配置不存在');
+    const wechatAccountService = new WechatAccountService();
+    const accounts = await wechatAccountService.getWechatAccountList(
+      undefined, undefined, undefined, platformId, 1, 1
+    );
+    
+    if (!accounts.accounts.length || !accounts.accounts[0].enablePayment) {
+      throw new Error('未找到可用的微信支付配置');
     }
-    if (!config.enablePayment) {
-      throw new Error('微信支付未启用');
+    
+    const account = accounts.accounts[0];
+    const config = await wechatAccountService.getAccountConfigByAppId(account.appId);
+    if (!config || !config.enablePayment) {
+      throw new Error('微信支付配置无效');
     }
-    return new WechatPaymentService(config);
+
+    // 创建配置对象，包含验证方法
+    const wechatConfig: WechatAccountConfig = {
+      ...config,
+      validatePaymentConfig: () => !!(config.appId && config.appSecret && config.mchId && config.mchKey)
+    };
+
+    return new WechatPaymentService(wechatConfig);
   }
 }

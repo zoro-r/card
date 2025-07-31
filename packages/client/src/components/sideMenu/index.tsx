@@ -62,7 +62,9 @@ function SideMenu(props: SideMenuProps) {
       menuMap[menu.uuid] = { 
         ...menu, 
         key: menu.path || menu.uuid, 
-        label: menu.name, 
+        label: menu.name,
+        name: menu.name,
+        icon: menu.icon,
         children: [] 
       };
     });

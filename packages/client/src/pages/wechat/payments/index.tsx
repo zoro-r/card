@@ -18,6 +18,7 @@ import {
   Col,
   InputNumber,
   Alert,
+  Select,
 } from 'antd';
 import {
   EyeOutlined,
@@ -40,8 +41,10 @@ import {
   WechatPaymentType,
   type RefundParams,
 } from '@/services/wechatPaymentService';
+import { getPlatformWechatAccounts } from '@/services/wechatAccountService';
 
 const { Text } = Typography;
+const { Option } = Select;
 
 const WechatPaymentList: React.FC = () => {
   const actionRef = useRef<any>();
@@ -53,8 +56,45 @@ const WechatPaymentList: React.FC = () => {
   
   const [refundForm] = Form.useForm();
 
-  // 假设从路由或上下文获取 platformId
-  const [platformId] = useState('platform001');
+  // 平台和微信账号选择
+  const [platformId, setPlatformId] = useState('platform001'); // 假设从路由或上下文获取
+  const [selectedWechatAccount, setSelectedWechatAccount] = useState<string>('');
+  const [wechatAccounts, setWechatAccounts] = useState<any[]>([]);
+
+  // 获取微信账号列表
+  const fetchWechatAccounts = async (currentPlatformId: string) => {
+    try {
+      console.log('开始获取微信账号, platformId:', currentPlatformId);
+      const response = await getPlatformWechatAccounts(currentPlatformId); // 获取所有账号
+      console.log('获取到的微信账号原始响应:', response);
+      
+      if (!response || !Array.isArray(response)) {
+        console.warn('响应数据格式异常:', response);
+        setWechatAccounts([]);
+        return;
+      }
+      
+      const paymentAccounts = response.filter((account: any) => account.enablePayment);
+      console.log('支持支付的账号:', paymentAccounts);
+      
+      setWechatAccounts(response); // 先设置所有账号，不过滤支付功能
+      
+      if (response.length > 0 && !selectedWechatAccount) {
+        setSelectedWechatAccount(response[0].accountId);
+      }
+    } catch (error) {
+      console.error('获取微信账号列表失败:', error);
+      message.error('获取微信账号列表失败');
+      setWechatAccounts([]);
+    }
+  };
+
+  // 初始化时获取微信账号列表
+  useEffect(() => {
+    if (platformId) {
+      fetchWechatAccounts(platformId);
+    }
+  }, [platformId]);
 
   useEffect(() => {
     fetchStats();
@@ -64,8 +104,6 @@ const WechatPaymentList: React.FC = () => {
     setStatsLoading(true);
     try {
       const response = await getWechatPaymentStats(platformId, startDate, endDate);
-      
-      // request工具已经处理了响应格式，直接使用response
       setStats(response);
     } catch (error) {
       console.error('获取支付统计失败:', error);
@@ -356,6 +394,195 @@ const WechatPaymentList: React.FC = () => {
 
   return (
     <div>
+      {/* 微信账号选择区域 */}
+      <Card 
+        style={{ 
+          marginBottom: 16,
+          background: '#fff',
+          borderRadius: '12px',
+          border: '1px solid #f0f0f0',
+          boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)'
+        }}
+        styles={{ body: { padding: '20px 24px' } }}
+      >
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 20 
+        }}>
+          {/* 左侧选择区域 */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, flex: 1 }}>
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center',
+              gap: 12
+            }}>
+              <Text style={{ 
+                fontSize: '14px', 
+                fontWeight: 600, 
+                color: '#262626',
+                whiteSpace: 'nowrap'
+              }}>
+                选择微信账号
+              </Text>
+              <Select
+                style={{ width: 320 }}
+                value={selectedWechatAccount}
+                onChange={(value) => {
+                  setSelectedWechatAccount(value);
+                  actionRef.current?.reload();
+                  fetchStats();
+                }}
+                placeholder={wechatAccounts.length === 0 ? "暂无可用的微信账号" : "请选择微信账号"}
+                notFoundContent={wechatAccounts.length === 0 ? "暂无数据，请先创建微信账号" : "未找到匹配项"}
+                size="large"
+                variant="filled"
+                popupMatchSelectWidth={false}
+                popupClassName="custom-dropdown"
+                dropdownRender={(originNode) => (
+                  <div style={{
+                    boxShadow: '0 6px 16px 0 rgba(0, 0, 0, 0.08)',
+                    borderRadius: '8px',
+                    minWidth: '360px'
+                  }}>
+                    {originNode}
+                  </div>
+                )}
+                optionRender={(option) => {
+                  // 从 wechatAccounts 中找到对应的账号数据
+                  const account = wechatAccounts.find(acc => acc.accountId === option.value);
+                  if (!account) return option.label;
+                  
+                  return (
+                    <div style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: 12,
+                      padding: '8px 4px'
+                    }}>
+                      <div style={{
+                        width: '8px',
+                        height: '8px',
+                        borderRadius: '50%',
+                        background: account.typeText === '小程序' ? '#722ed1' : '#1890ff',
+                        flexShrink: 0
+                      }} />
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ 
+                          display: 'flex', 
+                          alignItems: 'center',
+                          gap: 8,
+                          marginBottom: 2
+                        }}>
+                          <span style={{ 
+                            fontWeight: 500,
+                            fontSize: '14px',
+                            color: '#262626'
+                          }}>
+                            {account.displayName}
+                          </span>
+                          <Tag 
+                            color={account.typeText === '小程序' ? 'purple' : 'blue'}
+                            style={{ 
+                              margin: 0,
+                              fontSize: '11px',
+                              padding: '0 6px',
+                              height: '18px',
+                              lineHeight: '18px',
+                              borderRadius: '9px'
+                            }}
+                          >
+                            {account.typeText}
+                          </Tag>
+                          {account.enablePayment && (
+                            <Tag 
+                              color="green"
+                              style={{ 
+                                margin: 0,
+                                fontSize: '11px',
+                                padding: '0 6px',
+                                height: '18px',
+                                lineHeight: '18px',
+                                borderRadius: '9px'
+                              }}
+                            >
+                            支付
+                            </Tag>
+                          )}
+                        </div>
+                        <div style={{ 
+                          fontSize: '12px', 
+                          color: '#8c8c8c',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 8
+                        }}>
+                          <span>{account.name}</span>
+                          <span>•</span>
+                          <span style={{ fontFamily: 'Monaco, Consolas, monospace' }}>
+                            {account.appId ? `${account.appId.substring(0, 12)}...` : 'N/A'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }}
+              >
+                {wechatAccounts.map(account => (
+                  <Option 
+                    key={account.accountId} 
+                    value={account.accountId}
+                    data={account}
+                  >
+                    {account.displayName}
+                  </Option>
+                ))}
+              </Select>
+            </div>
+          </div>
+          
+          {/* 右侧信息展示区域 */}
+          {wechatAccounts.find(account => account.accountId === selectedWechatAccount) && (
+            <div style={{ 
+              display: 'flex', 
+              alignItems: 'center',
+              background: 'linear-gradient(135deg, #f6f9ff 0%, #f0f5ff 100%)',
+              padding: '10px 16px',
+              borderRadius: '8px',
+              border: '1px solid #e6f4ff',
+              gap: 12
+            }}>
+              <div>
+                <Text style={{ 
+                  fontSize: '12px', 
+                  color: '#595959',
+                  display: 'block',
+                  marginBottom: '2px'
+                }}>
+                  当前账号 AppID
+                </Text>
+                <Text 
+                  copyable={{ 
+                    text: wechatAccounts.find(account => account.accountId === selectedWechatAccount)?.appId,
+                    tooltips: ['复制 AppID', '已复制']
+                  }} 
+                  style={{ 
+                    fontFamily: 'Monaco, Consolas, monospace',
+                    fontSize: '13px',
+                    fontWeight: 500,
+                    color: '#262626'
+                  }}
+                >
+                  {wechatAccounts.find(account => account.accountId === selectedWechatAccount)?.appId}
+                </Text>
+              </div>
+            </div>
+          )}
+        </div>
+      </Card>
+
       {/* 统计卡片 */}
       {stats && (
         <Row gutter={16} style={{ marginBottom: 16 }}>
@@ -407,6 +634,14 @@ const WechatPaymentList: React.FC = () => {
         actionRef={actionRef}
         columns={columns}
         request={async (params) => {
+          if (!selectedWechatAccount) {
+            return {
+              data: [],
+              success: true,
+              total: 0,
+            };
+          }
+
           try {
             // 更新统计数据（当日期范围改变时）
             if (params.startDate || params.endDate) {
@@ -423,7 +658,6 @@ const WechatPaymentList: React.FC = () => {
               endDate: params.endDate,
             });
             
-            // request工具已经处理了响应格式，直接使用response
             return {
               data: response.payments,
               success: true,
@@ -450,7 +684,11 @@ const WechatPaymentList: React.FC = () => {
           labelWidth: 'auto',
           defaultCollapsed: false,
         }}
-        headerTitle="微信支付记录"
+        headerTitle={`微信支付记录${
+          wechatAccounts.find(account => account.accountId === selectedWechatAccount)
+            ? ` - ${wechatAccounts.find(account => account.accountId === selectedWechatAccount)?.displayName}`
+            : ''
+        }`}
         scroll={{ x: 1200 }}
       />
 
@@ -596,7 +834,7 @@ const WechatPaymentList: React.FC = () => {
         open={refundModalVisible}
         onOk={handleRefundSubmit}
         onCancel={() => setRefundModalVisible(false)}
-        width={500}
+        width={600}
       >
         <Alert
           message="退款说明"

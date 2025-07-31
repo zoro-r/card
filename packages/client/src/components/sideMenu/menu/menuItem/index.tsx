@@ -192,7 +192,7 @@ function MenuItem(props: MenuItemProps) {
         }}
       >
         <div style={style} className={styles['item']}>
-          <If show={isNode || showIcon}>
+          <If show={showIcon}>
             <MenuIcon className={styles['icon']} icon={icon} />
           </If>
           <div className={styles['text']}>{name}</div>
@@ -218,7 +218,7 @@ function MenuItem(props: MenuItemProps) {
             }
             return (
               <MenuItem
-                showIcon
+                showIcon={false}
                 inlineCollapsed={inlineCollapsed}
                 mode={mode}
                 openKeys={openKeys}
@@ -227,6 +227,7 @@ function MenuItem(props: MenuItemProps) {
                 {...child}
                 key={`${index}`}
                 onClick={onClick}
+                style={{ paddingLeft: '28px' }} // 32px 原始padding + 28px 图标宽度
               />
             );
           })}

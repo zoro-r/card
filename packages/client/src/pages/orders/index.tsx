@@ -671,7 +671,7 @@ const OrderList: React.FC = () => {
         open={shipModalVisible}
         onOk={handleShipSubmit}
         onCancel={() => setShipModalVisible(false)}
-        width={500}
+        width={600}
       >
         <Form form={shipForm} layout="vertical">
           <Form.Item
@@ -714,7 +714,7 @@ const OrderList: React.FC = () => {
         open={remarkModalVisible}
         onOk={handleRemarkSubmit}
         onCancel={() => setRemarkModalVisible(false)}
-        width={500}
+        width={600}
       >
         <Form form={remarkForm} layout="vertical">
           <Form.Item name="sellerMessage" label="卖家备注">
