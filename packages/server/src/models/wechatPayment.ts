@@ -38,7 +38,7 @@ export interface IWechatPayment extends Document {
 
   // 用户信息
   openid: string;               // 用户openid
-  platformId: string;          // 平台ID
+  appId: string;               // 微信账号AppID（用于区分具体的微信账号）
 
   // 支付配置
   paymentType: WechatPaymentType; // 支付类型
@@ -137,11 +137,11 @@ const WechatPaymentSchema = new Schema<IWechatPayment>({
     index: true,
     comment: '用户openid'
   },
-  platformId: {
+  appId: {
     type: String,
     required: true,
     index: true,
-    comment: '平台ID'
+    comment: '微信账号AppID'
   },
 
   // 支付配置
@@ -291,7 +291,7 @@ const WechatPaymentSchema = new Schema<IWechatPayment>({
 });
 
 // 创建复合索引
-WechatPaymentSchema.index({ openid: 1, platformId: 1 });
+WechatPaymentSchema.index({ openid: 1, appId: 1 });
 WechatPaymentSchema.index({ status: 1, createdAt: -1 });
 WechatPaymentSchema.index({ transactionId: 1 }, { sparse: true });
 WechatPaymentSchema.index({ prepayId: 1 }, { sparse: true });
@@ -347,7 +347,7 @@ interface WechatPaymentModel extends mongoose.Model<IWechatPayment> {
   findByPrepayId(prepayId: string): Promise<IWechatPayment | null>;
   findUserPayments(
     openid: string,
-    platformId: string,
+    appId: string,
     page?: number,
     limit?: number
   ): Promise<IWechatPayment[]>;
@@ -371,11 +371,11 @@ WechatPaymentSchema.statics.findByPrepayId = function(prepayId: string) {
 // 静态方法：获取用户支付记录
 WechatPaymentSchema.statics.findUserPayments = function(
   openid: string,
-  platformId: string,
+  appId: string,
   page: number = 1,
   limit: number = 20
 ) {
-  return this.find({ openid, platformId })
+  return this.find({ openid, appId })
     .sort({ createdAt: -1 })
     .skip((page - 1) * limit)
     .limit(limit);

@@ -35,14 +35,13 @@ const WechatUserList: React.FC = () => {
   const [form] = Form.useForm();
 
   // 平台和微信账号选择
-  const [platformId, setPlatformId] = useState('platform001'); // 假设从路由或上下文获取
   const [selectedWechatAccount, setSelectedWechatAccount] = useState<string>('');
   const [wechatAccounts, setWechatAccounts] = useState<any[]>([]);
 
   // 获取微信账号列表
-  const fetchWechatAccounts = async (currentPlatformId: string) => {
+  const fetchWechatAccounts = async () => {
     try {
-      const response = await getPlatformWechatAccounts(currentPlatformId);
+      const response = await getPlatformWechatAccounts('platform001'); // 使用固定的平台ID
       setWechatAccounts(response);
       if (response.length > 0 && !selectedWechatAccount) {
         setSelectedWechatAccount(response[0].accountId);
@@ -55,10 +54,8 @@ const WechatUserList: React.FC = () => {
 
   // 初始化时获取微信账号列表
   React.useEffect(() => {
-    if (platformId) {
-      fetchWechatAccounts(platformId);
-    }
-  }, [platformId]);
+    fetchWechatAccounts();
+  }, []);
 
   const handleViewDetail = (record: WechatUser) => {
     setCurrentUser(record);
@@ -80,7 +77,7 @@ const WechatUserList: React.FC = () => {
 
     try {
       const values = await form.validateFields();
-      await updateWechatUserStatus(platformId, currentUser._id, values);
+      await updateWechatUserStatus(selectedWechatAccount, currentUser._id, values);
       message.success('更新用户状态成功');
       setEditModalVisible(false);
       actionRef.current?.reload();
@@ -92,7 +89,7 @@ const WechatUserList: React.FC = () => {
 
   const handleQuickToggle = async (record: WechatUser, field: 'isActive' | 'isBlocked', value: boolean) => {
     try {
-      await updateWechatUserStatus(platformId, record._id, {
+      await updateWechatUserStatus(selectedWechatAccount, record._id, {
         [field]: value,
       });
       message.success(`${field === 'isActive' ? '激活状态' : '封禁状态'}更新成功`);
@@ -448,7 +445,7 @@ const WechatUserList: React.FC = () => {
 
           try {
             const response = await getWechatUserList({
-              platformId,
+              accountId: selectedWechatAccount, // 传递选中的微信账号ID
               page: params.current || 1,
               limit: params.pageSize || 20,
               keyword: params.keyword,
@@ -480,7 +477,7 @@ const WechatUserList: React.FC = () => {
           labelWidth: 'auto',
           defaultCollapsed: false,
         }}
-        headerTitle={`微信用户列表${currentWechatAccount ? ` - ${currentWechatAccount.displayName}` : ''}`}
+        headerTitle={`微信用户列表 - ${currentWechatAccount ? currentWechatAccount.displayName + ' 账号用户' : '所有用户'}`}
       />
 
       {/* 编辑用户模态框 */}

@@ -61,7 +61,7 @@ export interface WechatPayment {
 }
 
 export interface WechatPaymentListParams {
-  platformId: string;
+  accountId: string; // 直接使用accountId
   status?: WechatPaymentStatus;
   page?: number;
   limit?: number;
@@ -103,7 +103,7 @@ export interface RefundParams {
  * 获取支付记录列表
  */
 export async function getWechatPaymentList(params: WechatPaymentListParams) {
-  return request<WechatPaymentListResponse>(`/api/admin/wechat/${params.platformId}/payments`, {
+  return request<WechatPaymentListResponse>(`/api/admin/wechat/accounts/${params.accountId}/payments`, {
     method: 'GET',
     params: {
       status: params.status,
@@ -119,8 +119,8 @@ export async function getWechatPaymentList(params: WechatPaymentListParams) {
 /**
  * 获取支付记录详情
  */
-export async function getWechatPaymentDetail(platformId: string, paymentId: string) {
-  return request<WechatPayment>(`/api/admin/wechat/${platformId}/payments/${paymentId}`, {
+export async function getWechatPaymentDetail(accountId: string, paymentId: string) {
+  return request<WechatPayment>(`/api/admin/wechat/accounts/${accountId}/payments/${paymentId}`, {
     method: 'GET',
   });
 }
@@ -128,11 +128,11 @@ export async function getWechatPaymentDetail(platformId: string, paymentId: stri
 /**
  * 查询支付状态
  */
-export async function queryWechatPaymentStatus(platformId: string, outTradeNo: string) {
+export async function queryWechatPaymentStatus(accountId: string, outTradeNo: string) {
   return request<{
     status: WechatPaymentStatus;
     details: any;
-  }>(`/api/wechat/${platformId}/payment/${outTradeNo}/query`, {
+  }>(`/api/wechat/accounts/${accountId}/payment/${outTradeNo}/query`, {
     method: 'GET',
   });
 }
@@ -140,10 +140,10 @@ export async function queryWechatPaymentStatus(platformId: string, outTradeNo: s
 /**
  * 申请退款
  */
-export async function refundWechatPayment(platformId: string, data: RefundParams) {
+export async function refundWechatPayment(accountId: string, data: RefundParams) {
   return request<{
     refundId?: string;
-  }>(`/api/wechat/${platformId}/payment/refund`, {
+  }>(`/api/wechat/accounts/${accountId}/payment/refund`, {
     method: 'POST',
     data,
   });
@@ -153,15 +153,16 @@ export async function refundWechatPayment(platformId: string, data: RefundParams
  * 获取支付统计
  */
 export async function getWechatPaymentStats(
-  platformId: string, 
+  accountId: string, 
   startDate?: string, 
   endDate?: string
 ) {
-  return request<WechatPaymentStats>(`/api/admin/wechat/${platformId}/payments/stats`, {
+  const params: any = {};
+  if (startDate) params.startDate = startDate;
+  if (endDate) params.endDate = endDate;
+  
+  return request<WechatPaymentStats>(`/api/admin/wechat/accounts/${accountId}/payments/stats`, {
     method: 'GET',
-    params: {
-      startDate,
-      endDate,
-    },
+    params,
   });
 }

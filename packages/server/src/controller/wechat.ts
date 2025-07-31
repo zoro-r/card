@@ -16,29 +16,19 @@ export class WechatController {
    */
   static async login(ctx: Context) {
     try {
-      const { code, platformId } = ctx.request.body as {
+      const { code, appId } = ctx.request.body as {
         code: string;
-        platformId: string;
+        appId: string; // 直接传入appId
       };
 
-      if (!code || !platformId) {
+      if (!code || !appId) {
         ctx.body = fail('缺少必要参数');
         return;
       }
 
       // 获取微信账号配置
       const wechatAccountService = new WechatAccountService();
-      const accounts = await wechatAccountService.getWechatAccountList(
-        undefined, undefined, WechatAccountType.MINIPROGRAM, platformId, 1, 1
-      );
-      
-      if (!accounts.accounts.length) {
-        ctx.body = fail('未找到可用的微信小程序配置');
-        return;
-      }
-      
-      const account = accounts.accounts[0];
-      const config = await wechatAccountService.getAccountConfigByAppId(account.appId);
+      const config = await wechatAccountService.getAccountConfigByAppId(appId);
       if (!config) {
         ctx.body = fail('微信账号配置无效');
         return;
@@ -46,7 +36,7 @@ export class WechatController {
 
       // 执行登录
       const wechatService = new WechatService(config);
-      const result = await wechatService.login(code, platformId);
+      const result = await wechatService.login(code);
 
       ctx.body = success(result, result.isNewUser ? '注册成功' : '登录成功');
     } catch (error) {
@@ -103,7 +93,7 @@ export class WechatController {
       const userInfo = wechatService.decryptUserInfo(encryptedData, iv, user.sessionKey);
 
       // 更新用户信息
-      await wechatService.updateUserInfo(user.openid, platformId, {
+      await wechatService.updateUserInfo(user.openid, {
         nickName: userInfo.nickName,
         avatarUrl: userInfo.avatarUrl,
         gender: userInfo.gender,
@@ -167,7 +157,7 @@ export class WechatController {
       const phoneInfo = wechatService.decryptPhoneNumber(encryptedData, iv, user.sessionKey);
 
       // 更新用户手机号
-      await wechatService.updateUserInfo(user.openid, platformId, {
+      await wechatService.updateUserInfo(user.openid, {
         phone: phoneInfo.phoneNumber,
         phoneCountryCode: phoneInfo.countryCode
       });
@@ -311,7 +301,7 @@ export class WechatController {
    */
   static async getUserList(ctx: Context) {
     try {
-      const { platformId } = ctx.params;
+      const { accountId } = ctx.params; // 直接使用accountId
       const { page = 1, limit = 20, keyword } = ctx.query as {
         page?: string;
         limit?: string;
@@ -321,8 +311,25 @@ export class WechatController {
       const pageNum = parseInt((page || '1') as string);
       const limitNum = parseInt((limit || '20') as string);
 
+      // 获取对应的appId
+      const wechatAccountService = new WechatAccountService();
+      const account = await wechatAccountService.getWechatAccountDetail(accountId);
+      if (!account) {
+        ctx.body = success({
+          users: [],
+          pagination: {
+            page: pageNum,
+            limit: limitNum,
+            total: 0,
+            pages: 0
+          }
+        }, '获取用户列表成功');
+        return;
+      }
+
       // 构建查询条件
-      const query: any = { platformId };
+      const query: any = { appId: account.appId };
+      
       if (keyword) {
         query.$or = [
           { nickName: { $regex: keyword, $options: 'i' } },
@@ -392,14 +399,14 @@ export class WechatController {
    */
   static async getPaymentList(ctx: Context) {
     try {
-      const { platformId } = ctx.params;
+      const { accountId } = ctx.params; // 直接使用accountId
       const { 
         page = 1, 
         limit = 20, 
         keyword,
         status,
         startDate,
-        endDate 
+        endDate
       } = ctx.query as {
         page?: string;
         limit?: string;
@@ -412,8 +419,24 @@ export class WechatController {
       const pageNum = parseInt((page || '1') as string);
       const limitNum = parseInt((limit || '20') as string);
 
+      // 获取对应的appId
+      const wechatAccountService = new WechatAccountService();
+      const account = await wechatAccountService.getWechatAccountDetail(accountId);
+      if (!account) {
+        ctx.body = success({
+          payments: [],
+          pagination: {
+            page: pageNum,
+            limit: limitNum,
+            total: 0,
+            pages: 0
+          }
+        }, '获取支付记录列表成功');
+        return;
+      }
+
       // 构建查询条件
-      const query: any = { platformId };
+      const query: any = { appId: account.appId };
       
       if (status) {
         query.status = status;
@@ -484,13 +507,36 @@ export class WechatController {
   static async getPaymentStats(ctx: Context) {
     try {
       const { platformId } = ctx.params;
-      const { startDate, endDate } = ctx.query as {
+      const { startDate, endDate, accountId } = ctx.query as {
         startDate?: string;
         endDate?: string;
+        accountId?: string;
       };
 
       // 构建查询条件
-      const query: any = { platformId };
+      const query: any = {};
+      
+      // 如果指定了accountId，则按appId过滤
+      if (accountId) {
+        const wechatAccountService = new WechatAccountService();
+        const account = await wechatAccountService.getWechatAccountDetail(accountId);
+        if (account) {
+          query.appId = account.appId;
+        } else {
+          // 如果找不到账号，返回空统计
+          ctx.body = success({
+            total: 0,
+            totalAmount: 0,
+            totalAmountYuan: 0,
+            statusStats: {}
+          }, '获取支付统计成功');
+          return;
+        }
+      } else {
+        // 如果没有指定accountId，则按platformId过滤（兼容旧逻辑）
+        query.platformId = platformId;
+      }
+      
       if (startDate || endDate) {
         query.createdAt = {};
         if (startDate) query.createdAt.$gte = new Date(startDate);

@@ -22,8 +22,8 @@ export interface IWechatUser extends Document {
   phone?: string;           // 手机号码
   phoneCountryCode?: string;// 手机号国家码
   
-  // 平台相关
-  platformId: string;       // 小程序平台ID（支持多个小程序）
+  // 微信账号关联
+  appId: string;            // 微信账号AppID（用于区分具体的微信账号）
   
   // 状态信息
   isActive: boolean;        // 是否活跃
@@ -121,12 +121,12 @@ const WechatUserSchema = new Schema<IWechatUser>({
     comment: '手机号国家码'
   },
   
-  // 平台相关
-  platformId: {
+  // 微信账号关联
+  appId: {
     type: String,
     required: true,
     index: true,
-    comment: '小程序平台ID'
+    comment: '微信账号AppID'
   },
   
   // 状态信息
@@ -186,9 +186,9 @@ const WechatUserSchema = new Schema<IWechatUser>({
 });
 
 // 创建复合索引
-WechatUserSchema.index({ openid: 1, platformId: 1 }, { unique: true });
-WechatUserSchema.index({ unionid: 1, platformId: 1 }, { sparse: true });
-WechatUserSchema.index({ phone: 1, platformId: 1 }, { sparse: true });
+WechatUserSchema.index({ openid: 1, appId: 1 }, { unique: true });
+WechatUserSchema.index({ unionid: 1, appId: 1 }, { sparse: true });
+WechatUserSchema.index({ phone: 1, appId: 1 }, { sparse: true });
 WechatUserSchema.index({ registerTime: -1 });
 WechatUserSchema.index({ lastLoginTime: -1 });
 WechatUserSchema.index({ isActive: 1, isBlocked: 1 });
@@ -208,26 +208,30 @@ WechatUserSchema.methods.updateLoginInfo = function() {
 
 // 静态方法类型定义
 interface WechatUserModel extends mongoose.Model<IWechatUser> {
-  findByOpenid(openid: string, platformId: string): Promise<IWechatUser | null>;
-  findByUnionid(unionid: string): Promise<IWechatUser | null>;
-  findByPhone(phone: string, platformId?: string): Promise<IWechatUser | null>;
+  findByOpenid(openid: string, appId: string): Promise<IWechatUser | null>;
+  findByUnionid(unionid: string, appId?: string): Promise<IWechatUser | null>;
+  findByPhone(phone: string, appId?: string): Promise<IWechatUser | null>;
 }
 
-// 静态方法：根据openid和平台ID查找用户
-WechatUserSchema.statics.findByOpenid = function(openid: string, platformId: string) {
-  return this.findOne({ openid, platformId });
+// 静态方法：根据openid和AppID查找用户
+WechatUserSchema.statics.findByOpenid = function(openid: string, appId: string) {
+  return this.findOne({ openid, appId });
 };
 
 // 静态方法：根据unionid查找用户
-WechatUserSchema.statics.findByUnionid = function(unionid: string) {
-  return this.findOne({ unionid });
+WechatUserSchema.statics.findByUnionid = function(unionid: string, appId?: string) {
+  const query: any = { unionid };
+  if (appId) {
+    query.appId = appId;
+  }
+  return this.findOne(query);
 };
 
 // 静态方法：根据手机号查找用户
-WechatUserSchema.statics.findByPhone = function(phone: string, platformId?: string) {
+WechatUserSchema.statics.findByPhone = function(phone: string, appId?: string) {
   const query: any = { phone };
-  if (platformId) {
-    query.platformId = platformId;
+  if (appId) {
+    query.appId = appId;
   }
   return this.findOne(query);
 };

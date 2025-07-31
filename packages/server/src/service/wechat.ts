@@ -73,10 +73,9 @@ export class WechatService {
   /**
    * 微信小程序登录
    * @param code 微信登录凭证
-   * @param platformId 平台ID
    * @returns 登录结果
    */
-  async login(code: string, platformId: string): Promise<{
+  async login(code: string): Promise<{
     token: string;
     user: IWechatUser;
     isNewUser: boolean;
@@ -89,8 +88,8 @@ export class WechatService {
         throw new Error(`微信登录失败: ${wxResponse.errmsg}`);
       }
 
-      // 2. 查找或创建用户
-      let user = await WechatUser.findByOpenid(wxResponse.openid, platformId);
+      // 2. 查找或创建用户（使用appId区分）
+      let user = await WechatUser.findByOpenid(wxResponse.openid, this.config.appId);
       let isNewUser = false;
 
       if (!user) {
@@ -99,7 +98,7 @@ export class WechatService {
           openid: wxResponse.openid,
           unionid: wxResponse.unionid,
           sessionKey: this.encryptSessionKey(wxResponse.session_key),
-          platformId,
+          appId: this.config.appId, // 只使用appId
           registerTime: new Date(),
           lastLoginTime: new Date(),
           loginCount: 1
@@ -210,16 +209,15 @@ export class WechatService {
   /**
    * 更新用户信息
    * @param openid 用户openid
-   * @param platformId 平台ID
+   * @param appId 微信账号AppID
    * @param userInfo 用户信息
    * @returns 更新后的用户
    */
   async updateUserInfo(
     openid: string, 
-    platformId: string, 
     userInfo: Partial<IWechatUser>
   ): Promise<IWechatUser> {
-    const user = await WechatUser.findByOpenid(openid, platformId);
+    const user = await WechatUser.findByOpenid(openid, this.config.appId);
     if (!user) {
       throw new Error('用户不存在');
     }
@@ -279,7 +277,7 @@ export class WechatService {
     const payload = {
       type: 'wechat',
       openid: user.openid,
-      platformId: user.platformId,
+      appId: user.appId, // 只使用appId
       userId: user._id
     };
 

@@ -57,15 +57,14 @@ const WechatPaymentList: React.FC = () => {
   const [refundForm] = Form.useForm();
 
   // 平台和微信账号选择
-  const [platformId, setPlatformId] = useState('platform001'); // 假设从路由或上下文获取
   const [selectedWechatAccount, setSelectedWechatAccount] = useState<string>('');
   const [wechatAccounts, setWechatAccounts] = useState<any[]>([]);
 
   // 获取微信账号列表
-  const fetchWechatAccounts = async (currentPlatformId: string) => {
+  const fetchWechatAccounts = async () => {
     try {
-      console.log('开始获取微信账号, platformId:', currentPlatformId);
-      const response = await getPlatformWechatAccounts(currentPlatformId); // 获取所有账号
+      console.log('开始获取微信账号');
+      const response = await getPlatformWechatAccounts('platform001'); // 使用固定的平台ID
       console.log('获取到的微信账号原始响应:', response);
       
       if (!response || !Array.isArray(response)) {
@@ -91,19 +90,17 @@ const WechatPaymentList: React.FC = () => {
 
   // 初始化时获取微信账号列表
   useEffect(() => {
-    if (platformId) {
-      fetchWechatAccounts(platformId);
-    }
-  }, [platformId]);
+    fetchWechatAccounts();
+  }, []);
 
   useEffect(() => {
     fetchStats();
   }, []);
 
-  const fetchStats = async (startDate?: string, endDate?: string) => {
+  const fetchStats = async (startDate?: string, endDate?: string, accountId?: string) => {
     setStatsLoading(true);
     try {
-      const response = await getWechatPaymentStats(platformId, startDate, endDate);
+      const response = await getWechatPaymentStats(accountId || selectedWechatAccount, startDate, endDate);
       setStats(response);
     } catch (error) {
       console.error('获取支付统计失败:', error);
@@ -114,7 +111,7 @@ const WechatPaymentList: React.FC = () => {
 
   const handleViewDetail = async (payment: WechatPayment) => {
     try {
-      const response = await getWechatPaymentDetail(platformId, payment._id);
+      const response = await getWechatPaymentDetail(selectedWechatAccount, payment._id);
       setCurrentPayment(response);
       setDetailDrawerVisible(true);
     } catch (error) {
@@ -124,7 +121,7 @@ const WechatPaymentList: React.FC = () => {
 
   const handleQueryStatus = async (payment: WechatPayment) => {
     try {
-      await queryWechatPaymentStatus(platformId, payment.outTradeNo);
+      await queryWechatPaymentStatus(selectedWechatAccount, payment.outTradeNo);
       message.success('查询成功，状态已同步');
       actionRef.current?.reload();
     } catch (error) {
@@ -154,7 +151,7 @@ const WechatPaymentList: React.FC = () => {
         reason: values.reason,
       };
 
-      await refundWechatPayment(platformId, refundData);
+      await refundWechatPayment(selectedWechatAccount, refundData);
       message.success('退款申请成功');
       setRefundModalVisible(false);
       actionRef.current?.reload();
@@ -433,7 +430,7 @@ const WechatPaymentList: React.FC = () => {
                 onChange={(value) => {
                   setSelectedWechatAccount(value);
                   actionRef.current?.reload();
-                  fetchStats();
+                  fetchStats(undefined, undefined, value);
                 }}
                 placeholder={wechatAccounts.length === 0 ? "暂无可用的微信账号" : "请选择微信账号"}
                 notFoundContent={wechatAccounts.length === 0 ? "暂无数据，请先创建微信账号" : "未找到匹配项"}
@@ -645,11 +642,11 @@ const WechatPaymentList: React.FC = () => {
           try {
             // 更新统计数据（当日期范围改变时）
             if (params.startDate || params.endDate) {
-              fetchStats(params.startDate, params.endDate);
+              fetchStats(params.startDate, params.endDate, selectedWechatAccount);
             }
 
             const response = await getWechatPaymentList({
-              platformId,
+              accountId: selectedWechatAccount, // 传递选中的微信账号ID
               page: params.current || 1,
               limit: params.pageSize || 20,
               keyword: params.keyword,

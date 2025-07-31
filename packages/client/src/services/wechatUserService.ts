@@ -31,7 +31,7 @@ export interface WechatUserListParams {
   page?: number;
   limit?: number;
   keyword?: string;
-  platformId: string;
+  accountId: string; // 直接使用accountId
 }
 
 export interface WechatUserListResponse {
@@ -54,7 +54,7 @@ export interface UpdateUserStatusParams {
  * 获取微信用户列表
  */
 export async function getWechatUserList(params: WechatUserListParams) {
-  return request<WechatUserListResponse>(`/api/admin/wechat/${params.platformId}/users`, {
+  return request<WechatUserListResponse>(`/api/admin/wechat/accounts/${params.accountId}/users`, {
     method: 'GET',
     params: {
       page: params.page || 1,
@@ -68,11 +68,11 @@ export async function getWechatUserList(params: WechatUserListParams) {
  * 更新微信用户状态
  */
 export async function updateWechatUserStatus(
-  platformId: string,
+  accountId: string,
   userId: string,
   data: UpdateUserStatusParams
 ) {
-  return request<WechatUser>(`/api/admin/wechat/${platformId}/users/${userId}/status`, {
+  return request<WechatUser>(`/api/admin/wechat/accounts/${accountId}/users/${userId}/status`, {
     method: 'PUT',
     data,
   });
@@ -81,8 +81,8 @@ export async function updateWechatUserStatus(
 /**
  * 获取微信用户详情
  */
-export async function getWechatUserDetail(platformId: string, userId: string) {
-  return request<WechatUser>(`/api/admin/wechat/${platformId}/users/${userId}`, {
+export async function getWechatUserDetail(accountId: string, userId: string) {
+  return request<WechatUser>(`/api/admin/wechat/accounts/${accountId}/users/${userId}`, {
     method: 'GET',
   });
 }
