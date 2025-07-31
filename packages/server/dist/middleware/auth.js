@@ -13,9 +13,9 @@ exports.authMiddleware = authMiddleware;
 exports.authenticateToken = authenticateToken;
 exports.optionalAuthenticateToken = optionalAuthenticateToken;
 exports.requirePermission = requirePermission;
-const user_1 = require("@/service/user");
-const tool_1 = require("@/utils/tool");
-const wechat_1 = require("@/service/wechat");
+const user_1 = require("../service/user");
+const tool_1 = require("../utils/tool");
+const wechat_1 = require("../service/wechat");
 // 需要跳过认证的路径
 const skipAuthPaths = [
     '/api/user/login',
@@ -34,6 +34,16 @@ function authMiddleware(ctx, next) {
     return __awaiter(this, void 0, void 0, function* () {
         var _a;
         const { path, method } = ctx.request;
+        // 跳过静态文件请求（有文件扩展名的请求）
+        if (require('path').extname(path) !== '') {
+            yield next();
+            return;
+        }
+        // 跳过前端页面路由（非API路由）
+        if (!path.startsWith('/api/')) {
+            yield next();
+            return;
+        }
         // 跳过不需要认证的路径
         if (skipAuthPaths.includes(path)) {
             yield next();

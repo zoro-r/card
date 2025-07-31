@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node -r tsconfig-paths/register src/app.ts",
     "dev": "ts-node-dev -r tsconfig-paths/register --respawn src/app.ts",
-    "build": "tsc",
+    "build": "tsc && tsc-alias",
     "serve": "node dist/app.js",
     "init-data": "ts-node -r tsconfig-paths/register src/scripts/initData.ts",
     "reset-admin": "ts-node -r tsconfig-paths/register src/scripts/resetAdmin.ts"
@@ -15,18 +15,21 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "ts-node-dev": "^2.0.0"
+    "ts-node-dev": "^2.0.0",
+    "tsc-alias": "^1.8.10"
   },
   "dependencies": {
     "@koa/cors": "^5.0.0",
     "@koa/multer": "^4.0.0",
     "@koa/router": "^13.1.0",
+    "koa-static": "^5.0.0",
     "@types/archiver": "^6.0.3",
     "@types/crypto-js": "^4.2.2",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/koa": "^2.15.0",
     "@types/koa-bodyparser": "^4.3.12",
     "@types/koa-logger": "^3.1.5",
+    "@types/koa-static": "^4.0.4",
     "@types/koa__cors": "^5.0.0",
     "@types/koa__multer": "^2.0.7",
     "@types/koa__router": "^12.0.4",

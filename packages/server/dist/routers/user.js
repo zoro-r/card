@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = userRouter;
-const user_1 = require("@/controller/user");
+const user_1 = require("../controller/user");
 function userRouter(router) {
     // 用户登录
     router.post('/api/user/login', user_1.userLogin);

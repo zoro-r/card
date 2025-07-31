@@ -22,6 +22,18 @@ const skipAuthPathPrefixes = [
 export async function authMiddleware(ctx: Context, next: Next) {
   const { path, method } = ctx.request;
 
+  // 跳过静态文件请求（有文件扩展名的请求）
+  if (require('path').extname(path) !== '') {
+    await next();
+    return;
+  }
+
+  // 跳过前端页面路由（非API路由）
+  if (!path.startsWith('/api/')) {
+    await next();
+    return;
+  }
+
   // 跳过不需要认证的路径
   if (skipAuthPaths.includes(path)) {
     await next();

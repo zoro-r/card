@@ -104,7 +104,6 @@ const WechatPaymentSchema = new Schema<IWechatPayment>({
   },
   transactionId: {
     type: String,
-    index: true,
     comment: '微信支付订单号'
   },
 

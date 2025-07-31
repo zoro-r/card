@@ -17,8 +17,8 @@ exports.deleteRoleAPI = deleteRoleAPI;
 exports.batchDeleteRolesAPI = batchDeleteRolesAPI;
 exports.getRoleMenusAPI = getRoleMenusAPI;
 exports.updateRoleMenusAPI = updateRoleMenusAPI;
-const tool_1 = require("@/utils/tool");
-const role_1 = require("@/service/role");
+const tool_1 = require("../utils/tool");
+const role_1 = require("../service/role");
 // 获取角色列表
 function getRoleListAPI(ctx) {
     return __awaiter(this, void 0, void 0, function* () {

@@ -16,8 +16,8 @@ exports.createMenuAPI = createMenuAPI;
 exports.updateMenuAPI = updateMenuAPI;
 exports.deleteMenuAPI = deleteMenuAPI;
 exports.batchDeleteMenusAPI = batchDeleteMenusAPI;
-const tool_1 = require("@/utils/tool");
-const menu_1 = require("@/service/menu");
+const tool_1 = require("../utils/tool");
+const menu_1 = require("../service/menu");
 // 获取菜单列表
 function getMenuListAPI(ctx) {
     return __awaiter(this, void 0, void 0, function* () {

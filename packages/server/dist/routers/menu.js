@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = menuRouter;
-const menu_1 = require("@/controller/menu");
+const menu_1 = require("../controller/menu");
 function menuRouter(router) {
     // 菜单管理接口
     router.get('/api/menus', menu_1.getMenuListAPI);

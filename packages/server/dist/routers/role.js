@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = roleRouter;
-const role_1 = require("@/controller/role");
+const role_1 = require("../controller/role");
 function roleRouter(router) {
     // 角色管理接口
     router.get('/api/roles', role_1.getRoleListAPI);

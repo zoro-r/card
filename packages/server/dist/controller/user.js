@@ -21,8 +21,8 @@ exports.resetUserPasswordAPI = resetUserPasswordAPI;
 exports.changePasswordAPI = changePasswordAPI;
 exports.updateProfileAPI = updateProfileAPI;
 exports.firstTimeChangePasswordAPI = firstTimeChangePasswordAPI;
-const tool_1 = require("@/utils/tool");
-const user_1 = require("@/service/user");
+const tool_1 = require("../utils/tool");
+const user_1 = require("../service/user");
 // 用户登录
 function userLogin(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
