@@ -39,7 +39,6 @@ const uuid_1 = require("uuid");
 const roleMenuSchema = new mongoose_1.Schema({
     uuid: {
         type: String,
-        unique: true,
         default: uuid_1.v4,
     },
     roleId: {

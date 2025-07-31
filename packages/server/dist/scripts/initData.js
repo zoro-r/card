@@ -18,7 +18,7 @@ const roleMenu_1 = require("../models/roleMenu");
 const user_2 = require("../service/user");
 function initData() {
     return __awaiter(this, void 0, void 0, function* () {
-        var _a, _b, _c, _d, _e, _f;
+        var _a, _b, _c, _d, _e, _f, _g;
         try {
             yield (0, database_1.connectDB)();
             const platformId = 'default';
@@ -106,6 +106,16 @@ function initData() {
                     sort: 3,
                     permission: 'menu:manage',
                     parentKey: 'system'
+                },
+                {
+                    name: '配置管理',
+                    path: '/system/config',
+                    component: './pages/system/config',
+                    icon: 'ControlOutlined',
+                    type: 'menu',
+                    sort: 4,
+                    permission: 'config:manage',
+                    parentKey: 'system'
                 }
             ];
             const createdMenus = {};
@@ -113,7 +123,8 @@ function initData() {
                 'system': '系统管理',
                 'user': '用户管理',
                 'role': '角色管理',
-                'menu': '菜单管理'
+                'menu': '菜单管理',
+                'config': '配置管理'
             };
             // 先创建一级菜单
             for (const menuData of menus.filter(m => !m.parentKey)) {
@@ -163,10 +174,11 @@ function initData() {
                     (_b = createdMenus['系统管理']) === null || _b === void 0 ? void 0 : _b.uuid,
                     (_c = createdMenus['用户管理']) === null || _c === void 0 ? void 0 : _c.uuid,
                     (_d = createdMenus['角色管理']) === null || _d === void 0 ? void 0 : _d.uuid,
-                    (_e = createdMenus['菜单管理']) === null || _e === void 0 ? void 0 : _e.uuid
+                    (_e = createdMenus['菜单管理']) === null || _e === void 0 ? void 0 : _e.uuid,
+                    (_f = createdMenus['配置管理']) === null || _f === void 0 ? void 0 : _f.uuid
                 ].filter(Boolean),
                 'user': [
-                    (_f = createdMenus['仪表盘']) === null || _f === void 0 ? void 0 : _f.uuid
+                    (_g = createdMenus['仪表盘']) === null || _g === void 0 ? void 0 : _g.uuid
                 ].filter(Boolean)
             };
             for (const [roleCode, menuIds] of Object.entries(roleMenuMappings)) {
@@ -236,6 +248,7 @@ function initData() {
                         remark: userData.remark,
                         platformId,
                         status: 'active',
+                        isFirstLogin: true, // 显式设置为首次登录
                         createdBy: 'system',
                         updatedBy: 'system'
                     });
@@ -272,6 +285,7 @@ function initData() {
             console.log('  - 用户管理');
             console.log('  - 角色管理');
             console.log('  - 菜单管理');
+            console.log('  - 配置管理');
             console.log('\n权限通过角色菜单关系表管理');
         }
         catch (error) {

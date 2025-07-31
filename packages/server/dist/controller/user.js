@@ -17,6 +17,10 @@ exports.updateUserAPI = updateUserAPI;
 exports.deleteUserAPI = deleteUserAPI;
 exports.batchDeleteUsersAPI = batchDeleteUsersAPI;
 exports.updateUserRolesAPI = updateUserRolesAPI;
+exports.resetUserPasswordAPI = resetUserPasswordAPI;
+exports.changePasswordAPI = changePasswordAPI;
+exports.updateProfileAPI = updateProfileAPI;
+exports.firstTimeChangePasswordAPI = firstTimeChangePasswordAPI;
 const tool_1 = require("@/utils/tool");
 const user_1 = require("@/service/user");
 // 用户登录
@@ -73,12 +77,14 @@ function getUserInfo(ctx) {
 function getUserListAPI(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { page = 1, pageSize = 10, name, loginName, status, platformId = 'default' } = ctx.request.query;
+            const { page = 1, pageSize = 10, nickname, loginName, email, phone, status, platformId = 'default' } = ctx.request.query;
             const result = yield (0, user_1.getUserList)({
                 page: parseInt(page),
                 pageSize: parseInt(pageSize),
-                name,
+                nickname,
                 loginName,
+                email,
+                phone,
                 status,
                 platformId
             });
@@ -230,6 +236,152 @@ function updateUserRolesAPI(ctx) {
                 return;
             }
             ctx.body = (0, tool_1.success)(user, '用户角色更新成功');
+        }
+        catch (err) {
+            ctx.body = (0, tool_1.fail)(err.message);
+        }
+    });
+}
+// 重置用户密码
+function resetUserPasswordAPI(ctx) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const { uuid } = ctx.params;
+            const { newPassword } = ctx.request.body;
+            const { platformId = 'default' } = ctx.request.query;
+            if (!newPassword) {
+                ctx.body = (0, tool_1.fail)('新密码不能为空');
+                return;
+            }
+            if (newPassword.length < 6) {
+                ctx.body = (0, tool_1.fail)('密码长度不能少于6位');
+                return;
+            }
+            const user = yield (0, user_1.resetUserPassword)(uuid, newPassword, platformId);
+            if (!user) {
+                ctx.body = (0, tool_1.fail)('用户不存在');
+                return;
+            }
+            ctx.body = (0, tool_1.success)(null, '密码重置成功');
+        }
+        catch (err) {
+            ctx.body = (0, tool_1.fail)(err.message);
+        }
+    });
+}
+// 用户修改自己的密码
+function changePasswordAPI(ctx) {
+    return __awaiter(this, void 0, void 0, function* () {
+        var _a;
+        try {
+            const token = (_a = ctx.headers.authorization) === null || _a === void 0 ? void 0 : _a.replace('Bearer ', '');
+            if (!token) {
+                ctx.status = 401;
+                ctx.body = (0, tool_1.fail)('未提供认证令牌');
+                return;
+            }
+            const decoded = (0, user_1.verifyToken)(token);
+            if (!decoded) {
+                ctx.status = 401;
+                ctx.body = (0, tool_1.fail)('无效的认证令牌');
+                return;
+            }
+            const { oldPassword, newPassword } = ctx.request.body;
+            if (!oldPassword || !newPassword) {
+                ctx.body = (0, tool_1.fail)('当前密码和新密码不能为空');
+                return;
+            }
+            if (newPassword.length < 6) {
+                ctx.body = (0, tool_1.fail)('新密码长度不能少于6位');
+                return;
+            }
+            yield (0, user_1.changeUserPassword)(decoded.uuid, oldPassword, newPassword, decoded.platformId);
+            ctx.body = (0, tool_1.success)(null, '密码修改成功');
+        }
+        catch (err) {
+            ctx.body = (0, tool_1.fail)(err.message);
+        }
+    });
+}
+// 用户更新自己的个人信息
+function updateProfileAPI(ctx) {
+    return __awaiter(this, void 0, void 0, function* () {
+        var _a;
+        try {
+            const token = (_a = ctx.headers.authorization) === null || _a === void 0 ? void 0 : _a.replace('Bearer ', '');
+            if (!token) {
+                ctx.status = 401;
+                ctx.body = (0, tool_1.fail)('未提供认证令牌');
+                return;
+            }
+            const decoded = (0, user_1.verifyToken)(token);
+            if (!decoded) {
+                ctx.status = 401;
+                ctx.body = (0, tool_1.fail)('无效的认证令牌');
+                return;
+            }
+            const profileData = ctx.request.body;
+            // 基本字段验证
+            if (profileData.nickname && profileData.nickname.length > 50) {
+                ctx.body = (0, tool_1.fail)('昵称长度不能超过50个字符');
+                return;
+            }
+            if (profileData.address && profileData.address.length > 200) {
+                ctx.body = (0, tool_1.fail)('地址长度不能超过200个字符');
+                return;
+            }
+            if (profileData.remark && profileData.remark.length > 500) {
+                ctx.body = (0, tool_1.fail)('个人简介长度不能超过500个字符');
+                return;
+            }
+            if (profileData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profileData.email)) {
+                ctx.body = (0, tool_1.fail)('请输入有效的邮箱地址');
+                return;
+            }
+            if (profileData.phone && !/^1[3-9]\d{9}$/.test(profileData.phone)) {
+                ctx.body = (0, tool_1.fail)('请输入有效的手机号');
+                return;
+            }
+            if (profileData.gender && !['male', 'female', 'other'].includes(profileData.gender)) {
+                ctx.body = (0, tool_1.fail)('性别参数无效');
+                return;
+            }
+            const updatedUser = yield (0, user_1.updateUserProfile)(decoded.uuid, profileData, decoded.platformId);
+            ctx.body = (0, tool_1.success)(updatedUser, '个人信息更新成功');
+        }
+        catch (err) {
+            ctx.body = (0, tool_1.fail)(err.message);
+        }
+    });
+}
+// 首次修改密码
+function firstTimeChangePasswordAPI(ctx) {
+    return __awaiter(this, void 0, void 0, function* () {
+        var _a;
+        try {
+            const token = (_a = ctx.headers.authorization) === null || _a === void 0 ? void 0 : _a.replace('Bearer ', '');
+            if (!token) {
+                ctx.status = 401;
+                ctx.body = (0, tool_1.fail)('未提供认证令牌');
+                return;
+            }
+            const decoded = (0, user_1.verifyToken)(token);
+            if (!decoded) {
+                ctx.status = 401;
+                ctx.body = (0, tool_1.fail)('认证令牌无效');
+                return;
+            }
+            const { newPassword } = ctx.request.body;
+            if (!newPassword) {
+                ctx.body = (0, tool_1.fail)('新密码不能为空');
+                return;
+            }
+            if (newPassword.length < 6) {
+                ctx.body = (0, tool_1.fail)('密码长度不能少于6位');
+                return;
+            }
+            yield (0, user_1.firstTimeChangePassword)(decoded.uuid, newPassword, decoded.platformId);
+            ctx.body = (0, tool_1.success)(null, '密码修改成功');
         }
         catch (err) {
             ctx.body = (0, tool_1.fail)(err.message);

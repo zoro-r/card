@@ -39,13 +39,11 @@ const uuid_1 = require("uuid");
 const adminUserSchema = new mongoose_1.Schema({
     uuid: {
         type: String,
-        unique: true,
         default: uuid_1.v4,
     },
     loginName: {
         type: String,
         required: true,
-        unique: true,
     },
     nickname: {
         type: String,
@@ -94,6 +92,10 @@ const adminUserSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
+    isFirstLogin: {
+        type: Boolean,
+        default: true,
+    },
     lastLoginAt: {
         type: Date,
     },
@@ -112,8 +114,6 @@ const adminUserSchema = new mongoose_1.Schema({
     timestamps: true,
 });
 adminUserSchema.index({ uuid: 1 }, { unique: true });
-adminUserSchema.index({ email: 1 }, { unique: true, sparse: true });
-adminUserSchema.index({ phone: 1 }, { unique: true, sparse: true });
 adminUserSchema.index({ platformId: 1 });
 adminUserSchema.index({ roleIds: 1 });
 exports.AdminUser = mongoose_1.default.model('AdminUser', adminUserSchema);

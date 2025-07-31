@@ -11,7 +11,9 @@
       "Bash(cp:*)",
       "Bash(curl:*)",
       "Bash(cd \"/Users/jiangdaofeng/Desktop/基础项目/card/packages/client/src/components\")",
-      "Bash(mv header Header)"
+      "Bash(mv header Header)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": []
   }

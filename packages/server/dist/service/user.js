@@ -29,6 +29,10 @@ exports.batchDeleteUsers = batchDeleteUsers;
 exports.checkLoginNameExists = checkLoginNameExists;
 exports.checkEmailExists = checkEmailExists;
 exports.checkPhoneExists = checkPhoneExists;
+exports.resetUserPassword = resetUserPassword;
+exports.changeUserPassword = changeUserPassword;
+exports.updateUserProfile = updateUserProfile;
+exports.firstTimeChangePassword = firstTimeChangePassword;
 const user_1 = require("../models/user");
 const role_1 = require("../models/role");
 const userRole_1 = require("../models/userRole");
@@ -98,6 +102,7 @@ function login(loginName, password, platformId) {
             phone: user.phone,
             avatar: user.avatar,
             platformId: user.platformId,
+            isFirstLogin: user.isFirstLogin, // 添加首次登录标识
             roles,
             permissions,
             menus
@@ -154,14 +159,46 @@ function getUserMenus(userUuid, platformId) {
         if (menuIds.length === 0) {
             return [];
         }
-        // 获取菜单
-        const menus = yield menu_1.Menu.find({
+        // 获取有权限的菜单
+        const authorizedMenus = yield menu_1.Menu.find({
             uuid: { $in: menuIds },
             platformId,
             status: 'active'
-        }).sort({ sort: 1 });
+        });
+        // 获取所有父级菜单ID
+        const parentMenuIds = new Set();
+        const getAllParentIds = (menus) => __awaiter(this, void 0, void 0, function* () {
+            for (const menu of menus) {
+                if (menu.parentId) {
+                    parentMenuIds.add(menu.parentId);
+                    // 递归获取父级的父级
+                    const parentMenu = yield menu_1.Menu.findOne({
+                        uuid: menu.parentId,
+                        platformId,
+                        status: 'active'
+                    });
+                    if (parentMenu) {
+                        yield getAllParentIds([parentMenu]);
+                    }
+                }
+            }
+        });
+        yield getAllParentIds(authorizedMenus);
+        // 获取所有父级菜单
+        const parentMenus = parentMenuIds.size > 0 ?
+            yield menu_1.Menu.find({
+                uuid: { $in: Array.from(parentMenuIds) },
+                platformId,
+                status: 'active'
+            }) : [];
+        // 合并有权限的菜单和父级菜单
+        const allMenus = [...authorizedMenus, ...parentMenus];
+        // 去重（基于uuid）
+        const uniqueMenus = allMenus.filter((menu, index, self) => index === self.findIndex(m => m.uuid === menu.uuid));
+        // 排序并构建菜单树
+        uniqueMenus.sort((a, b) => (a.sort || 0) - (b.sort || 0));
         // 构建菜单树
-        return buildMenuTree(menus);
+        return buildMenuTree(uniqueMenus);
     });
 }
 // 构建菜单树
@@ -197,14 +234,20 @@ function buildMenuTree(menus) {
 // 获取用户列表
 function getUserList(params) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { page = 1, pageSize = 10, name, loginName, status, platformId } = params;
+        const { page = 1, pageSize = 10, nickname, loginName, email, phone, status, platformId } = params;
         const skip = (page - 1) * pageSize;
         const query = {};
-        if (name) {
-            query.nickname = new RegExp(name, 'i');
+        if (nickname) {
+            query.nickname = new RegExp(nickname, 'i');
         }
         if (loginName) {
             query.loginName = new RegExp(loginName, 'i');
+        }
+        if (email) {
+            query.email = new RegExp(email, 'i');
+        }
+        if (phone) {
+            query.phone = new RegExp(phone, 'i');
         }
         if (status) {
             query.status = status;
@@ -414,5 +457,111 @@ function checkPhoneExists(phone, excludeUuid, platformId) {
         }
         const user = yield user_1.AdminUser.findOne(query);
         return !!user;
+    });
+}
+// 重置用户密码
+function resetUserPassword(uuid, newPassword, platformId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const query = { uuid };
+        if (platformId) {
+            query.platformId = platformId;
+        }
+        const hashedPassword = hashPassword(newPassword);
+        const user = yield user_1.AdminUser.findOneAndUpdate(query, {
+            password: hashedPassword,
+            updatedAt: new Date()
+        }, { new: true }).select('-password');
+        return user;
+    });
+}
+// 用户修改自己的密码
+function changeUserPassword(uuid, oldPassword, newPassword, platformId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const query = { uuid };
+        if (platformId) {
+            query.platformId = platformId;
+        }
+        // 首先获取用户信息（包括密码）来验证旧密码
+        const user = yield user_1.AdminUser.findOne(query);
+        if (!user) {
+            throw new Error('用户不存在');
+        }
+        // 验证旧密码
+        if (!verifyPassword(oldPassword, user.password)) {
+            throw new Error('当前密码错误');
+        }
+        // 更新为新密码
+        const hashedNewPassword = hashPassword(newPassword);
+        const updatedUser = yield user_1.AdminUser.findOneAndUpdate(query, {
+            password: hashedNewPassword,
+            updatedAt: new Date()
+        }, { new: true }).select('-password');
+        return updatedUser;
+    });
+}
+// 用户更新自己的个人信息
+function updateUserProfile(uuid, profileData, platformId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const query = { uuid };
+        if (platformId) {
+            query.platformId = platformId;
+        }
+        // 如果更新邮箱，需要检查邮箱是否已被其他用户使用
+        if (profileData.email) {
+            const emailExists = yield checkEmailExists(profileData.email, uuid, platformId);
+            if (emailExists) {
+                throw new Error('邮箱已被其他用户使用');
+            }
+        }
+        // 如果更新手机号，需要检查手机号是否已被其他用户使用
+        if (profileData.phone) {
+            const phoneExists = yield checkPhoneExists(profileData.phone, uuid, platformId);
+            if (phoneExists) {
+                throw new Error('手机号已被其他用户使用');
+            }
+        }
+        // 过滤掉不允许用户自己修改的字段
+        const allowedFields = ['nickname', 'email', 'phone', 'gender', 'birthday', 'address', 'remark'];
+        const filteredData = {};
+        Object.keys(profileData).forEach(key => {
+            if (allowedFields.includes(key) && profileData[key] !== undefined) {
+                filteredData[key] = profileData[key];
+            }
+        });
+        // 添加更新时间和更新者
+        filteredData.updatedAt = new Date();
+        filteredData.updatedBy = uuid; // 用户自己更新
+        const updatedUser = yield user_1.AdminUser.findOneAndUpdate(query, filteredData, { new: true }).select('-password');
+        if (!updatedUser) {
+            throw new Error('用户不存在');
+        }
+        return updatedUser;
+    });
+}
+// 首次修改密码（无需验证旧密码）
+function firstTimeChangePassword(uuid, newPassword, platformId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const query = { uuid };
+        if (platformId) {
+            query.platformId = platformId;
+        }
+        const user = yield user_1.AdminUser.findOne(query);
+        if (!user) {
+            throw new Error('用户不存在');
+        }
+        if (!user.isFirstLogin) {
+            throw new Error('用户已完成首次密码修改');
+        }
+        const hashedPassword = hashPassword(newPassword);
+        const updatedUser = yield user_1.AdminUser.findOneAndUpdate(query, {
+            password: hashedPassword,
+            isFirstLogin: false, // 标记为非首次登录
+            updatedAt: new Date(),
+            updatedBy: uuid
+        }, { new: true }).select('-password');
+        if (!updatedUser) {
+            throw new Error('用户不存在');
+        }
+        return updatedUser;
     });
 }

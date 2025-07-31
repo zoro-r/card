@@ -39,7 +39,6 @@ const uuid_1 = require("uuid");
 const roleSchema = new mongoose_1.Schema({
     uuid: {
         type: String,
-        unique: true,
         default: uuid_1.v4,
     },
     name: {
@@ -75,6 +74,5 @@ const roleSchema = new mongoose_1.Schema({
     timestamps: true,
 });
 roleSchema.index({ uuid: 1 }, { unique: true });
-roleSchema.index({ code: 1 }, { unique: true });
 roleSchema.index({ platformId: 1 });
 exports.Role = mongoose_1.default.model('Role', roleSchema);

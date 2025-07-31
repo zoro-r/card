@@ -3,6 +3,8 @@ import userRouter from './user';
 import roleRouter from './role';
 import menuRouter from './menu';
 import fileRouter from './file';
+import wechatRouter from './wechat';
+import orderRouter from './order';
 import { configRouter, publicRouter } from './config';
 
 export function initRouter(app: any) {
@@ -13,6 +15,8 @@ export function initRouter(app: any) {
   roleRouter(router);
   menuRouter(router);
   fileRouter(router);
+  wechatRouter(router);
+  orderRouter(router);
 
   // 注册配置路由
   app.use(configRouter.routes());

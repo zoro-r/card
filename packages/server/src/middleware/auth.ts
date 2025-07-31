@@ -1,6 +1,7 @@
 import { Context, Next } from 'koa';
 import { verifyToken } from '@/service/user';
 import { fail } from '@/utils/tool';
+import { WechatService } from '@/service/wechat';
 
 // 需要跳过认证的路径
 const skipAuthPaths = [
@@ -14,6 +15,7 @@ const skipAuthPathPrefixes = [
   '/public/config', // 公开配置接口无需认证
   '/api/files/public', // 公开文件接口无需认证
   '/api/files/download',
+  '/api/wechat', // 微信相关接口
 ];
 
 // JWT认证中间件
@@ -58,6 +60,71 @@ export async function authMiddleware(ctx: Context, next: Next) {
   ctx.state.user = decoded;
 
   await next();
+}
+
+/**
+ * JWT认证中间件（微信生态专用）
+ */
+export async function authenticateToken(ctx: Context, next: Next) {
+  try {
+    const authHeader = ctx.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+      ctx.status = 401;
+      ctx.body = {
+        success: false,
+        message: '访问令牌缺失'
+      };
+      return;
+    }
+
+    // 验证token
+    const decoded = WechatService.verifyToken(token);
+    if (!decoded) {
+      ctx.status = 401;
+      ctx.body = {
+        success: false,
+        message: '访问令牌无效或已过期'
+      };
+      return;
+    }
+
+    // 将用户信息存储到上下文状态中
+    ctx.state.user = decoded;
+    
+    await next();
+  } catch (error) {
+    console.error('Token验证失败:', error);
+    ctx.status = 401;
+    ctx.body = {
+      success: false,
+      message: '认证失败'
+    };
+  }
+}
+
+/**
+ * 可选的JWT认证中间件（不强制要求登录）
+ */
+export async function optionalAuthenticateToken(ctx: Context, next: Next) {
+  try {
+    const authHeader = ctx.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (token) {
+      const decoded = WechatService.verifyToken(token);
+      if (decoded) {
+        ctx.state.user = decoded;
+      }
+    }
+    
+    await next();
+  } catch (error) {
+    console.error('可选Token验证失败:', error);
+    // 可选认证失败时不阻止请求继续
+    await next();
+  }
 }
 
 // 权限验证中间件
