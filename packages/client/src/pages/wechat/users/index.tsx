@@ -106,7 +106,7 @@ const WechatUserList: React.FC = () => {
       title: '搜索',
       dataIndex: 'keyword',
       hideInTable: true,
-      formItemProps: {
+      fieldProps: {
         placeholder: '搜索用户昵称或手机号',
       },
     },
@@ -177,7 +177,6 @@ const WechatUserList: React.FC = () => {
       dataIndex: 'registerTime',
       width: 100,
       search: false,
-      render: (text) => new Date(text).toLocaleDateString(),
     },
     {
       title: '操作',
@@ -208,7 +207,7 @@ const WechatUserList: React.FC = () => {
   ];
 
   return (
-    <div style={{ padding: 24 }}>
+    <div>
       <ProTable<WechatUser>
         actionRef={actionRef}
         columns={columns}

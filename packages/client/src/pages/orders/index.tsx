@@ -210,7 +210,7 @@ const OrderList: React.FC = () => {
       title: '搜索',
       dataIndex: 'keyword',
       hideInTable: true,
-      formItemProps: {
+      fieldProps: {
         placeholder: '搜索订单号或商品名称',
       },
     },
@@ -311,7 +311,7 @@ const OrderList: React.FC = () => {
             ¥{text}
           </div>
           {record.paymentMethod && (
-            <Tag size="small" color="blue">
+            <Tag color="blue">
               {record.paymentMethod === PaymentMethod.WECHAT ? '微信支付' : record.paymentMethod}
             </Tag>
           )}
@@ -402,7 +402,7 @@ const OrderList: React.FC = () => {
   ];
 
   return (
-    <div style={{ padding: 24 }}>
+    <div>
       {/* 统计卡片 */}
       {stats && (
         <Row gutter={16} style={{ marginBottom: 16 }}>
