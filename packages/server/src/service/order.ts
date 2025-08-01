@@ -19,7 +19,7 @@ interface CreateOrderParams {
     unitPrice?: number;
     quantity: number;
     attributes?: { [key: string]: string };
-    
+
     // 小程序兼容字段
     name?: string;        // 兼容productName
     price?: number;       // 兼容unitPrice
@@ -145,8 +145,9 @@ export class OrderService {
       const timestamp = Date.now().toString();
       const randomSuffix = Math.random().toString(36).substring(2, 6); // 4位随机字符
       const outTradeNo = `WX${timestamp.slice(-10)}${randomSuffix}`; // WX + 10位时间戳 + 4位随机 = 16位
-      
+
       const wechatPayment = new WechatPayment({
+        orderNo, // 直接存储订单号
         appId: order.platformId, // 使用platformId作为appId
         outTradeNo,
         body: order.items.map(item => item.productName).join(', '),
@@ -157,7 +158,7 @@ export class OrderService {
         tradeType: 'JSAPI',
         notifyUrl: `${process.env.API_BASE_URL}/api/wechat/payment/notify`,
         spbillCreateIp: clientIp,
-        attach: orderNo // 将订单号作为附加数据
+        attach: orderNo // 保留attach字段，向下兼容
       });
 
       await wechatPayment.save();
@@ -206,7 +207,11 @@ export class OrderService {
       }
 
       // 2. 查找订单
-      const orderNo = payment.attach;
+      let orderNo = payment.orderNo; // 优先使用orderNo字段
+      if (!orderNo) {
+        // 向下兼容：如果orderNo字段不存在，使用attach字段
+        orderNo = payment.attach as string;
+      }
       if (!orderNo) {
         throw new Error('支付记录缺少订单信息');
       }
@@ -247,7 +252,7 @@ export class OrderService {
   ): Promise<IOrder | null> {
     try {
       const query: any = { orderNo };
-      
+
       if (userId) {
         query.userId = userId;
       } else if (openid) {
@@ -255,6 +260,22 @@ export class OrderService {
       }
 
       const order = await Order.findOne(query).populate('wechatPayment');
+      return order;
+    } catch (error) {
+      console.error('查询订单详情失败:', error);
+      throw new Error('查询订单详情失败');
+    }
+  }
+
+  /**
+   * 获取订单详情（管理后台专用）
+   * @param orderNo 订单号
+   * @returns 订单详情
+   */
+  async getAdminOrderDetail(orderNo: string): Promise<IOrder | null> {
+    try {
+      // 管理员可以查看所有订单，不需要用户ID过滤
+      const order = await Order.findOne({ orderNo }).populate('wechatPayment');
       return order;
     } catch (error) {
       console.error('查询订单详情失败:', error);
@@ -287,7 +308,7 @@ export class OrderService {
   }> {
     try {
       const orders = await Order.findUserOrders(userId, openid, platformId, status, page, limit);
-      
+
       // 计算总数
       const query: any = { platformId };
       if (userId) {
@@ -298,7 +319,7 @@ export class OrderService {
       if (status) {
         query.status = status;
       }
-      
+
       const total = await Order.countDocuments(query);
 
       return {
@@ -428,12 +449,12 @@ export class OrderService {
       if (payment.status === WechatPaymentStatus.PENDING) {
         const paymentService = await WechatPaymentService.create(order.platformId);
         const queryResult = await paymentService.queryPaymentStatus(payment.outTradeNo);
-        
+
         if (queryResult.success && queryResult.status !== payment.status) {
           // 更新支付状态
           payment.status = queryResult.status;
           await payment.save();
-          
+
           // 如果支付成功，更新订单状态
           if (queryResult.status === WechatPaymentStatus.PAID) {
             await this.handlePaymentSuccess((payment._id as any).toString());
@@ -453,19 +474,17 @@ export class OrderService {
 
   /**
    * 获取订单统计
-   * @param platformId 平台ID
    * @param startDate 开始日期
    * @param endDate 结束日期
    * @returns 统计数据
    */
   async getOrderStats(
-    platformId: string,
     startDate?: Date,
     endDate?: Date
   ): Promise<any> {
     try {
-      const stats = await Order.getOrderStats(platformId, startDate, endDate);
-      
+      const stats = await Order.getOrderStats(startDate, endDate);
+
       // 格式化统计数据
       const result: any = {
         total: 0,

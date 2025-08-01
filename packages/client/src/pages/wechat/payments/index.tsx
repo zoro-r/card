@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ProTable, ProColumns } from '@ant-design/pro-components';
+import { useLocation, useNavigate, useSearchParams } from '@umijs/max';
+import { ProTable, ProColumns, ProFormInstance } from '@ant-design/pro-components';
 import {
   Card,
   Button,
@@ -27,6 +28,8 @@ import {
   CreditCardOutlined,
   SyncOutlined,
   RollbackOutlined,
+  ArrowLeftOutlined,
+  ShoppingOutlined,
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import {
@@ -48,6 +51,10 @@ const { Option } = Select;
 
 const WechatPaymentList: React.FC = () => {
   const actionRef = useRef<any>();
+  const formRef = useRef<ProFormInstance>();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [statsLoading, setStatsLoading] = useState(false);
   const [stats, setStats] = useState<WechatPaymentStats | null>(null);
   const [detailDrawerVisible, setDetailDrawerVisible] = useState(false);
@@ -104,6 +111,21 @@ const WechatPaymentList: React.FC = () => {
   useEffect(() => {
     fetchStats();
   }, []);
+
+  // 处理从订单页面传递的URL参数
+  useEffect(() => {
+    const keyword = searchParams.get('keyword');
+    const fromOrder = searchParams.get('fromOrder');
+    
+    if (keyword && fromOrder && formRef.current) {
+      // 设置表单字段值
+      formRef.current.setFieldsValue({
+        keyword: keyword
+      });
+      // 提交表单以触发搜索
+      formRef.current.submit();
+    }
+  }, [searchParams]);
 
   const fetchStats = async (startDate?: string, endDate?: string, accountId?: string) => {
     setStatsLoading(true);
@@ -167,6 +189,11 @@ const WechatPaymentList: React.FC = () => {
       message.error('退款申请失败');
       console.error('退款申请失败:', error);
     }
+  };
+
+  const handleViewOrder = (payment: WechatPayment) => {
+    // 跳转到订单管理页面，并传递商户订单号作为URL参数
+    navigate(`/orders?keyword=${encodeURIComponent(payment.orderNo)}&fromPayment=true`);
   };
 
   const getStatusColor = (status: WechatPaymentStatus) => {
@@ -362,32 +389,50 @@ const WechatPaymentList: React.FC = () => {
       render: (_, record) => (
         <Space direction="vertical" size={4}>
           <Space size={4}>
-            <Tooltip title="查看详情">
-              <Button
-                type="text"
-                size="small"
-                icon={<EyeOutlined />}
-                onClick={() => handleViewDetail(record)}
-              />
-            </Tooltip>
+            <Button
+              size="small"
+              icon={<EyeOutlined />}
+              onClick={() => handleViewDetail(record)}
+            >
+              详情
+            </Button>
+            <Button
+              size="small"
+              icon={<ShoppingOutlined />}
+              onClick={() => handleViewOrder(record)}
+              title="查看关联订单"
+            >
+              订单
+            </Button>
             {record.status === WechatPaymentStatus.PENDING && (
-              <Tooltip title="同步状态">
-                <Button
-                  type="text"
-                  size="small"
-                  icon={<SyncOutlined />}
-                  onClick={() => handleQueryStatus(record)}
-                />
-              </Tooltip>
+              <Button
+                size="small"
+                icon={<SyncOutlined />}
+                onClick={() => handleQueryStatus(record)}
+              >
+                同步
+              </Button>
             )}
           </Space>
           {record.status === WechatPaymentStatus.PAID && !record.refundFee && (
             <Button
               size="small"
-              type="primary"
               danger
               icon={<RollbackOutlined />}
               onClick={() => handleRefund(record)}
+              style={{
+                border: 'none',
+                boxShadow: 'none',
+                color: '#fff',
+                background: '#ff4d4f',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#ff7875';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#ff4d4f';
+              }}
             >
               退款
             </Button>
@@ -635,6 +680,7 @@ const WechatPaymentList: React.FC = () => {
 
       <ProTable<WechatPayment>
         actionRef={actionRef}
+        formRef={formRef}
         columns={columns}
         request={async (params) => {
           if (!selectedWechatAccount) {
@@ -692,18 +738,25 @@ const WechatPaymentList: React.FC = () => {
             ? ` - ${wechatAccounts.find(account => account.accountId === selectedWechatAccount)?.displayName}`
             : ''
         }`}
-        toolBarRender={() => [
-          <Button
-            key="refresh"
-            icon={<ReloadOutlined />}
-            onClick={() => {
-              actionRef.current?.reload();
-              fetchStats();
-            }}
-          >
-            刷新
-          </Button>
-        ]}
+        toolBarRender={() => {
+          const fromOrder = searchParams.get('fromOrder');
+          const buttons = [];
+          
+          // 如果是从订单页面跳转过来的，显示返回按钮
+          if (fromOrder) {
+            buttons.push(
+              <Button
+                key="back"
+                icon={<ArrowLeftOutlined />}
+                onClick={() => navigate('/orders')}
+              >
+                返回订单
+              </Button>
+            );
+          }
+          
+          return buttons;
+        }}
         options={{
           reload: true,
           density: true,

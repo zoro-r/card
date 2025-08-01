@@ -421,6 +421,7 @@ export class WechatController {
       if (keyword) {
         query.$or = [
           { outTradeNo: { $regex: keyword, $options: 'i' } },
+          { orderNo: { $regex: keyword, $options: 'i' } }, // 添加对订单号的支持
           { body: { $regex: keyword, $options: 'i' } }
         ];
       }

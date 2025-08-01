@@ -112,6 +112,29 @@ export class OrderController {
   }
 
   /**
+   * 获取订单详情（管理后台）
+   */
+  static async getAdminOrderDetail(ctx: Context) {
+    try {
+      const { orderNo } = ctx.params;
+
+      // 管理员可以查看所有订单，不需要用户ID过滤
+      const orderService = new OrderService();
+      const order = await orderService.getAdminOrderDetail(orderNo);
+
+      if (!order) {
+        ctx.body = fail('订单不存在');
+        return;
+      }
+
+      ctx.body = success(order, '获取订单详情成功');
+    } catch (error) {
+      console.error('获取订单详情失败:', error);
+      ctx.body = fail('获取订单详情失败');
+    }
+  }
+
+  /**
    * 获取用户订单列表
    */
   static async getUserOrders(ctx: Context) {
@@ -253,7 +276,6 @@ export class OrderController {
    */
   static async getOrderList(ctx: Context) {
     try {
-      const { platformId } = ctx.params;
       const { 
         status, 
         page = '1', 
@@ -273,8 +295,8 @@ export class OrderController {
       const pageNum = parseInt(page);
       const limitNum = parseInt(limit);
 
-      // 构建查询条件
-      const query: any = { platformId };
+      // 构建查询条件（移除platformId过滤）
+      const query: any = {};
       
       if (status) {
         query.status = status;
@@ -381,7 +403,6 @@ export class OrderController {
    */
   static async getOrderStats(ctx: Context) {
     try {
-      const { platformId } = ctx.params;
       const { startDate, endDate } = ctx.query as {
         startDate?: string;
         endDate?: string;
@@ -390,9 +411,9 @@ export class OrderController {
       const start = startDate ? new Date(startDate) : undefined;
       const end = endDate ? new Date(endDate) : undefined;
 
-      // 获取订单统计
+      // 获取订单统计（移除platformId过滤）
       const orderService = new OrderService();
-      const stats = await orderService.getOrderStats(platformId, start, end);
+      const stats = await orderService.getOrderStats(start, end);
 
       ctx.body = success(stats, '获取订单统计成功');
     } catch (error) {

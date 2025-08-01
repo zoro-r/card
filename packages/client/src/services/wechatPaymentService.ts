@@ -18,6 +18,7 @@ export enum WechatPaymentType {
 
 export interface WechatPayment {
   _id: string;
+  orderNo: string;              // 关联的订单号
   outTradeNo: string;
   transactionId?: string;
   body: string;

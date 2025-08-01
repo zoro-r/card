@@ -27,6 +27,7 @@ export enum WechatPaymentType {
  */
 export interface IWechatPayment extends Document {
   // 业务订单信息
+  orderNo: string;              // 关联的订单号（用于数据库关联）
   outTradeNo: string;           // 商户订单号（唯一）
   transactionId?: string;       // 微信支付订单号
 
@@ -95,6 +96,12 @@ export interface IWechatPayment extends Document {
  */
 const WechatPaymentSchema = new Schema<IWechatPayment>({
   // 业务订单信息
+  orderNo: {
+    type: String,
+    required: true,
+    index: true,
+    comment: '关联的订单号'
+  },
   outTradeNo: {
     type: String,
     required: true,
@@ -290,6 +297,7 @@ const WechatPaymentSchema = new Schema<IWechatPayment>({
 });
 
 // 创建复合索引
+WechatPaymentSchema.index({ orderNo: 1 }); // 新增订单号索引
 WechatPaymentSchema.index({ openid: 1, appId: 1 });
 WechatPaymentSchema.index({ status: 1, createdAt: -1 });
 WechatPaymentSchema.index({ transactionId: 1 }, { sparse: true });
@@ -341,6 +349,7 @@ WechatPaymentSchema.methods.initiateRefund = function(refundFee: number, reason?
 
 // 静态方法类型定义
 interface WechatPaymentModel extends mongoose.Model<IWechatPayment> {
+  findByOrderNo(orderNo: string): Promise<IWechatPayment | null>;
   findByOutTradeNo(outTradeNo: string): Promise<IWechatPayment | null>;
   findByTransactionId(transactionId: string): Promise<IWechatPayment | null>;
   findByPrepayId(prepayId: string): Promise<IWechatPayment | null>;
@@ -351,6 +360,11 @@ interface WechatPaymentModel extends mongoose.Model<IWechatPayment> {
     limit?: number
   ): Promise<IWechatPayment[]>;
 }
+
+// 静态方法：根据订单号查找
+WechatPaymentSchema.statics.findByOrderNo = function(orderNo: string) {
+  return this.findOne({ orderNo });
+};
 
 // 静态方法：根据商户订单号查找
 WechatPaymentSchema.statics.findByOutTradeNo = function(outTradeNo: string) {

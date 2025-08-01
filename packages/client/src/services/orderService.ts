@@ -107,7 +107,6 @@ export interface Order {
 }
 
 export interface OrderListParams {
-  platformId: string;
   status?: OrderStatus;
   page?: number;
   limit?: number;
@@ -149,11 +148,7 @@ export interface ShipOrderParams {
  * 获取订单列表
  */
 export async function getOrderList(params: OrderListParams) {
-  return request<{
-    success: boolean;
-    data: OrderListResponse;
-    message: string;
-  }>(`/api/admin/orders/${params.platformId}`, {
+  return request<OrderListResponse>(`/api/admin/orders`, {
     method: 'GET',
     params: {
       status: params.status,
@@ -170,11 +165,7 @@ export async function getOrderList(params: OrderListParams) {
  * 获取订单详情
  */
 export async function getOrderDetail(orderNo: string) {
-  return request<{
-    success: boolean;
-    data: Order;
-    message: string;
-  }>(`/api/orders/${orderNo}`, {
+  return request<Order>(`/api/admin/orders/${orderNo}`, {
     method: 'GET',
   });
 }
@@ -210,12 +201,8 @@ export async function updateOrderRemark(orderNo: string, sellerMessage: string) 
 /**
  * 获取订单统计
  */
-export async function getOrderStats(platformId: string, startDate?: string, endDate?: string) {
-  return request<{
-    success: boolean;
-    data: OrderStats;
-    message: string;
-  }>(`/api/admin/orders/${platformId}/stats`, {
+export async function getOrderStats(startDate?: string, endDate?: string) {
+  return request<OrderStats>(`/api/admin/orders/stats`, {
     method: 'GET',
     params: {
       startDate,

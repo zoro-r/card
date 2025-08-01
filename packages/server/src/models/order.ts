@@ -585,7 +585,7 @@ interface OrderModel extends mongoose.Model<IOrder> {
     page?: number,
     limit?: number
   ): Promise<IOrder[]>;
-  getOrderStats(platformId: string, startDate?: Date, endDate?: Date): Promise<any[]>;
+  getOrderStats(startDate?: Date, endDate?: Date): Promise<any[]>;
 }
 
 // 静态方法：生成订单号
@@ -632,9 +632,9 @@ OrderSchema.statics.findUserOrders = function(
     .populate('wechatPayment');
 };
 
-// 静态方法：获取平台订单统计
-OrderSchema.statics.getOrderStats = function(platformId: string, startDate?: Date, endDate?: Date) {
-  const match: any = { platformId };
+// 静态方法：获取订单统计（移除平台过滤）
+OrderSchema.statics.getOrderStats = function(startDate?: Date, endDate?: Date) {
+  const match: any = {};
 
   if (startDate || endDate) {
     match.createdAt = {};

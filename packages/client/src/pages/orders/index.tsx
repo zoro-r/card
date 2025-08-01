@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ProTable, ProColumns } from '@ant-design/pro-components';
+import { useNavigate, useLocation, useSearchParams } from '@umijs/max';
+import { ProTable, ProColumns, ActionType, ProFormInstance } from '@ant-design/pro-components';
 import {
   Card,
   Button,
@@ -29,6 +30,8 @@ import {
   ShoppingCartOutlined,
   TruckOutlined,
   DollarOutlined,
+  CreditCardOutlined,
+  ArrowLeftOutlined,
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import {
@@ -49,7 +52,11 @@ const { Step } = Steps;
 const { Option } = Select;
 
 const OrderList: React.FC = () => {
-  const actionRef = useRef<any>();
+  const actionRef = useRef<ActionType>();
+  const formRef = useRef<ProFormInstance>();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
   const [statsLoading, setStatsLoading] = useState(false);
   const [stats, setStats] = useState<OrderStats | null>(null);
   const [detailDrawerVisible, setDetailDrawerVisible] = useState(false);
@@ -60,19 +67,12 @@ const OrderList: React.FC = () => {
   const [shipForm] = Form.useForm();
   const [remarkForm] = Form.useForm();
 
-  // 假设从路由或上下文获取 platformId
-  const [platformId] = useState('platform001');
-
-  useEffect(() => {
-    fetchStats();
-  }, []);
-
   const fetchStats = async (startDate?: string, endDate?: string) => {
     setStatsLoading(true);
     try {
-      const response = await getOrderStats(platformId, startDate, endDate);
+      const response = await getOrderStats(startDate, endDate);
       
-      // request工具已经处理了响应格式，直接使用response
+      // 直接使用response，request工具已经提取了data
       setStats(response);
     } catch (error) {
       console.error('获取订单统计失败:', error);
@@ -80,6 +80,25 @@ const OrderList: React.FC = () => {
       setStatsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  // 处理URL参数中的搜索关键字
+  useEffect(() => {
+    const keyword = searchParams.get('keyword');
+    const fromPayment = searchParams.get('fromPayment');
+    
+    if (keyword && fromPayment && formRef.current) {
+      // 设置表单字段值
+      formRef.current.setFieldsValue({
+        keyword: keyword
+      });
+      // 提交表单以触发搜索
+      formRef.current.submit();
+    }
+  }, [searchParams]);
 
   const handleViewDetail = async (order: Order) => {
     try {
@@ -135,6 +154,11 @@ const OrderList: React.FC = () => {
     }
   };
 
+  const handleViewPayment = (order: Order) => {
+    // 跳转到支付管理页面，并传递订单号作为URL参数
+    navigate(`/wechat/payments?keyword=${encodeURIComponent(order.orderNo)}&fromOrder=true`);
+  };
+
   const getStatusColor = (status: OrderStatus) => {
     const colorMap: Record<OrderStatus, string> = {
       [OrderStatus.PENDING]: 'orange',
@@ -148,8 +172,8 @@ const OrderList: React.FC = () => {
     return colorMap[status] || 'default';
   };
 
-  const getOrderSteps = (order: Order) => {
-    const steps = [
+  const getOrderSteps = (order: Order): Array<{ title: string; description: string; status: 'wait' | 'process' | 'finish' | 'error' }> => {
+    const steps: Array<{ title: string; description: string; status: 'wait' | 'process' | 'finish' | 'error' }> = [
       {
         title: '创建订单',
         description: dayjs(order.createdAt).format('YYYY-MM-DD HH:mm'),
@@ -323,9 +347,9 @@ const OrderList: React.FC = () => {
       dataIndex: 'status',
       width: 100,
       search: false,
-      render: (status, record) => (
+      render: (status: any, record: Order) => (
         <div>
-          <Tag color={getStatusColor(status)}>
+          <Tag color={getStatusColor(record.status)}>
             {record.statusText}
           </Tag>
           <div style={{ fontSize: 12, color: '#666', marginTop: 4 }}>
@@ -369,27 +393,34 @@ const OrderList: React.FC = () => {
       render: (_, record) => (
         <Space direction="vertical" size={4}>
           <Space size={4}>
-            <Tooltip title="查看详情">
+            <Button
+              size="small"
+              icon={<EyeOutlined />}
+              onClick={() => handleViewDetail(record)}
+            >
+              详情
+            </Button>
+            <Button
+              size="small"
+              icon={<EditOutlined />}
+              onClick={() => handleRemark(record)}
+            >
+              备注
+            </Button>
+            {(record.status === OrderStatus.PAID || record.status === OrderStatus.SHIPPED || record.status === OrderStatus.DELIVERED) && (
               <Button
-                type="text"
                 size="small"
-                icon={<EyeOutlined />}
-                onClick={() => handleViewDetail(record)}
-              />
-            </Tooltip>
-            <Tooltip title="备注">
-              <Button
-                type="text"
-                size="small"
-                icon={<EditOutlined />}
-                onClick={() => handleRemark(record)}
-              />
-            </Tooltip>
+                icon={<CreditCardOutlined />}
+                onClick={() => handleViewPayment(record)}
+                title="查看支付记录"
+              >
+                支付
+              </Button>
+            )}
           </Space>
           {record.status === OrderStatus.PAID && (
             <Button
               size="small"
-              type="primary"
               icon={<TruckOutlined />}
               onClick={() => handleShip(record)}
             >
@@ -452,6 +483,7 @@ const OrderList: React.FC = () => {
 
       <ProTable<Order>
         actionRef={actionRef}
+        formRef={formRef}
         columns={columns}
         request={async (params) => {
           try {
@@ -461,7 +493,6 @@ const OrderList: React.FC = () => {
             }
 
             const response = await getOrderList({
-              platformId,
               page: params.current || 1,
               limit: params.pageSize || 20,
               keyword: params.keyword,
@@ -470,7 +501,7 @@ const OrderList: React.FC = () => {
               endDate: params.endDate,
             });
             
-            // request工具已经处理了响应格式，直接使用response
+            // 直接使用response，request工具已经提取了data
             return {
               data: response.orders,
               success: true,
@@ -498,6 +529,30 @@ const OrderList: React.FC = () => {
           defaultCollapsed: false,
         }}
         headerTitle="订单列表"
+        toolBarRender={() => {
+          const fromPayment = searchParams.get('fromPayment');
+          const buttons = [];
+          
+          // 如果是从支付页面跳转过来的，显示返回按钮
+          if (fromPayment) {
+            buttons.push(
+              <Button
+                key="back"
+                icon={<ArrowLeftOutlined />}
+                onClick={() => navigate('/wechat/payments')}
+              >
+                返回支付
+              </Button>
+            );
+          }
+          
+          return buttons;
+        }}
+        options={{
+          reload: true,
+          density: true,
+          setting: true,
+        }}
         scroll={{ x: 1200 }}
       />
 
@@ -547,6 +602,18 @@ const OrderList: React.FC = () => {
                 <Descriptions.Item label="创建时间" span={2}>
                   {dayjs(currentOrder.createdAt).format('YYYY-MM-DD HH:mm:ss')}
                 </Descriptions.Item>
+                {currentOrder.paymentStatus === 'PAID' && (
+                  <Descriptions.Item label="关联支付" span={2}>
+                    <Button
+                      type="link"
+                      size="small"
+                      icon={<CreditCardOutlined />}
+                      onClick={() => handleViewPayment(currentOrder)}
+                    >
+                      查看支付记录
+                    </Button>
+                  </Descriptions.Item>
+                )}
               </Descriptions>
             </Card>
 

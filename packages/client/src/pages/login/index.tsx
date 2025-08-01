@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Card, message, Typography } from 'antd';
 import { UserOutlined, LockOutlined, SafetyCertificateOutlined } from '@ant-design/icons';
 import { useNavigate } from 'umi';
@@ -15,6 +15,21 @@ const { Title, Text } = Typography;
 const Login: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [form] = Form.useForm();
+
+  // 本地环境自动填充用户名密码
+  useEffect(() => {
+    const isLocalhost = window.location.hostname === 'localhost' || 
+                       window.location.hostname === '127.0.0.1' || 
+                       window.location.hostname.includes('localhost');
+    
+    if (isLocalhost) {
+      form.setFieldsValue({
+        loginName: 'super',
+        password: '123456'
+      });
+    }
+  }, [form]);
 
   const onFinish = async (values: LoginForm) => {
     setLoading(true);
@@ -84,6 +99,7 @@ const Login: React.FC = () => {
             
             <Form
               name="login"
+              form={form}
               onFinish={onFinish}
               autoComplete="off"
               size="large"
