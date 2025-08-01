@@ -188,8 +188,8 @@ const WechatPaymentList: React.FC = () => {
       title: '搜索',
       dataIndex: 'keyword',
       hideInTable: true,
-      formItemProps: {
-        // placeholder: '搜索商户订单号或商品描述',
+      fieldProps: {
+        placeholder: '搜索商户订单号或商品描述',
       },
     },
     {

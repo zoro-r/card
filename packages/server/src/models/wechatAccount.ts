@@ -161,7 +161,10 @@ const WechatAccountSchema = new Schema<IWechatAccount>({
   },
   appSecret: {
     type: String,
-    required: true,
+    required: function(this: any) {
+      // 创建时必填，更新时可选
+      return this.isNew;
+    },
     comment: '微信AppSecret（加密存储）'
   },
   originalId: {
