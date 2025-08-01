@@ -5,7 +5,8 @@ import { authenticateToken } from '@/middleware/auth';
 const orderRouter = new Router();
 
 // 用户订单相关路由
-orderRouter.post('/orders/:platformId', authenticateToken, OrderController.createOrder);
+orderRouter.post('/orders', authenticateToken, OrderController.createOrder); // 微信小程序创建订单
+orderRouter.post('/orders/:platformId', authenticateToken, OrderController.createOrder); // 兼容管理后台
 orderRouter.post('/orders/:orderNo/payment', authenticateToken, OrderController.initiatePayment);
 orderRouter.get('/orders/:orderNo', authenticateToken, OrderController.getOrderDetail);
 orderRouter.get('/orders/:platformId/list', authenticateToken, OrderController.getUserOrders);

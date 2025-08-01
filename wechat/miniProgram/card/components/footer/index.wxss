@@ -1,0 +1,5 @@
+.footer {
+  width: 750rpx;
+  height: 241rpx;
+  background: #E60012;
+}

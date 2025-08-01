@@ -1,0 +1,8 @@
+<view
+  class="header"
+  style="height: {{navHeight}}rpx; padding-top: {{statusBarHeight}}px; background-color: rgba(230,0,18,{{opacity}});"
+>
+  <view class="back-btn" wx:if="{{showBack}}" bindtap="onBack">←</view>
+  <view class="title">{{title}}</view>
+</view>
+<view style="height: {{navHeight + statusBarHeight * 2}}rpx;" />

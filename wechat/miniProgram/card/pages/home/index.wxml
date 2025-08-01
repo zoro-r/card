@@ -1,0 +1,57 @@
+<view class="container">
+  <!-- 使用吸顶header组件 -->
+  <sticky-header title="我的名片" opacity="{{navOpacity}}" showBack="{{false}}"></sticky-header>
+  <view class="header">
+    <image class="logo" src="http://www.wuxipaike.com/uploadfiles/2023/07/th_20230708104944715.jpg?MDY4NWVkMGEwZDA2MGEzYTgzZjQwYjMyMmI4MjhjYi5qcGc=" mode="heightFix" />
+
+    <view class="info">
+      <view class="left">
+        <view class="name">
+          张伟
+        </view>
+        <view class="job">
+          派克新材营销部 | 销售经理
+        </view>
+        <view class="phone">
+          139-0167-3320
+        </view>
+        <view class="email">
+          zhangwei@wuxipaike.com
+        </view>
+      </view>
+      <view class="right">
+        <image class="avatar" src="" mode="" />
+      </view>
+    </view>
+
+    <view class="footer">
+      <view>
+        无锡市滨湖区胡埭工业园联合路30号
+      </view>
+      <view>
+        www.wuxipaike.com
+      </view>
+    </view>
+  </view>
+</view>
+
+<view class="icon-list">
+  <view class="item" wx:for="{{tabs}}" wx:key="index">
+    <image class="icon" src="" mode="" />
+    <view>{{item.title}}</view>
+  </view>
+</view>
+
+<view class="buttons">
+  <view class="btn">
+    官方网站
+  </view>
+  <view class="btn">
+    微信公众号
+  </view>
+  <navigator class="btn test-btn" url="/pages/test/index">
+    API测试
+  </navigator>
+</view>
+
+<footer />

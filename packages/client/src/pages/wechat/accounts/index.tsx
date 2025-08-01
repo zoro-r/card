@@ -13,7 +13,7 @@ import {
   Descriptions,
   Typography,
   Switch,
-  Popconfirm
+  Popconfirm,
 } from 'antd';
 import {
   PlusOutlined,
@@ -22,12 +22,78 @@ import {
   EyeOutlined,
   ReloadOutlined,
   WechatOutlined,
+  FileOutlined,
+  UploadOutlined,
 } from '@ant-design/icons';
 import { getWechatAccountList, createWechatAccount, updateWechatAccount, deleteWechatAccount, type WechatAccount } from '@/services/wechatAccountService';
 import dayjs from 'dayjs';
 
 const { Text } = Typography;
 const { Option } = Select;
+
+// 文件选择和文本输入混合组件
+const FileTextArea: React.FC<{
+  value?: string;
+  onChange?: (value: string) => void;
+  placeholder?: string;
+  accept?: string;
+  rows?: number;
+  style?: React.CSSProperties;
+}> = ({ value, onChange, placeholder, accept = '.pem,.key,.txt', rows = 6, style }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileSelect = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const content = e.target?.result as string;
+        onChange?.(content);
+        message.success(`文件 ${file.name} 读取成功`);
+      };
+      reader.onerror = () => {
+        message.error('文件读取失败');
+      };
+      reader.readAsText(file);
+    }
+  };
+
+  return (
+    <div>
+      <Input.TextArea
+        value={value}
+        onChange={(e) => onChange?.(e.target.value)}
+        placeholder={placeholder}
+        rows={rows}
+        style={style}
+      />
+      <div style={{ marginTop: 8 }}>
+        <Button 
+          size="small" 
+          icon={<UploadOutlined />} 
+          onClick={handleFileSelect}
+          type="dashed"
+        >
+          选择文件填充
+        </Button>
+        <span style={{ marginLeft: 8, color: '#999', fontSize: '12px' }}>
+          支持 .pem、.key、.txt 格式文件
+        </span>
+      </div>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept={accept}
+        style={{ display: 'none' }}
+        onChange={handleFileChange}
+      />
+    </div>
+  );
+};
 
 export interface WechatAccountFormData {
   name: string;
@@ -40,7 +106,7 @@ export interface WechatAccountFormData {
   status: 'ACTIVE' | 'INACTIVE' | 'SUSPENDED' | 'EXPIRED' | 'PENDING';
   enablePayment?: boolean;
   mchId?: string;
-  apiKey?: string;
+  mchKey?: string;
   certPath?: string;
   keyPath?: string;
 }
@@ -63,7 +129,7 @@ const WechatAccountList: React.FC = () => {
     form.setFieldsValue({
       ...record,
       appSecret: '', // 不显示原密钥
-      apiKey: record.enablePayment ? '' : undefined, // 不显示原密钥
+      mchKey: record.enablePayment ? '' : undefined, // 不显示原密钥
     });
     setEditModalVisible(true);
   };
@@ -116,8 +182,8 @@ const WechatAccountList: React.FC = () => {
       if (!updateData.appSecret) {
         delete updateData.appSecret;
       }
-      if (!updateData.apiKey) {
-        delete updateData.apiKey;
+      if (!updateData.mchKey) {
+        delete updateData.mchKey;
       }
       
       await updateWechatAccount(currentAccount.accountId, updateData);
@@ -367,23 +433,53 @@ const WechatAccountList: React.FC = () => {
       >
         {({ getFieldValue }) =>
           getFieldValue('enablePayment') ? (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-              <Form.Item
-                name="mchId"
-                label="商户号"
-                rules={[{ required: true, message: '请输入商户号' }]}
-              >
-                <Input placeholder="请输入微信支付商户号" />
-              </Form.Item>
+            <>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                <Form.Item
+                  name="mchId"
+                  label="商户号"
+                  rules={[{ required: true, message: '请输入商户号' }]}
+                >
+                  <Input placeholder="请输入微信支付商户号" />
+                </Form.Item>
+                
+                <Form.Item
+                  name="mchKey"
+                  label={isEdit ? "API密钥（留空则不修改）" : "API密钥"}
+                  rules={isEdit ? [] : [{ required: true, message: '请输入API密钥' }]}
+                >
+                  <Input.Password placeholder={isEdit ? "留空则不修改现有密钥" : "请输入API密钥"} />
+                </Form.Item>
+              </div>
               
-              <Form.Item
-                name="apiKey"
-                label={isEdit ? "API密钥（留空则不修改）" : "API密钥"}
-                rules={isEdit ? [] : [{ required: true, message: '请输入API密钥' }]}
-              >
-                <Input.Password placeholder={isEdit ? "留空则不修改现有密钥" : "请输入API密钥"} />
-              </Form.Item>
-            </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>              
+                <Form.Item
+                  name="certPath"
+                  label="API证书内容"
+                  tooltip="粘贴apiclient_cert.pem文件内容，用于微信支付退款等接口，可选"
+                >
+                  <FileTextArea
+                    rows={6}
+                    placeholder="-----BEGIN CERTIFICATE-----&#10;证书内容...&#10;-----END CERTIFICATE-----"
+                    style={{ fontFamily: 'monospace', fontSize: '12px' }}
+                    accept=".pem,.crt,.cer,.txt"
+                  />
+                </Form.Item>
+                
+                <Form.Item
+                  name="keyPath"
+                  label="API密钥内容"
+                  tooltip="粘贴apiclient_key.pem文件内容，用于微信支付退款等接口，可选"
+                >
+                  <FileTextArea
+                    rows={6}
+                    placeholder="-----BEGIN PRIVATE KEY-----&#10;密钥内容...&#10;-----END PRIVATE KEY-----"
+                    style={{ fontFamily: 'monospace', fontSize: '12px' }}
+                    accept=".pem,.key,.txt"
+                  />
+                </Form.Item>
+              </div>
+            </>
           ) : null
         }
       </Form.Item>
@@ -539,6 +635,24 @@ const WechatAccountList: React.FC = () => {
               {currentAccount.enablePayment && currentAccount.mchId && (
                 <Descriptions.Item label="商户号">
                   <Text copyable>{currentAccount.mchId}</Text>
+                </Descriptions.Item>
+              )}
+              
+              {currentAccount.enablePayment && currentAccount.certPath && (
+                <Descriptions.Item label="API证书">
+                  <Space>
+                    <FileOutlined />
+                    <Text>{currentAccount.certPath}</Text>
+                  </Space>
+                </Descriptions.Item>
+              )}
+              
+              {currentAccount.enablePayment && currentAccount.keyPath && (
+                <Descriptions.Item label="API密钥文件">
+                  <Space>
+                    <FileOutlined />
+                    <Text>{currentAccount.keyPath}</Text>
+                  </Space>
                 </Descriptions.Item>
               )}
               

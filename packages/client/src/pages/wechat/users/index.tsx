@@ -57,6 +57,13 @@ const WechatUserList: React.FC = () => {
     fetchWechatAccounts();
   }, []);
 
+  // 当选中的微信账号改变时，触发表格重新加载
+  React.useEffect(() => {
+    if (selectedWechatAccount && actionRef.current) {
+      actionRef.current.reload();
+    }
+  }, [selectedWechatAccount]);
+
   const handleViewDetail = (record: WechatUser) => {
     setCurrentUser(record);
     setDetailDrawerVisible(true);
@@ -207,9 +214,8 @@ const WechatUserList: React.FC = () => {
       width: 150,
       search: false,
       render: (_, record) => (
-        <Space>
+        <Space size={2}>
           <Button
-            type="link"
             size="small"
             icon={<EyeOutlined />}
             onClick={() => handleViewDetail(record)}
@@ -217,7 +223,6 @@ const WechatUserList: React.FC = () => {
             详情
           </Button>
           <Button
-            type="link"
             size="small"
             icon={<EditOutlined />}
             onClick={() => handleEdit(record)}
@@ -478,6 +483,23 @@ const WechatUserList: React.FC = () => {
           defaultCollapsed: false,
         }}
         headerTitle={`微信用户列表 - ${currentWechatAccount ? currentWechatAccount.displayName + ' 账号用户' : '所有用户'}`}
+        toolBarRender={() => [
+          <Button
+            key="refresh"
+            onClick={() => {
+              actionRef.current?.reload();
+            }}
+          >
+            刷新
+          </Button>
+        ]}
+        options={{
+          reload: true,
+          density: true,
+          setting: true,
+        }}
+        dateFormatter="string"
+        scroll={{ x: 'max-content' }}
       />
 
       {/* 编辑用户模态框 */}

@@ -50,10 +50,9 @@ export class WechatController {
    */
   static async decryptUserInfo(ctx: Context) {
     try {
-      const { encryptedData, iv, platformId } = ctx.request.body as {
+      const { encryptedData, iv } = ctx.request.body as {
         encryptedData: string;
         iv: string;
-        platformId: string;
       };
 
       // 从token中获取用户信息
@@ -64,7 +63,7 @@ export class WechatController {
       }
 
       // 查找用户
-      const user = await WechatUser.findByOpenid(tokenData.openid, platformId);
+      const user = await WechatUser.findByOpenid(tokenData.openid, tokenData.appId);
       if (!user) {
         ctx.body = fail('用户不存在');
         return;
@@ -72,17 +71,7 @@ export class WechatController {
 
       // 获取微信账号配置
       const wechatAccountService = new WechatAccountService();
-      const accounts = await wechatAccountService.getWechatAccountList(
-        undefined, undefined, WechatAccountType.MINIPROGRAM, platformId, 1, 1
-      );
-      
-      if (!accounts.accounts.length) {
-        ctx.body = fail('未找到可用的微信小程序配置');
-        return;
-      }
-      
-      const account = accounts.accounts[0];
-      const config = await wechatAccountService.getAccountConfigByAppId(account.appId);
+      const config = await wechatAccountService.getAccountConfigByAppId(tokenData.appId);
       if (!config) {
         ctx.body = fail('微信账号配置无效');
         return;
@@ -114,10 +103,9 @@ export class WechatController {
    */
   static async decryptPhoneNumber(ctx: Context) {
     try {
-      const { encryptedData, iv, platformId } = ctx.request.body as {
+      const { encryptedData, iv } = ctx.request.body as {
         encryptedData: string;
         iv: string;
-        platformId: string;
       };
 
       // 从token中获取用户信息
@@ -128,7 +116,7 @@ export class WechatController {
       }
 
       // 查找用户
-      const user = await WechatUser.findByOpenid(tokenData.openid, platformId);
+      const user = await WechatUser.findByOpenid(tokenData.openid, tokenData.appId);
       if (!user) {
         ctx.body = fail('用户不存在');
         return;
@@ -136,17 +124,7 @@ export class WechatController {
 
       // 获取微信账号配置
       const wechatAccountService = new WechatAccountService();
-      const accounts = await wechatAccountService.getWechatAccountList(
-        undefined, undefined, WechatAccountType.MINIPROGRAM, platformId, 1, 1
-      );
-      
-      if (!accounts.accounts.length) {
-        ctx.body = fail('未找到可用的微信小程序配置');
-        return;
-      }
-      
-      const account = accounts.accounts[0];
-      const config = await wechatAccountService.getAccountConfigByAppId(account.appId);
+      const config = await wechatAccountService.getAccountConfigByAppId(tokenData.appId);
       if (!config) {
         ctx.body = fail('微信账号配置无效');
         return;
@@ -177,8 +155,6 @@ export class WechatController {
    */
   static async getUserInfo(ctx: Context) {
     try {
-      const { platformId } = ctx.params;
-
       // 从token中获取用户信息
       const tokenData = ctx.state.user;
       if (!tokenData || tokenData.type !== 'wechat') {
@@ -187,7 +163,7 @@ export class WechatController {
       }
 
       // 查找用户
-      const user = await WechatUser.findByOpenid(tokenData.openid, platformId);
+      const user = await WechatUser.findByOpenid(tokenData.openid, tokenData.appId);
       if (!user) {
         ctx.body = fail('用户不存在');
         return;

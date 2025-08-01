@@ -19,6 +19,8 @@ export interface CreateWechatAccountParams {
   originalId?: string;
   mchId?: string;
   mchKey?: string;
+  certPath?: string;
+  keyPath?: string;
   payNotifyUrl?: string;
   refundNotifyUrl?: string;
   enablePayment?: boolean;
@@ -48,6 +50,8 @@ export interface UpdateWechatAccountParams {
   originalId?: string;
   mchId?: string;
   mchKey?: string;
+  certPath?: string;
+  keyPath?: string;
   payNotifyUrl?: string;
   refundNotifyUrl?: string;
   enablePayment?: boolean;
@@ -213,6 +217,8 @@ export class WechatAccountService {
         originalId: params.originalId,
         mchId: params.mchId,
         mchKey: encryptedMchKey,
+        certPath: params.certPath,
+        keyPath: params.keyPath,
         payNotifyUrl: params.payNotifyUrl,
         refundNotifyUrl: params.refundNotifyUrl,
         enablePayment: params.enablePayment ?? false,
@@ -283,6 +289,8 @@ export class WechatAccountService {
       if (params.mchKey) {
         account.mchKey = this.encryptSensitiveData(params.mchKey);
       }
+      if (params.certPath !== undefined) account.certPath = params.certPath;
+      if (params.keyPath !== undefined) account.keyPath = params.keyPath;
       
       await account.save();
       return account;

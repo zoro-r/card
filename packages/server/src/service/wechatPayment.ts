@@ -366,8 +366,10 @@ export class WechatPaymentService {
         throw new Error('订单状态不支持退款');
       }
 
-      // 2. 生成退款单号
-      const outRefundNo = `RF${Date.now()}${Math.random().toString().substr(2, 6)}`;
+      // 2. 生成退款单号（符合微信32字节限制）
+      const timestamp = Date.now().toString();
+      const randomSuffix = Math.random().toString(36).substring(2, 6); // 4位随机字符
+      const outRefundNo = `RF${timestamp.slice(-10)}${randomSuffix}`; // RF + 10位时间戳 + 4位随机 = 16位
       const nonceStr = this.generateNonceStr();
 
       // 3. 构建退款参数
@@ -528,23 +530,16 @@ export class WechatPaymentService {
 
   /**
    * 获取微信支付配置
-   * @param platformId 平台ID
+   * @param platformId 平台ID (实际上是appId)
    * @returns 支付服务实例
    */
   static async create(platformId: string): Promise<WechatPaymentService> {
     const wechatAccountService = new WechatAccountService();
-    const accounts = await wechatAccountService.getWechatAccountList(
-      undefined, undefined, undefined, platformId, 1, 1
-    );
     
-    if (!accounts.accounts.length || !accounts.accounts[0].enablePayment) {
-      throw new Error('未找到可用的微信支付配置');
-    }
-    
-    const account = accounts.accounts[0];
-    const config = await wechatAccountService.getAccountConfigByAppId(account.appId);
+    // 直接通过appId查找账户配置
+    const config = await wechatAccountService.getAccountConfigByAppId(platformId);
     if (!config || !config.enablePayment) {
-      throw new Error('微信支付配置无效');
+      throw new Error('未找到可用的微信支付配置');
     }
 
     // 创建配置对象，包含验证方法

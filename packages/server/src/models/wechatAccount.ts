@@ -51,8 +51,8 @@ export interface IWechatAccount extends Document {
   refundNotifyUrl?: string;        // 退款回调地址
   
   // 证书配置（用于退款等高级功能）
-  certPath?: string;               // 商户证书文件路径
-  keyPath?: string;                // 商户密钥文件路径
+  certPath?: string;               // 商户证书内容
+  keyPath?: string;                // 商户密钥内容
   
   // 业务配置
   enablePayment: boolean;          // 是否启用支付
@@ -193,11 +193,11 @@ const WechatAccountSchema = new Schema<IWechatAccount>({
   // 证书配置
   certPath: {
     type: String,
-    comment: '商户证书文件路径'
+    comment: '商户证书内容'
   },
   keyPath: {
     type: String,
-    comment: '商户密钥文件路径'
+    comment: '商户密钥内容'
   },
   
   // 业务配置

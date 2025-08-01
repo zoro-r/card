@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "sticky-header": "/components/header/index",
+    "footer": "/components/footer/index"
+  },
+  "navigationBarTextStyle": "white",
+  "navigationStyle": "custom"
+}

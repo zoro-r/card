@@ -93,6 +93,14 @@ const WechatPaymentList: React.FC = () => {
     fetchWechatAccounts();
   }, []);
 
+  // 当选中的微信账号改变时，触发表格重新加载和统计数据刷新
+  useEffect(() => {
+    if (selectedWechatAccount && actionRef.current) {
+      actionRef.current.reload();
+      fetchStats();
+    }
+  }, [selectedWechatAccount]);
+
   useEffect(() => {
     fetchStats();
   }, []);
@@ -429,8 +437,6 @@ const WechatPaymentList: React.FC = () => {
                 value={selectedWechatAccount}
                 onChange={(value) => {
                   setSelectedWechatAccount(value);
-                  actionRef.current?.reload();
-                  fetchStats(undefined, undefined, value);
                 }}
                 placeholder={wechatAccounts.length === 0 ? "暂无可用的微信账号" : "请选择微信账号"}
                 notFoundContent={wechatAccounts.length === 0 ? "暂无数据，请先创建微信账号" : "未找到匹配项"}
@@ -686,6 +692,23 @@ const WechatPaymentList: React.FC = () => {
             ? ` - ${wechatAccounts.find(account => account.accountId === selectedWechatAccount)?.displayName}`
             : ''
         }`}
+        toolBarRender={() => [
+          <Button
+            key="refresh"
+            icon={<ReloadOutlined />}
+            onClick={() => {
+              actionRef.current?.reload();
+              fetchStats();
+            }}
+          >
+            刷新
+          </Button>
+        ]}
+        options={{
+          reload: true,
+          density: true,
+          setting: true,
+        }}
         scroll={{ x: 1200 }}
       />
 

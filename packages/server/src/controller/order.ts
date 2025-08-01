@@ -13,7 +13,7 @@ export class OrderController {
    */
   static async createOrder(ctx: Context) {
     try {
-      const { platformId } = ctx.params;
+      let { platformId } = ctx.params;
       const orderData = ctx.request.body as any;
 
       // 从token中获取用户信息
@@ -24,9 +24,19 @@ export class OrderController {
       if (tokenData) {
         if (tokenData.type === 'wechat') {
           openid = tokenData.openid;
+          // 如果没有提供platformId，从token中获取appId作为platformId
+          if (!platformId) {
+            platformId = tokenData.appId;
+          }
         } else {
           userId = tokenData.userId;
         }
+      }
+
+      // 验证platformId
+      if (!platformId) {
+        ctx.body = fail('缺少平台标识');
+        return;
       }
 
       // 验证必要参数

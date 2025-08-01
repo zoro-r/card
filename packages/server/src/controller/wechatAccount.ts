@@ -1,9 +1,9 @@
 import { Context } from 'koa';
 import { success, fail } from '@/utils/tool';
-import { 
-  WechatAccountService, 
-  CreateWechatAccountParams, 
-  UpdateWechatAccountParams 
+import {
+  WechatAccountService,
+  CreateWechatAccountParams,
+  UpdateWechatAccountParams
 } from '@/service/wechatAccount';
 import { WechatAccountStatus, WechatAccountType } from '@/models/wechatAccount';
 
@@ -30,23 +30,23 @@ export class WechatAccountController {
   static async createWechatAccount(ctx: Context) {
     try {
       const params = ctx.request.body as CreateWechatAccountParams;
-      
+
       // 参数验证
       if (!params.name || !params.displayName || !params.appId || !params.appSecret || !params.type || !params.platformId) {
         ctx.body = fail('缺少必要参数');
         return;
       }
-      
+
       const wechatAccountService = new WechatAccountService();
       const account = await wechatAccountService.createWechatAccount(params);
-      
+
       ctx.body = success(account, '创建微信账号成功');
     } catch (error) {
       console.error('创建微信账号失败:', error);
       ctx.body = fail(error instanceof Error ? error.message : '创建微信账号失败');
     }
   }
-  
+
   /**
    * 更新微信账号信息
    */
@@ -54,51 +54,51 @@ export class WechatAccountController {
     try {
       const { accountId } = ctx.params;
       const params = ctx.request.body as UpdateWechatAccountParams;
-      
+
       const wechatAccountService = new WechatAccountService();
       const account = await wechatAccountService.updateWechatAccount(accountId, params);
-      
+
       ctx.body = success(account, '更新微信账号成功');
     } catch (error) {
       console.error('更新微信账号失败:', error);
       ctx.body = fail(error instanceof Error ? error.message : '更新微信账号失败');
     }
   }
-  
+
   /**
    * 获取微信账号详情
    */
   static async getWechatAccountDetail(ctx: Context) {
     try {
       const { accountId } = ctx.params;
-      
+
       const wechatAccountService = new WechatAccountService();
       const account = await wechatAccountService.getWechatAccountDetail(accountId);
-      
+
       if (!account) {
         ctx.body = fail('微信账号不存在');
         return;
       }
-      
+
       ctx.body = success(account, '获取微信账号详情成功');
     } catch (error) {
       console.error('获取微信账号详情失败:', error);
       ctx.body = fail('获取微信账号详情失败');
     }
   }
-  
+
   /**
    * 获取微信账号列表
    */
   static async getWechatAccountList(ctx: Context) {
     try {
-      const { 
+      const {
         keyword,
         status,
         type,
         platformId,
-        page = '1', 
-        limit = '20' 
+        page = '1',
+        limit = '20'
       } = ctx.query as {
         keyword?: string;
         status?: string;
@@ -107,12 +107,12 @@ export class WechatAccountController {
         page?: string;
         limit?: string;
       };
-      
+
       const pageNum = parseInt(page);
       const limitNum = parseInt(limit);
       const accountStatus = status as WechatAccountStatus | undefined;
       const accountType = type as WechatAccountType | undefined;
-      
+
       const wechatAccountService = new WechatAccountService();
       const result = await wechatAccountService.getWechatAccountList(
         keyword,
@@ -122,31 +122,31 @@ export class WechatAccountController {
         pageNum,
         limitNum
       );
-      
+
       ctx.body = success(result, '获取微信账号列表成功');
     } catch (error) {
       console.error('获取微信账号列表失败:', error);
       ctx.body = fail('获取微信账号列表失败');
     }
   }
-  
+
   /**
    * 激活微信账号
    */
   static async activateWechatAccount(ctx: Context) {
     try {
       const { accountId } = ctx.params;
-      
+
       const wechatAccountService = new WechatAccountService();
       const account = await wechatAccountService.activateWechatAccount(accountId);
-      
+
       ctx.body = success(account, '激活微信账号成功');
     } catch (error) {
       console.error('激活微信账号失败:', error);
       ctx.body = fail(error instanceof Error ? error.message : '激活微信账号失败');
     }
   }
-  
+
   /**
    * 暂停微信账号
    */
@@ -154,51 +154,51 @@ export class WechatAccountController {
     try {
       const { accountId } = ctx.params;
       const { reason } = ctx.request.body as { reason?: string };
-      
+
       const wechatAccountService = new WechatAccountService();
       const account = await wechatAccountService.suspendWechatAccount(accountId, reason);
-      
+
       ctx.body = success(account, '暂停微信账号成功');
     } catch (error) {
       console.error('暂停微信账号失败:', error);
       ctx.body = fail(error instanceof Error ? error.message : '暂停微信账号失败');
     }
   }
-  
+
   /**
    * 删除微信账号
    */
   static async deleteWechatAccount(ctx: Context) {
     try {
       const { accountId } = ctx.params;
-      
+
       const wechatAccountService = new WechatAccountService();
       await wechatAccountService.deleteWechatAccount(accountId);
-      
+
       ctx.body = success(null, '删除微信账号成功');
     } catch (error) {
       console.error('删除微信账号失败:', error);
       ctx.body = fail(error instanceof Error ? error.message : '删除微信账号失败');
     }
   }
-  
+
   /**
    * 获取微信账号统计信息
    */
   static async getWechatAccountStats(ctx: Context) {
     try {
       const { platformId } = ctx.query as { platformId?: string };
-      
+
       const wechatAccountService = new WechatAccountService();
       const stats = await wechatAccountService.getWechatAccountStats(platformId);
-      
+
       ctx.body = success(stats, '获取微信账号统计成功');
     } catch (error) {
       console.error('获取微信账号统计失败:', error);
       ctx.body = fail('获取微信账号统计失败');
     }
   }
-  
+
   /**
    * 获取微信账号配置选项
    */
@@ -219,42 +219,42 @@ export class WechatAccountController {
           { value: WechatAccountType.OPEN_PLATFORM, label: '开放平台' }
         ]
       };
-      
+
       ctx.body = success(options, '获取配置选项成功');
     } catch (error) {
       console.error('获取配置选项失败:', error);
       ctx.body = fail('获取配置选项失败');
     }
   }
-  
+
   /**
    * 批量操作微信账号
    */
   static async batchOperateWechatAccounts(ctx: Context) {
     try {
-      const { 
+      const {
         accountIds,
         operation,
-        params 
+        params
       } = ctx.request.body as {
         accountIds: string[];
         operation: 'activate' | 'suspend' | 'delete';
         params?: any;
       };
-      
+
       if (!accountIds || !Array.isArray(accountIds) || accountIds.length === 0) {
         ctx.body = fail('请选择要操作的微信账号');
         return;
       }
-      
+
       if (!['activate', 'suspend', 'delete'].includes(operation)) {
         ctx.body = fail('操作类型无效');
         return;
       }
-      
+
       const wechatAccountService = new WechatAccountService();
       const results: { accountId: string; success: boolean; error?: string }[] = [];
-      
+
       for (const accountId of accountIds) {
         try {
           switch (operation) {
@@ -270,17 +270,17 @@ export class WechatAccountController {
           }
           results.push({ accountId, success: true });
         } catch (error) {
-          results.push({ 
-            accountId, 
-            success: false, 
-            error: error instanceof Error ? error.message : '操作失败' 
+          results.push({
+            accountId,
+            success: false,
+            error: error instanceof Error ? error.message : '操作失败'
           });
         }
       }
-      
+
       const successCount = results.filter(r => r.success).length;
       const failCount = results.filter(r => !r.success).length;
-      
+
       ctx.body = success({
         results,
         summary: {
@@ -294,7 +294,7 @@ export class WechatAccountController {
       ctx.body = fail('批量操作微信账号失败');
     }
   }
-  
+
   /**
    * 获取指定平台的微信账号选择列表（用于下拉选择）
    */
@@ -302,7 +302,7 @@ export class WechatAccountController {
     try {
       const { platformId } = ctx.params;
       const { type } = ctx.query as { type?: string };
-      
+
       const wechatAccountService = new WechatAccountService();
       const result = await wechatAccountService.getWechatAccountList(
         undefined, // keyword
@@ -312,7 +312,7 @@ export class WechatAccountController {
         1, // page
         100 // limit - 获取更多数据用于选择
       );
-      
+
       // 简化返回数据，只包含选择需要的字段
       const accounts = result.accounts.map(account => ({
         accountId: account.accountId,
@@ -323,29 +323,29 @@ export class WechatAccountController {
         appId: account.appId,
         enablePayment: account.enablePayment
       }));
-      
+
       ctx.body = success(accounts, '获取平台微信账号成功');
     } catch (error) {
       console.error('获取平台微信账号失败:', error);
       ctx.body = fail('获取平台微信账号失败');
     }
   }
-  
+
   /**
    * 测试微信账号配置
    */
   static async testWechatAccountConfig(ctx: Context) {
     try {
       const { accountId } = ctx.params;
-      
+
       const wechatAccountService = new WechatAccountService();
       const account = await wechatAccountService.getWechatAccountDetail(accountId);
-      
+
       if (!account) {
         ctx.body = fail('微信账号不存在');
         return;
       }
-      
+
       // 基础配置检查
       const configCheck = {
         hasAppId: !!account.appId,
@@ -354,9 +354,9 @@ export class WechatAccountController {
         isActive: account.status === WechatAccountStatus.ACTIVE,
         withinValidPeriod: true // 简化实现
       };
-      
+
       const allValid = Object.values(configCheck).every(Boolean);
-      
+
       ctx.body = success({
         valid: allValid,
         checks: configCheck,

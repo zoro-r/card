@@ -9,15 +9,21 @@ import { WechatService } from '@/service/wechat';
  */
 interface CreateOrderParams {
   items: Array<{
-    productId: string;
-    productName: string;
+    // 标准字段
+    productId?: string;
+    productName?: string;
     productImage?: string;
     skuId?: string;
     skuName?: string;
     skuImage?: string;
-    unitPrice: number;
+    unitPrice?: number;
     quantity: number;
     attributes?: { [key: string]: string };
+    
+    // 小程序兼容字段
+    name?: string;        // 兼容productName
+    price?: number;       // 兼容unitPrice
+    description?: string; // 商品描述
   }>;
   shippingAddress?: {
     receiverName: string;
@@ -55,10 +61,14 @@ export class OrderService {
       // 1. 生成订单号
       const orderNo = Order.generateOrderNo(platformId);
 
-      // 2. 计算商品金额
+      // 2. 计算商品金额和映射字段
       const items = params.items.map(item => ({
-        ...item,
-        totalPrice: item.unitPrice * item.quantity
+        productId: item.productId || 'test-product-' + Date.now(), // 如果没有productId，生成一个测试用的
+        productName: item.name || item.productName || '测试商品', // 支持name或productName字段
+        unitPrice: item.price || item.unitPrice || 0, // 支持price或unitPrice字段
+        quantity: item.quantity,
+        description: item.description || '',
+        totalPrice: (item.price || item.unitPrice || 0) * item.quantity
       }));
 
       // 3. 创建订单
@@ -131,8 +141,13 @@ export class OrderService {
       }
 
       // 2. 创建微信支付记录
-      const outTradeNo = `WX${orderNo}${Date.now()}`;
+      // 生成符合微信支付限制的商户订单号（最大32字节）
+      const timestamp = Date.now().toString();
+      const randomSuffix = Math.random().toString(36).substring(2, 6); // 4位随机字符
+      const outTradeNo = `WX${timestamp.slice(-10)}${randomSuffix}`; // WX + 10位时间戳 + 4位随机 = 16位
+      
       const wechatPayment = new WechatPayment({
+        appId: order.platformId, // 使用platformId作为appId
         outTradeNo,
         body: order.items.map(item => item.productName).join(', '),
         totalFee: order.totalAmount,

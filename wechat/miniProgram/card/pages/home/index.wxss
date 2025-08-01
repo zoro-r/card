@@ -1,0 +1,142 @@
+page {
+  background: #F0F0F0;
+}
+
+.container {
+  width: 100%;
+  background: linear-gradient(0deg, rgba(230, 0, 18, 0) 0%, #E60012 100%);
+}
+
+.header {
+  height: 450rpx;
+  background: #F5F5F5;
+  box-shadow: 0rpx 2rpx 11rpx 0rpx rgba(17, 17, 17, 0.1);
+  border-radius: 11rpx;
+  margin-left: 18rpx;
+  padding: 30rpx 32rpx 33rpx 48.35rpx;
+  margin-right: 18rpx;
+}
+
+.logo {
+  height: 71rpx;
+}
+
+.info {
+  margin-top: 50rpx;
+  display: flex;
+  justify-content: space-between;
+}
+
+.info .right {
+  flex: 0 0 157rpx;
+  background-color: red;
+}
+
+.avatar {
+  width: 157rpx;
+  height: 220rpx;
+  background: #C8C8C8;
+}
+
+.info .left {
+  flex: 1;
+}
+
+.name {
+  width: 130rpx;
+  height: 53rpx;
+  font-family: PingFang SC;
+  font-weight: 800;
+  font-size: 56rpx;
+  color: #171717;
+  line-height: 43rpx;
+}
+
+.job {
+  height: 25rpx;
+  font-family: PingFang SC;
+  font-weight: 500;
+  font-size: 25rpx;
+  color: #555555;
+  line-height: 43rpx;
+  margin-top: 21rpx;
+  margin-bottom: 40rpx;
+}
+
+.phone,
+.email {
+  width: 173rpx;
+  height: 17rpx;
+  font-family: PingFang SC;
+  font-weight: 500;
+  font-size: 22rpx;
+  color: #555555;
+  line-height: 43rpx;
+  margin-bottom: 20rpx;
+}
+
+.footer {
+  display: flex;
+  font-family: PingFang SC;
+  font-weight: 500;
+  font-size: 18rpx;
+  color: #858585;
+  margin-top: 37rpx;
+  justify-content: space-between;
+}
+
+.icon-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 714rpx;
+  height: 133rpx;
+  background: #FFFFFF;
+  box-shadow: 0rpx 2rpx 11rpx 0rpx rgba(17, 17, 17, 0.1);
+  border-radius: 11rpx;
+  margin: 47rpx 18rpx;
+}
+
+.test-btn {
+  background: #1890ff !important;
+  color: #fff !important;
+}
+
+.icon-list .item {
+  flex: 1;
+  font-family: PingFang SC;
+  font-weight: 500;
+  font-size: 20rpx;
+  color: #202020;
+  line-height: 43rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-list .icon {
+  width: 62rpx;
+  height: 62rpx;
+  background: #FBEFF0;
+  border-radius: 50%;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 18rpx;
+}
+
+.btn {
+  width: 340rpx;
+  height: 62rpx;
+  line-height: 62rpx;
+  background: #F5E5E6;
+  border-radius: 31rpx;
+  text-align: center;
+  font-family: PingFang SC;
+  font-weight: 500;
+  font-size: 22rpx;
+  color: #E60012;
+}

@@ -1,0 +1,121 @@
+<view class="container">
+  <view class="header">
+    <text class="title">微信API测试</text>
+    <view class="status">
+      <view class="label">登录状态:</view>
+      <view class="value {{token ? 'success' : 'error'}}">
+        {{token ? '已登录' : '未登录'}}
+      </view>
+    </view>
+  </view>
+
+  <view class="test-section">
+    <text class="section-title">基础功能测试</text>
+    
+    <button 
+      class="test-btn" 
+      bindtap="testWechatLogin" 
+      loading="{{loading}}"
+      disabled="{{loading}}"
+    >
+      微信登录测试
+    </button>
+    
+    <button 
+      class="test-btn" 
+      bindtap="testGetUserInfo" 
+      loading="{{loading}}"
+      disabled="{{loading || !token}}"
+    >
+      获取用户信息
+    </button>
+    
+    <button 
+      class="test-btn" 
+      bindtap="testDecryptUserInfo" 
+      loading="{{loading}}"
+      disabled="{{loading || !token}}"
+    >
+      获取用户信息(getUserProfile)
+    </button>
+    
+    <button 
+      class="test-btn deprecated-btn" 
+      open-type="getUserInfo"
+      bindgetuserinfo="onGetUserInfo"
+      loading="{{loading}}"
+      disabled="{{loading || !token}}"
+    >
+      获取用户信息(open-type) - 已废弃
+    </button>
+    
+    <button 
+      class="test-btn phone-btn" 
+      open-type="getPhoneNumber"
+      bindgetphonenumber="onGetPhoneNumber"
+      loading="{{loading}}"
+      disabled="{{loading || !token}}"
+    >
+      获取用户手机号
+    </button>
+  </view>
+
+  <view class="test-section">
+    <text class="section-title">订单支付测试</text>
+    
+    <button 
+      class="test-btn" 
+      bindtap="testCreateOrder" 
+      loading="{{loading}}"
+      disabled="{{loading || !token}}"
+    >
+      创建测试订单
+    </button>
+    
+    <button 
+      class="test-btn" 
+      bindtap="testInitiatePayment" 
+      loading="{{loading}}"
+      disabled="{{loading || !token}}"
+    >
+      发起支付测试
+    </button>
+  </view>
+
+  <view class="control-section">
+    <button class="control-btn clear" bindtap="clearResults">清空结果</button>
+    <button class="control-btn logout" bindtap="logout" disabled="{{!token}}">退出登录</button>
+  </view>
+
+  <view class="results-section">
+    <text class="section-title">测试结果 ({{testResults.length}})</text>
+    
+    <view class="results" wx:if="{{testResults.length > 0}}">
+      <view 
+        class="result-item {{item.success ? 'success' : 'error'}}" 
+        wx:for="{{testResults}}" 
+        wx:key="index"
+        bindtap="copyResult"
+        data-index="{{index}}"
+      >
+        <view class="result-header">
+          <text class="result-title">{{item.title}}</text>
+          <text class="result-time">{{item.time}}</text>
+          <text class="result-status">{{item.success ? '✓' : '✗'}}</text>
+        </view>
+        
+        <view class="result-content" wx:if="{{item.success && item.data}}">
+          <text class="content-text">{{item.data}}</text>
+        </view>
+        
+        <view class="result-error" wx:if="{{!item.success && item.error}}">
+          <text class="error-text">{{item.error}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="empty-results" wx:else>
+      <text>暂无测试结果</text>
+    </view>
+  </view>
+</view>

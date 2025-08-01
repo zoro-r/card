@@ -15,6 +15,8 @@ export interface WechatAccount {
   appId: string;
   originalId?: string;
   mchId?: string;
+  certPath?: string;
+  keyPath?: string;
   payNotifyUrl?: string;
   refundNotifyUrl?: string;
   enablePayment: boolean;
@@ -74,6 +76,8 @@ export interface CreateWechatAccountParams {
   originalId?: string;
   mchId?: string;
   mchKey?: string;
+  certPath?: string;
+  keyPath?: string;
   payNotifyUrl?: string;
   refundNotifyUrl?: string;
   enablePayment?: boolean;
@@ -100,6 +104,8 @@ export interface UpdateWechatAccountParams {
   originalId?: string;
   mchId?: string;
   mchKey?: string;
+  certPath?: string;
+  keyPath?: string;
   payNotifyUrl?: string;
   refundNotifyUrl?: string;
   enablePayment?: boolean;
@@ -281,3 +287,4 @@ export async function getPlatformWechatAccounts(
     params: { type },
   });
 }
+
