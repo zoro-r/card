@@ -328,7 +328,7 @@ const WechatAccountList: React.FC = () => {
     {
       title: '操作',
       key: 'actions',
-      width: 230,
+      width: 180,
       fixed: 'right',
       search: false,
       render: (_, record) => (
@@ -635,24 +635,6 @@ const WechatAccountList: React.FC = () => {
               {currentAccount.enablePayment && currentAccount.mchId && (
                 <Descriptions.Item label="商户号">
                   <Text copyable>{currentAccount.mchId}</Text>
-                </Descriptions.Item>
-              )}
-              
-              {currentAccount.enablePayment && currentAccount.certPath && (
-                <Descriptions.Item label="API证书">
-                  <Space>
-                    <FileOutlined />
-                    <Text>{currentAccount.certPath}</Text>
-                  </Space>
-                </Descriptions.Item>
-              )}
-              
-              {currentAccount.enablePayment && currentAccount.keyPath && (
-                <Descriptions.Item label="API密钥文件">
-                  <Space>
-                    <FileOutlined />
-                    <Text>{currentAccount.keyPath}</Text>
-                  </Space>
                 </Descriptions.Item>
               )}
               

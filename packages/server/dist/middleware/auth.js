@@ -28,6 +28,7 @@ const skipAuthPathPrefixes = [
     '/api/files/public', // 公开文件接口无需认证
     '/api/files/download',
     '/api/wechat', // 微信相关接口
+    '/api/orders', // 订单相关接口（使用独立的authenticateToken中间件）
 ];
 // JWT认证中间件
 function authMiddleware(ctx, next) {

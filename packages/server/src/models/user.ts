@@ -9,7 +9,6 @@ export interface IAdminUser extends Document {
   email: string;
   avatar?: string;
   platformId: string; // 平台id
-  roleIds: string[]; // 角色ID数组
   gender?: 'male' | 'female' | 'other';
   birthday?: string;
   address?: string;
@@ -56,9 +55,6 @@ const adminUserSchema = new Schema<IAdminUser>(
       type: String,
       required: true,
     },
-    roleIds: [{
-      type: String,
-    }],
     gender: {
       type: String,
       enum: ['male', 'female', 'other'],
@@ -107,9 +103,8 @@ const adminUserSchema = new Schema<IAdminUser>(
 );
 
 adminUserSchema.index({ uuid: 1 }, { unique: true });
-
-
 adminUserSchema.index({ platformId: 1 });
-adminUserSchema.index({ roleIds: 1 });
+adminUserSchema.index({ platformId: 1, status: 1 });
+adminUserSchema.index({ email: 1, platformId: 1 });
 
 export const AdminUser = mongoose.model<IAdminUser>('AdminUser', adminUserSchema);

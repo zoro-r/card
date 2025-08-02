@@ -83,7 +83,7 @@ export class WechatService {
     try {
       // 1. 调用微信API获取session_key和openid
       const wxResponse = await this.getSessionKey(code);
-      
+
       if (wxResponse.errcode) {
         throw new Error(`微信登录失败: ${wxResponse.errmsg}`);
       }
@@ -141,7 +141,7 @@ export class WechatService {
       const key = CryptoJS.enc.Base64.parse(decryptedSessionKey);
       const ivParsed = CryptoJS.enc.Base64.parse(iv);
       const encrypted = CryptoJS.enc.Base64.parse(encryptedData);
-      
+
       const decrypted = CryptoJS.AES.decrypt(
         { ciphertext: encrypted } as any,
         key,
@@ -151,15 +151,15 @@ export class WechatService {
           padding: CryptoJS.pad.Pkcs7
         }
       );
-      
+
       const decryptedStr = CryptoJS.enc.Utf8.stringify(decrypted);
       const userInfo = JSON.parse(decryptedStr);
-      
+
       // 验证水印
       if (userInfo.watermark.appid !== this.config.appId) {
         throw new Error('数据水印验证失败');
       }
-      
+
       return userInfo;
     } catch (error) {
       console.error('解密用户信息失败:', error);
@@ -180,7 +180,7 @@ export class WechatService {
       const key = CryptoJS.enc.Base64.parse(decryptedSessionKey);
       const ivParsed = CryptoJS.enc.Base64.parse(iv);
       const encrypted = CryptoJS.enc.Base64.parse(encryptedData);
-      
+
       const decrypted = CryptoJS.AES.decrypt(
         { ciphertext: encrypted } as any,
         key,
@@ -190,15 +190,15 @@ export class WechatService {
           padding: CryptoJS.pad.Pkcs7
         }
       );
-      
+
       const decryptedStr = CryptoJS.enc.Utf8.stringify(decrypted);
       const phoneInfo = JSON.parse(decryptedStr);
-      
+
       // 验证水印
       if (phoneInfo.watermark.appid !== this.config.appId) {
         throw new Error('数据水印验证失败');
       }
-      
+
       return phoneInfo;
     } catch (error) {
       console.error('解密手机号失败:', error);
@@ -214,7 +214,7 @@ export class WechatService {
    * @returns 更新后的用户
    */
   async updateUserInfo(
-    openid: string, 
+    openid: string,
     userInfo: Partial<IWechatUser>
   ): Promise<IWechatUser> {
     const user = await WechatUser.findByOpenid(openid, this.config.appId);
@@ -298,14 +298,5 @@ export class WechatService {
     } catch (error) {
       return null;
     }
-  }
-
-  /**
-   * 获取微信配置（已废弃，使用WechatAccountService代替）
-   * @param platformId 平台ID
-   * @returns 微信配置
-   */
-  static async getWechatConfig(platformId: string): Promise<WechatAccountConfig> {
-    throw new Error('该方法已废弃，请使用WechatAccountService获取配置');
   }
 }

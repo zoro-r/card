@@ -211,7 +211,8 @@ const WechatUserList: React.FC = () => {
     {
       title: '操作',
       key: 'actions',
-      width: 150,
+      width: 120,
+      fixed: 'right',
       search: false,
       render: (_, record) => (
         <Space size={2}>
@@ -483,16 +484,6 @@ const WechatUserList: React.FC = () => {
           defaultCollapsed: false,
         }}
         headerTitle={`微信用户列表 - ${currentWechatAccount ? currentWechatAccount.displayName + ' 账号用户' : '所有用户'}`}
-        toolBarRender={() => [
-          <Button
-            key="refresh"
-            onClick={() => {
-              actionRef.current?.reload();
-            }}
-          >
-            刷新
-          </Button>
-        ]}
         options={{
           reload: true,
           density: true,

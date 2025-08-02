@@ -66,9 +66,6 @@ const adminUserSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
-    roleIds: [{
-            type: String,
-        }],
     gender: {
         type: String,
         enum: ['male', 'female', 'other'],
@@ -115,5 +112,6 @@ const adminUserSchema = new mongoose_1.Schema({
 });
 adminUserSchema.index({ uuid: 1 }, { unique: true });
 adminUserSchema.index({ platformId: 1 });
-adminUserSchema.index({ roleIds: 1 });
+adminUserSchema.index({ platformId: 1, status: 1 });
+adminUserSchema.index({ email: 1, platformId: 1 });
 exports.AdminUser = mongoose_1.default.model('AdminUser', adminUserSchema);

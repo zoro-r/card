@@ -135,7 +135,13 @@ pnpm run init-data    # Creates default users, roles, and menus
 NODE_ENV=development|production
 PORT=3000
 JWT_SECRET=your-secret-key
-MONGODB_URI=mongodb://localhost:27017/center
+MONGODB_HOST=localhost
+MONGODB_PORT=27017
+MONGODB_USERNAME=your_username
+MONGODB_PASSWORD=your_password
+MONGODB_DATABASE=card_system
+UPLOAD_ROOT_DIR=./uploads
+MAX_FILE_SIZE=104857600
 ENCRYPTION_KEY=32-character-encryption-key
 ```
 
@@ -170,14 +176,49 @@ ENCRYPTION_KEY=32-character-encryption-key
 ### File Upload Handling
 - **Certificate Storage**: Text-based content storage (not file uploads)
 - **WeChat Certificates**: PEM content stored directly in database fields
-- **General Uploads**: Uses @koa/multer for file handling
+- **General Uploads**: Uses @koa/multer for file handling with date-structured storage (`yyyy/mm/dd`)
+- **File Management**: Metadata stored in MongoDB, physical files in configured upload directory
 
 ### Build Configuration
-- **TypeScript**: Uses `tsc-alias` for path mapping resolution
-- **Monorepo**: Turbo for orchestrated building with dependency management
-- **Package Manager**: pnpm workspaces with consistent versioning
+- **TypeScript**: Uses `tsc-alias` for path mapping resolution (`@/*` and `src/*` aliases)
+- **Monorepo**: Turbo for orchestrated building with dependency management and caching
+- **Package Manager**: pnpm workspaces with consistent versioning (pnpm@10.11.0 enforced)
+- **Path Mapping**: Both packages use TypeScript path mapping for cleaner imports
 
 ### Security Considerations
 - **Sensitive Data**: Always encrypted before database storage
 - **API Authentication**: JWT middleware applied to protected routes with skip paths for static assets
 - **WeChat Integration**: Signature verification and encrypted parameter handling
+
+## Integrated Deployment Architecture
+
+### Single Server Deployment Pattern
+- **Unified Deployment**: Server serves both API endpoints and static frontend files
+- **SPA Fallback**: Intelligent routing that serves `/admin/index.html` for non-API, non-file requests
+- **Static File Serving**: Direct serving of client build artifacts from server
+- **Admin Dashboard Path**: Frontend accessible at `/admin` base path, API at `/api`
+
+### Development vs Production Workflow
+- **Development**: Parallel frontend/backend development via Turbo (client on :8000, server on :3000)
+- **Production**: Single server deployment after building both packages
+- **Build Process**: `pnpm deploy` builds all packages then starts production server
+
+## Code Quality & Development Standards
+
+### Frontend Development Standards
+- **Component Library**: Prioritize `@ant-design/pro-components` for consistent UI
+- **Date Handling**: Use `dayjs` exclusively, avoid native `Date` objects
+- **Request Handling**: Use pre-configured `request` method with built-in error handling
+- **Table Components**: Use `ProTable` with fixed operations column (`fixed: 'right'`)
+- **TypeScript**: Extract constants and types, maintain strict typing throughout
+
+### Backend Development Standards
+- **Response Format**: Use `@utils/tools` for unified API response structure
+- **Error Handling**: Centralized error handling, avoid throwing raw exceptions
+- **Documentation**: Update API docs in `docs/` after implementing new endpoints
+- **Path Mapping**: Use `@/*` and `src/*` aliases consistently across imports
+
+### Code Organization Patterns
+- **MVC + Service Layer**: Controllers handle HTTP, Services contain business logic
+- **Permission-Based Features**: Use `requirePermission()` middleware + `usePermission()` hook
+- **Platform Isolation**: Include `platformId` in all multi-tenant data operations

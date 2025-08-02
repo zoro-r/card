@@ -388,7 +388,8 @@ const OrderList: React.FC = () => {
     {
       title: '操作',
       key: 'actions',
-      width: 150,
+      width: 160,
+      fixed: 'right',
       search: false,
       render: (_, record) => (
         <Space direction="vertical" size={4}>

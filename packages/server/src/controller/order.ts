@@ -18,18 +18,21 @@ export class OrderController {
 
       // 从token中获取用户信息
       const tokenData = ctx.state.user;
-      let userId = null;
+      let wechatUserId = null;
       let openid = null;
 
       if (tokenData) {
         if (tokenData.type === 'wechat') {
           openid = tokenData.openid;
+          wechatUserId = tokenData.userId; // 微信用户的userId实际是wechatUserId
           // 如果没有提供platformId，从token中获取appId作为platformId
           if (!platformId) {
             platformId = tokenData.appId;
           }
         } else {
-          userId = tokenData.userId;
+          // 管理员用户暂不支持创建订单
+          ctx.body = fail('管理员账户不支持创建订单');
+          return;
         }
       }
 
@@ -47,7 +50,7 @@ export class OrderController {
 
       // 创建订单
       const orderService = new OrderService();
-      const order = await orderService.createOrder(userId, openid, platformId, orderData);
+      const order = await orderService.createOrder(wechatUserId, openid, platformId, orderData);
 
       ctx.body = success(order, '创建订单成功');
     } catch (error) {
@@ -84,20 +87,20 @@ export class OrderController {
 
       // 从token中获取用户信息
       const tokenData = ctx.state.user;
-      let userId = undefined;
+      let wechatUserId = undefined;
       let openid = undefined;
 
       if (tokenData) {
         if (tokenData.type === 'wechat') {
           openid = tokenData.openid;
         } else {
-          userId = tokenData.userId;
+          wechatUserId = tokenData.userId;
         }
       }
 
       // 查询订单详情
       const orderService = new OrderService();
-      const order = await orderService.getOrderDetail(orderNo, userId, openid);
+      const order = await orderService.getOrderDetail(orderNo, wechatUserId, openid);
 
       if (!order) {
         ctx.body = fail('订单不存在');
@@ -148,14 +151,14 @@ export class OrderController {
 
       // 从token中获取用户信息
       const tokenData = ctx.state.user;
-      let userId = null;
+      let wechatUserId = null;
       let openid = null;
 
       if (tokenData) {
         if (tokenData.type === 'wechat') {
           openid = tokenData.openid;
         } else {
-          userId = tokenData.userId;
+          wechatUserId = tokenData.userId;
         }
       } else {
         ctx.body = fail('用户未登录');
@@ -169,7 +172,7 @@ export class OrderController {
       // 获取用户订单列表
       const orderService = new OrderService();
       const result = await orderService.getUserOrders(
-        userId,
+        wechatUserId,
         openid,
         platformId,
         orderStatus,
@@ -194,14 +197,14 @@ export class OrderController {
 
       // 从token中获取用户信息
       const tokenData = ctx.state.user;
-      let userId = undefined;
+      let wechatUserId = undefined;
       let openid = undefined;
 
       if (tokenData) {
         if (tokenData.type === 'wechat') {
           openid = tokenData.openid;
         } else {
-          userId = tokenData.userId;
+          wechatUserId = tokenData.userId;
         }
       } else {
         ctx.body = fail('用户未登录');
@@ -210,7 +213,7 @@ export class OrderController {
 
       // 取消订单
       const orderService = new OrderService();
-      await orderService.cancelOrder(orderNo, userId, openid, reason);
+      await orderService.cancelOrder(orderNo, wechatUserId, openid, reason);
 
       ctx.body = success(null, '取消订单成功');
     } catch (error) {
@@ -228,14 +231,14 @@ export class OrderController {
 
       // 从token中获取用户信息
       const tokenData = ctx.state.user;
-      let userId = undefined;
+      let wechatUserId = undefined;
       let openid = undefined;
 
       if (tokenData) {
         if (tokenData.type === 'wechat') {
           openid = tokenData.openid;
         } else {
-          userId = tokenData.userId;
+          wechatUserId = tokenData.userId;
         }
       } else {
         ctx.body = fail('用户未登录');
@@ -244,7 +247,7 @@ export class OrderController {
 
       // 确认收货
       const orderService = new OrderService();
-      await orderService.confirmDelivery(orderNo, userId, openid);
+      await orderService.confirmDelivery(orderNo, wechatUserId, openid);
 
       ctx.body = success(null, '确认收货成功');
     } catch (error) {
@@ -321,7 +324,7 @@ export class OrderController {
         .sort({ createdAt: -1 })
         .skip((pageNum - 1) * limitNum)
         .limit(limitNum)
-        .populate('wechatPayment');
+        .populate('wechatPaymentId');
 
       // 查询总数
       const total = await Order.countDocuments(query);

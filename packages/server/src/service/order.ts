@@ -1,4 +1,5 @@
 import { Context } from 'koa';
+import mongoose from 'mongoose';
 import { Order, IOrder, OrderStatus, OrderType, PaymentMethod } from '@/models/order';
 import { WechatPayment, WechatPaymentStatus, WechatPaymentType } from '@/models/wechatPayment';
 import { WechatPaymentService } from '@/service/wechatPayment';
@@ -45,14 +46,14 @@ interface CreateOrderParams {
 export class OrderService {
   /**
    * 创建订单
-   * @param userId 用户ID
+   * @param wechatUserId 微信用户ID
    * @param openid 微信用户openid
    * @param platformId 平台ID
    * @param params 订单参数
    * @returns 创建的订单
    */
   async createOrder(
-    userId: string | null,
+    wechatUserId: mongoose.Types.ObjectId | null,
     openid: string | null,
     platformId: string,
     params: CreateOrderParams
@@ -75,7 +76,7 @@ export class OrderService {
       const order = new Order({
         orderNo,
         orderType: params.orderType || OrderType.PRODUCT,
-        userId,
+        wechatUserId,
         openid,
         platformId,
         items,
@@ -147,13 +148,13 @@ export class OrderService {
       const outTradeNo = `WX${timestamp.slice(-10)}${randomSuffix}`; // WX + 10位时间戳 + 4位随机 = 16位
 
       const wechatPayment = new WechatPayment({
-        orderNo, // 直接存储订单号
+        orderId: order._id, // 使用订单的ObjectId
+        orderNo: order.orderNo, // 添加订单号
         appId: order.platformId, // 使用platformId作为appId
         outTradeNo,
         body: order.items.map(item => item.productName).join(', '),
         totalFee: order.totalAmount,
         openid: order.openid,
-        platformId: order.platformId,
         paymentType: WechatPaymentType.JSAPI,
         tradeType: 'JSAPI',
         notifyUrl: `${process.env.API_BASE_URL}/api/wechat/payment/notify`,
@@ -164,7 +165,7 @@ export class OrderService {
       await wechatPayment.save();
 
       // 3. 关联订单和支付记录
-      order.wechatPayment = wechatPayment._id;
+      order.wechatPaymentId = wechatPayment._id as mongoose.Types.ObjectId;
       order.paymentMethod = PaymentMethod.WECHAT;
       await order.save();
 
@@ -207,16 +208,7 @@ export class OrderService {
       }
 
       // 2. 查找订单
-      let orderNo = payment.orderNo; // 优先使用orderNo字段
-      if (!orderNo) {
-        // 向下兼容：如果orderNo字段不存在，使用attach字段
-        orderNo = payment.attach as string;
-      }
-      if (!orderNo) {
-        throw new Error('支付记录缺少订单信息');
-      }
-
-      const order = await Order.findByOrderNo(orderNo);
+      const order = await Order.findById(payment.orderId);
       if (!order) {
         throw new Error('关联订单不存在');
       }
@@ -231,7 +223,7 @@ export class OrderService {
       // 4. 执行后续业务逻辑
       // TODO: 发送支付成功通知、库存扣减等
 
-      console.log(`订单 ${orderNo} 支付成功处理完成`);
+      console.log(`订单 ${order.orderNo} 支付成功处理完成`);
     } catch (error) {
       console.error('处理支付成功回调失败:', error);
       throw error;
@@ -241,25 +233,25 @@ export class OrderService {
   /**
    * 查询订单详情
    * @param orderNo 订单号
-   * @param userId 用户ID
+   * @param wechatUserId 微信用户ID
    * @param openid 微信用户openid
    * @returns 订单详情
    */
   async getOrderDetail(
     orderNo: string,
-    userId?: string,
+    wechatUserId?: string,
     openid?: string
   ): Promise<IOrder | null> {
     try {
       const query: any = { orderNo };
 
-      if (userId) {
-        query.userId = userId;
+      if (wechatUserId) {
+        query.wechatUserId = wechatUserId;
       } else if (openid) {
         query.openid = openid;
       }
 
-      const order = await Order.findOne(query).populate('wechatPayment');
+      const order = await Order.findOne(query).populate('wechatPaymentId');
       return order;
     } catch (error) {
       console.error('查询订单详情失败:', error);
@@ -275,7 +267,7 @@ export class OrderService {
   async getAdminOrderDetail(orderNo: string): Promise<IOrder | null> {
     try {
       // 管理员可以查看所有订单，不需要用户ID过滤
-      const order = await Order.findOne({ orderNo }).populate('wechatPayment');
+      const order = await Order.findOne({ orderNo }).populate('wechatPaymentId');
       return order;
     } catch (error) {
       console.error('查询订单详情失败:', error);
@@ -285,7 +277,7 @@ export class OrderService {
 
   /**
    * 获取用户订单列表
-   * @param userId 用户ID
+   * @param wechatUserId 微信用户ID
    * @param openid 微信用户openid
    * @param platformId 平台ID
    * @param status 订单状态
@@ -294,7 +286,7 @@ export class OrderService {
    * @returns 订单列表
    */
   async getUserOrders(
-    userId: string | null,
+    wechatUserId: mongoose.Types.ObjectId | null,
     openid: string | null,
     platformId: string,
     status?: OrderStatus,
@@ -307,12 +299,12 @@ export class OrderService {
     limit: number;
   }> {
     try {
-      const orders = await Order.findUserOrders(userId, openid, platformId, status, page, limit);
+      const orders = await Order.findUserOrders(wechatUserId, openid, platformId, status, page, limit);
 
       // 计算总数
       const query: any = { platformId };
-      if (userId) {
-        query.userId = userId;
+      if (wechatUserId) {
+        query.wechatUserId = wechatUserId;
       } else if (openid) {
         query.openid = openid;
       }
@@ -337,20 +329,20 @@ export class OrderService {
   /**
    * 取消订单
    * @param orderNo 订单号
-   * @param userId 用户ID
+   * @param wechatUserId 微信用户ID
    * @param openid 微信用户openid
    * @param reason 取消原因
    * @returns 取消结果
    */
   async cancelOrder(
     orderNo: string,
-    userId?: string,
+    wechatUserId?: string,
     openid?: string,
     reason?: string
   ): Promise<void> {
     try {
       // 1. 查找订单
-      const order = await this.getOrderDetail(orderNo, userId, openid);
+      const order = await this.getOrderDetail(orderNo, wechatUserId, openid);
       if (!order) {
         throw new Error('订单不存在');
       }
@@ -364,8 +356,8 @@ export class OrderService {
       await order.cancel(reason);
 
       // 4. 如果有关联的微信支付记录，也需要处理
-      if (order.wechatPayment) {
-        const payment = await WechatPayment.findById(order.wechatPayment);
+      if (order.wechatPaymentId) {
+        const payment = await WechatPayment.findById(order.wechatPaymentId);
         if (payment && payment.status === WechatPaymentStatus.PENDING) {
           payment.status = WechatPaymentStatus.CANCELLED;
           await payment.save();
@@ -382,18 +374,18 @@ export class OrderService {
   /**
    * 确认收货
    * @param orderNo 订单号
-   * @param userId 用户ID
+   * @param wechatUserId 微信用户ID
    * @param openid 微信用户openid
    * @returns 确认结果
    */
   async confirmDelivery(
     orderNo: string,
-    userId?: string,
+    wechatUserId?: string,
     openid?: string
   ): Promise<void> {
     try {
       // 1. 查找订单
-      const order = await this.getOrderDetail(orderNo, userId, openid);
+      const order = await this.getOrderDetail(orderNo, wechatUserId, openid);
       if (!order) {
         throw new Error('订单不存在');
       }
@@ -430,14 +422,14 @@ export class OrderService {
       }
 
       // 2. 查找微信支付记录
-      if (!order.wechatPayment) {
+      if (!order.wechatPaymentId) {
         return {
           status: WechatPaymentStatus.PENDING,
           paid: false
         };
       }
 
-      const payment = await WechatPayment.findById(order.wechatPayment);
+      const payment = await WechatPayment.findById(order.wechatPaymentId);
       if (!payment) {
         return {
           status: WechatPaymentStatus.PENDING,

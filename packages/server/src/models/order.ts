@@ -90,8 +90,8 @@ export interface IOrder extends Document {
   status: OrderStatus;          // 订单状态
 
   // 用户信息
-  userId?: string;              // 用户ID（如果是注册用户）
-  openid?: string;              // 微信用户openid
+  wechatUserId?: mongoose.Types.ObjectId; // 微信用户ID（关联WechatUser）
+  openid?: string;              // 微信用户openid（冗余字段，便于查询）
   platformId: string;          // 平台ID
 
   // 商品信息
@@ -110,7 +110,7 @@ export interface IOrder extends Document {
   paymentStatus: string;        // 支付状态
   paymentTime?: Date;           // 支付时间
   paymentId?: string;           // 支付单号
-  wechatPayment?: IWechatPayment['_id']; // 微信支付记录ID
+  wechatPaymentId?: mongoose.Types.ObjectId; // 微信支付记录ID（关联WechatPayment）
 
   // 收货信息
   shippingAddress?: ShippingAddress; // 收货地址
@@ -184,10 +184,11 @@ const OrderSchema = new Schema<IOrder>({
   },
 
   // 用户信息
-  userId: {
-    type: String,
+  wechatUserId: {
+    type: Schema.Types.ObjectId,
+    ref: 'WechatUser',
     index: true,
-    comment: '用户ID'
+    comment: '微信用户ID'
   },
   openid: {
     type: String,
@@ -310,7 +311,7 @@ const OrderSchema = new Schema<IOrder>({
     type: String,
     comment: '支付单号'
   },
-  wechatPayment: {
+  wechatPaymentId: {
     type: Schema.Types.ObjectId,
     ref: 'WechatPayment',
     comment: '微信支付记录ID'
@@ -497,11 +498,12 @@ const OrderSchema = new Schema<IOrder>({
 
 // 创建复合索引
 OrderSchema.index({ orderNo: 1 }, { unique: true });
-OrderSchema.index({ userId: 1, status: 1 });
+OrderSchema.index({ wechatUserId: 1, status: 1 });
 OrderSchema.index({ openid: 1, platformId: 1 });
 OrderSchema.index({ status: 1, createdAt: -1 });
 OrderSchema.index({ paymentStatus: 1, createdAt: -1 });
 OrderSchema.index({ platformId: 1, createdAt: -1 });
+OrderSchema.index({ platformId: 1, status: 1, createdAt: -1 });
 
 // 虚拟字段：格式化状态
 OrderSchema.virtual('statusText').get(function() {
@@ -532,7 +534,7 @@ OrderSchema.methods.markAsPaid = function(paymentData: any) {
     this.paymentId = paymentData.paymentId;
   }
   if (paymentData.wechatPaymentId) {
-    this.wechatPayment = paymentData.wechatPaymentId;
+    this.wechatPaymentId = paymentData.wechatPaymentId;
   }
   return this.save();
 };
@@ -578,7 +580,7 @@ interface OrderModel extends mongoose.Model<IOrder> {
   generateOrderNo(platformId: string): string;
   findByOrderNo(orderNo: string): Promise<IOrder | null>;
   findUserOrders(
-    userId: string | null,
+    wechatUserId: mongoose.Types.ObjectId | null,
     openid: string | null,
     platformId: string,
     status?: OrderStatus,
@@ -606,7 +608,7 @@ OrderSchema.statics.findByOrderNo = function(orderNo: string) {
 
 // 静态方法：获取用户订单
 OrderSchema.statics.findUserOrders = function(
-  userId: string | null,
+  wechatUserId: mongoose.Types.ObjectId | null,
   openid: string | null,
   platformId: string,
   status?: OrderStatus,
@@ -615,8 +617,8 @@ OrderSchema.statics.findUserOrders = function(
 ) {
   const query: any = { platformId };
 
-  if (userId) {
-    query.userId = userId;
+  if (wechatUserId) {
+    query.wechatUserId = wechatUserId;
   } else if (openid) {
     query.openid = openid;
   }
@@ -629,7 +631,7 @@ OrderSchema.statics.findUserOrders = function(
     .sort({ createdAt: -1 })
     .skip((page - 1) * limit)
     .limit(limit)
-    .populate('wechatPayment');
+    .populate('wechatPaymentId');
 };
 
 // 静态方法：获取订单统计（移除平台过滤）

@@ -192,6 +192,7 @@ WechatUserSchema.index({ phone: 1, appId: 1 }, { sparse: true });
 WechatUserSchema.index({ registerTime: -1 });
 WechatUserSchema.index({ lastLoginTime: -1 });
 WechatUserSchema.index({ isActive: 1, isBlocked: 1 });
+WechatUserSchema.index({ appId: 1, isActive: 1, isBlocked: 1 }); // 新增：活跃用户查询优化
 
 // 虚拟字段：格式化性别
 WechatUserSchema.virtual('genderText').get(function() {
