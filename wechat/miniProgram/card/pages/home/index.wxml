@@ -49,9 +49,6 @@
   <view class="btn">
     微信公众号
   </view>
-  <navigator class="btn test-btn" url="/pages/test/index">
-    API测试
-  </navigator>
 </view>
 
 <footer />
