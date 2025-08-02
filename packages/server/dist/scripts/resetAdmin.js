@@ -12,14 +12,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const database_1 = require("../config/database");
 const user_1 = require("../models/user");
 const user_2 = require("../service/user");
+const platform_1 = require("../utils/platform");
 function resetAdmin() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             yield (0, database_1.connectDB)();
-            const platformId = 'default';
+            const platformId = (0, platform_1.getDefaultPlatformId)();
             const loginName = process.argv[2] || 'super'; // 从命令行参数获取用户名，默认为super
             const newPassword = process.argv[3] || 'super123'; // 从命令行参数获取新密码，默认为super123
-            console.log(`正在重置用户"${loginName}"的密码...`);
+            console.log(`正在重置用户"${loginName}"的密码... (平台ID: ${platformId})`);
             // 查找用户
             const user = yield user_1.AdminUser.findOne({ loginName, platformId });
             if (!user) {

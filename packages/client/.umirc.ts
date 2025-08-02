@@ -3,6 +3,11 @@ import { defineConfig } from '@umijs/max';
 export default defineConfig({
   // 移除base配置，或者设置为空字符串
   base: 'admin',
+  esbuildMinifyIIFE: true,  // 修复esbuild helpers冲突问题
+  // 启用全局样式
+  styles: [
+    'src/global.less'
+  ],
   antd: {
     theme: {
       token: {
@@ -15,7 +20,7 @@ export default defineConfig({
       },
       components: {
         Layout: {
-          siderBg: '#fff',      // 深色侧边栏
+          siderBg: '#fff',      // 侧边栏背景
           bodyBg: '#f0f2f5',       // 浅灰色背景
           headerBg: '#ffffff'       // 白色顶栏
         },
@@ -29,4 +34,3 @@ export default defineConfig({
   },
   npmClient: 'pnpm',
 });
-

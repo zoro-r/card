@@ -12,6 +12,7 @@ const file_1 = __importDefault(require("./file"));
 const wechat_1 = __importDefault(require("./wechat"));
 const order_1 = __importDefault(require("./order"));
 const wechatAccount_1 = __importDefault(require("./wechatAccount"));
+const product_1 = __importDefault(require("./product"));
 const config_1 = require("./config");
 function initRouter(app) {
     const router = new router_1.default();
@@ -23,6 +24,7 @@ function initRouter(app) {
     (0, wechat_1.default)(router);
     (0, order_1.default)(router);
     (0, wechatAccount_1.default)(router);
+    (0, product_1.default)(router);
     // 注册配置路由
     app.use(config_1.configRouter.routes());
     app.use(config_1.configRouter.allowedMethods());

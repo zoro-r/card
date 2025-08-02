@@ -23,6 +23,7 @@ exports.updateProfileAPI = updateProfileAPI;
 exports.firstTimeChangePasswordAPI = firstTimeChangePasswordAPI;
 const tool_1 = require("../utils/tool");
 const user_1 = require("../service/user");
+const platform_1 = require("../utils/platform");
 // 用户登录
 function userLogin(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -77,7 +78,7 @@ function getUserInfo(ctx) {
 function getUserListAPI(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { page = 1, pageSize = 10, nickname, loginName, email, phone, status, platformId = 'default' } = ctx.request.query;
+            const { page = 1, pageSize = 10, nickname, loginName, email, phone, status, platformId = (0, platform_1.getDefaultPlatformId)() } = ctx.request.query;
             const result = yield (0, user_1.getUserList)({
                 page: parseInt(page),
                 pageSize: parseInt(pageSize),
@@ -100,7 +101,7 @@ function createUserAPI(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const userData = ctx.request.body;
-            const { loginName, email, phone, password, platformId = 'default' } = userData;
+            const { loginName, email, phone, password, platformId = (0, platform_1.getDefaultPlatformId)() } = userData;
             // 验证必填字段
             if (!loginName || !email || !password) {
                 ctx.body = (0, tool_1.fail)('登录名、邮箱和密码不能为空');
@@ -142,7 +143,7 @@ function updateUserAPI(ctx) {
         try {
             const { uuid } = ctx.params;
             const userData = ctx.request.body;
-            const { loginName, email, phone, password, platformId = 'default' } = userData;
+            const { loginName, email, phone, password, platformId = (0, platform_1.getDefaultPlatformId)() } = userData;
             // 检查登录名是否已存在（排除当前用户）
             if (loginName) {
                 const loginNameExists = yield (0, user_1.checkLoginNameExists)(loginName, uuid, platformId);
@@ -188,7 +189,7 @@ function deleteUserAPI(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { uuid } = ctx.params;
-            const { platformId = 'default' } = ctx.request.query;
+            const { platformId = (0, platform_1.getDefaultPlatformId)() } = ctx.request.query;
             const user = yield (0, user_1.deleteUser)(uuid, platformId);
             if (!user) {
                 ctx.body = (0, tool_1.fail)('用户不存在');
@@ -206,7 +207,7 @@ function batchDeleteUsersAPI(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { uuids } = ctx.request.body;
-            const { platformId = 'default' } = ctx.request.query;
+            const { platformId = (0, platform_1.getDefaultPlatformId)() } = ctx.request.query;
             if (!uuids || !Array.isArray(uuids) || uuids.length === 0) {
                 ctx.body = (0, tool_1.fail)('请提供要删除的用户ID列表');
                 return;
@@ -225,7 +226,7 @@ function updateUserRolesAPI(ctx) {
         try {
             const { uuid } = ctx.params;
             const { roleIds } = ctx.request.body;
-            const { platformId = 'default' } = ctx.request.query;
+            const { platformId = (0, platform_1.getDefaultPlatformId)() } = ctx.request.query;
             if (!Array.isArray(roleIds)) {
                 ctx.body = (0, tool_1.fail)('角色ID列表格式错误');
                 return;
@@ -248,7 +249,7 @@ function resetUserPasswordAPI(ctx) {
         try {
             const { uuid } = ctx.params;
             const { newPassword } = ctx.request.body;
-            const { platformId = 'default' } = ctx.request.query;
+            const { platformId = (0, platform_1.getDefaultPlatformId)() } = ctx.request.query;
             if (!newPassword) {
                 ctx.body = (0, tool_1.fail)('新密码不能为空');
                 return;

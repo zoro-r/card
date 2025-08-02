@@ -16,13 +16,14 @@ const menu_1 = require("../models/menu");
 const userRole_1 = require("../models/userRole");
 const roleMenu_1 = require("../models/roleMenu");
 const user_2 = require("../service/user");
+const platform_1 = require("../utils/platform");
 function initData() {
     return __awaiter(this, void 0, void 0, function* () {
         var _a, _b, _c, _d, _e, _f, _g;
         try {
             yield (0, database_1.connectDB)();
-            const platformId = 'default';
-            console.log('开始初始化数据...');
+            const platformId = (0, platform_1.getDefaultPlatformId)();
+            console.log(`开始初始化数据... (平台ID: ${platformId})`);
             // 1. 创建角色（不包含permissions字段）
             const roles = [
                 {

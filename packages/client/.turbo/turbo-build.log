@@ -1,387 +1,60 @@
 
-
 > client@ build /Users/jiangdaofeng/Desktop/基础项目/card/packages/client
 > max build
 
-[36minfo[39m  - [33m[你知道吗？] 编写 src/loading.(jsx|tsx) 可以自定义页面的加载动画。[39m
-[36minfo[39m  - [36m[1mUmi v4.4.11[22m[39m
-[36minfo[39m  - Preparing...
-
-[32m●[39m [32mWebpack[39m [37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m  (0%)  
- 
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (10%) [90m0/1 entries 5/11 dependencies 0/5 modules 2 active[39m 
- [90mbabel-loader [34m›[39m[90m src/.umi-production/core/polyfill.ts[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (10%) [90m0/1 entries 189/252 dependencies 0/189 modules 6 active[39m 
- [90mbabel-loader [34m›[39m[90m src/.umi-production/exports.ts[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (10%) [90m0/1 entries 495/546 dependencies 1/313 modules 67 active[39m 
- [90m...|/Users/jiangdaofeng/Desktop/基础项目/card/node_modules/.pnpm/core-js@3.34.0/node_modules/core-js/modules/esnext.async-iterator.to[39m
-[90m-array.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (10%) [90m0/1 entries 890/938 dependencies 1/377 modules 164 active[39m 
- [90m...ascript/dynamic|/Users/jiangdaofeng/Desktop/基础项目/card/node_modules/.pnpm/core-js@3.34.0/node_modules/core-js/modules/esnext.se[39m
-[90mt.from.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (10%) [90m0/1 entries 935/1000 dependencies 1/399 modules 260 active[39m 
- [90m...ipt/dynamic|/Users/jiangdaofeng/Desktop/基础项目/card/node_modules/.pnpm/core-js@3.34.0/node_modules/core-js/internals/array-to-re[39m
-[90mversed.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (10%) [90m0/1 entries 1309/1399 dependencies 9/444 modules 253 active[39m 
- [90m...ript/dynamic|/Users/jiangdaofeng/Desktop/基础项目/card/node_modules/.pnpm/core-js@3.34.0/node_modules/core-js/internals/array-set-[39m
-[90mlength.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (10%) [90m0/1 entries 1584/1642 dependencies 31/476 modules 327 active[39m 
- [90m...ript/dynamic|/Users/jiangdaofeng/Desktop/基础项目/card/node_modules/.pnpm/core-js@3.34.0/node_modules/core-js/internals/iterator-i[39m
-[90mndexed.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (10%) [90m0/1 entries 1857/1923 dependencies 62/506 modules 349 active[39m 
- [90m...vascript/dynamic|/Users/jiangdaofeng/Desktop/基础项目/card/node_modules/.pnpm/core-js@3.34.0/node_modules/core-js/internals/string[39m
-[90m-parse.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (11%) [90m0/1 entries 2110/2148 dependencies 94/540 modules 400 active[39m 
- [90m...Users/jiangdaofeng/Desktop/基础项目/card/node_modules/.pnpm/core-js@3.34.0/node_modules/core-js/internals/function-uncurry-this-ac[39m
-[90mcessor.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (11%) [90m0/1 entries 2151/2208 dependencies 105/541 modules 398 active[39m 
- [90m...amic|/Users/jiangdaofeng/Desktop/基础项目/card/node_modules/.pnpm/core-js@3.34.0/node_modules/core-js/internals/array-buffer-byte-[39m
-[90mlength.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (11%) [90m0/1 entries 2419/2442 dependencies 169/649 modules 410 active[39m 
- [90m...modules/.pnpm/antd@5.26.4_date-fns@2.30.0_moment@2.30.1_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/antd/es/alert/ind[39m
-[90mex.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (12%) [90m0/1 entries 2468/2510 dependencies 211/656 modules 369 active[39m 
- [90m...odules/.pnpm/antd@5.26.4_date-fns@2.30.0_moment@2.30.1_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/antd/es/avatar/ind[39m
-[90mex.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (13%) [90m0/1 entries 2862/2947 dependencies 311/808 modules 310 active[39m 
- [90m.../.pnpm/antd@5.26.4_date-fns@2.30.0_moment@2.30.1_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/antd/es/notification/ind[39m
-[90mex.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (13%) [90m0/1 entries 3181/3258 dependencies 341/939 modules 340 active[39m 
- [90m...sers/jiangdaofeng/Desktop/基础项目/card/node_modules/.pnpm/@babel+runtime@7.23.6/node_modules/@babel/runtime/helpers/esm/nonIterab[39m
-[90mleRest.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (14%) [90m0/1 entries 4264/4342 dependencies 364/1832 modules 371 active[39m 
- [90m.../antd@5.26.4_date-fns@2.30.0_moment@2.30.1_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/antd/es/_util/responsiveObserv[39m
-[90mer.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (14%) [90m0/1 entries 4890/4946 dependencies 387/2109 modules 417 active[39m 
- [90m../../node_modules/.pnpm/rc-util@5.44.4_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/rc-util/es/utils/set.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (14%) [90m0/1 entries 5327/5422 dependencies 413/2198 modules 482 active[39m 
- [90m...pm/antd@5.26.4_date-fns@2.30.0_moment@2.30.1_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/antd/es/popconfirm/style/ind[39m
-[90mex.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (14%) [90m0/1 entries 5603/5637 dependencies 429/2268 modules 576 active[39m 
- [90m...dules/.pnpm/@ant-design+icons@5.6.1_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@ant-design/icons/es/icons/AlertTwoTo[39m
-[90mne.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (16%) [90m0/1 entries 6204/6274 dependencies 620/2433 modules 475 active[39m 
- [90m...odules/.pnpm/@ant-design+icons@5.6.1_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@ant-design/icons/es/icons/BulbTwoTo[39m
-[90mne.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (16%) [90m0/1 entries 6722/6794 dependencies 621/2593 modules 605 active[39m 
- [90m...pnpm/@ant-design+icons@5.6.1_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@ant-design/icons/es/icons/DollarCircleTwoTo[39m
-[90mne.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (16%) [90m0/1 entries 7406/7494 dependencies 621/2758 modules 774 active[39m 
- [90m...odules/.pnpm/@ant-design+icons@5.6.1_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@ant-design/icons/es/icons/HddOutlin[39m
-[90med.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (16%) [90m0/1 entries 7809/7829 dependencies 621/2888 modules 922 active[39m 
- [90m...s/.pnpm/@ant-design+icons@5.6.1_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@ant-design/icons/es/icons/PicRightOutlin[39m
-[90med.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (16%) [90m0/1 entries 8511/8569 dependencies 621/3036 modules 1043 active[39m 
- [90m...s/.pnpm/@ant-design+icons@5.6.1_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@ant-design/icons/es/icons/ShoppingOutlin[39m
-[90med.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (16%) [90m0/1 entries 8912/8973 dependencies 621/3133 modules 1142 active[39m 
- [90m...dules/.pnpm/@ant-design+icons@5.6.1_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@ant-design/icons/es/icons/UndoOutlin[39m
-[90med.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (17%) [90m0/1 entries 9792/9880 dependencies 683/3313 modules 1272 active[39m 
- [90m..._moment@2.30.1_react-dom@18.3._c14bab058538dd2bdf4c84b974da0987/node_modules/@ant-design/pro-layout/es/components/TopNavHeader/ind[39m
-[90mex.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (18%) [90m0/1 entries 10116/10209 dependencies 736/3430 modules 1291 active[39m 
- [90m....4_date-fns@2.30.0_moment@2.30.1_react-dom@18.3.1_daa3525f50214847d6ef9392490b9ef2/node_modules/@ant-design/pro-utils/es/isNil/ind[39m
-[90mex.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (18%) [90m0/1 entries 10503/10585 dependencies 776/3509 modules 1340 active[39m 
- [90m.../antd@5.26.4_date-fns@2.30.0_moment@2.30.1_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/antd/es/layout/hooks/useHasSid[39m
-[90mer.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (18%) [90m0/1 entries 10715/10809 dependencies 811/3531 modules 1359 active[39m 
- [90m...npm/antd@5.26.4_date-fns@2.30.0_moment@2.30.1_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/antd/es/select/style/multip[39m
-[90mle.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (20%) [90m0/1 entries 11227/11317 dependencies 950/3607 modules 1347 active[39m 
- [90mbabel-loader [34m›[39m[90m ../../node_modules/.pnpm/axios@1.10.0/node_modules/axios/lib/adapters/adapters.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (21%) [90m0/1 entries 11445/11494 dependencies 1010/3671 modules 1383 active[39m 
- [90m../../node_modules/.pnpm/rc-rate@2.13.1_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/rc-rate/es/Rate.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (24%) [90m0/1 entries 11671/11761 dependencies 1291/3748 modules 1243 active[39m 
- [90m../../node_modules/.pnpm/@ant-design+icons-svg@4.4.2/node_modules/@ant-design/icons-svg/es/asn/CloudOutlined.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (28%) [90m0/1 entries 11865/11873 dependencies 1652/3797 modules 1175 active[39m 
- [90m../../node_modules/.pnpm/@ant-design+icons-svg@4.4.2/node_modules/@ant-design/icons-svg/es/asn/HighlightFilled.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (35%) [90m0/1 entries 11898/11899 dependencies 2340/3821 modules 832 active[39m 
- [90m../../node_modules/.pnpm/@ant-design+icons-svg@4.4.2/node_modules/@ant-design/icons-svg/es/asn/TrademarkCircleTwoTone.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (39%) [90m0/1 entries 11998/12500 dependencies 2718/3830 modules 649 active[39m 
- [90m../../node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/index.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (40%) [90m0/1 entries 12450/12501 dependencies 2769/3900 modules 645 active[39m 
- [90m...t@2.30.1_react-dom@18.3._c14bab058538dd2bdf4c84b974da0987/node_modules/@ant-design/pro-layout/es/components/AppsLogoComponents/ind[39m
-[90mex.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (41%) [90m0/1 entries 12886/12953 dependencies 2868/3924 modules 609 active[39m 
- [90m...@2.30.1_react-dom@18.3.1_daa3525f50214847d6ef9392490b9ef2/node_modules/@ant-design/pro-utils/es/components/InlineErrorFormItem/sty[39m
-[90mle.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (43%) [90m0/1 entries 13162/13197 dependencies 3018/3974 modules 577 active[39m 
- [90m...-design+cssinjs@1.23.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@ant-design/cssinjs/es/linters/hashedAnimationLint[39m
-[90mer.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (43%) [90m0/1 entries 13414/13501 dependencies 3082/4021 modules 561 active[39m 
- [90m...es/.pnpm/@ant-design+cssinjs@1.23.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@ant-design/cssinjs/es/theme/calc/ind[39m
-[90mex.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (44%) [90m0/1 entries 13552/13646 dependencies 3139/4057 modules 549 active[39m 
- [90m../../node_modules/.pnpm/lodash@4.17.21/node_modules/lodash/_nativeKeysIn.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (45%) [90m0/1 entries 13885/13952 dependencies 3225/4107 modules 546 active[39m 
- [90m...../node_modules/.pnpm/rc-tree-select@5.27.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/rc-tree-select/es/LegacyConte[39m
-[90mxt.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (46%) [90m0/1 entries 14248/14320 dependencies 3291/4264 modules 549 active[39m 
- [90m....30.0_dayjs@1.11.13_moment@2.30.1_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/rc-picker/es/PickerInput/hooks/useShowN[39m
-[90mow.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (47%) [90m0/1 entries 14543/14602 dependencies 3377/4325 modules 547 active[39m 
- [90m...@2.30.0_moment@2.30.1_react-dom@18.3.1__6144b56a655b7e031324c930c5a4fa7d/node_modules/@ant-design/pro-form/es/components/Group/sty[39m
-[90mle.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (48%) [90m0/1 entries 14831/14858 dependencies 3480/4392 modules 582 active[39m 
- [90m../../node_modules/.pnpm/lodash@4.17.21/node_modules/lodash/_getNative.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (48%) [90m0/1 entries 14907/14938 dependencies 3533/4392 modules 533 active[39m 
- [90m../../node_modules/.pnpm/lodash@4.17.21/node_modules/lodash/_mapCacheHas.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (50%) [90m0/1 entries 15394/15472 dependencies 3711/4450 modules 455 active[39m 
- [90m.../.pnpm/@ant-design+plots@2.6.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@ant-design/plots/es/core/plots/funnel/ind[39m
-[90mex.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (51%) [90m0/1 entries 15902/16028 dependencies 3783/4685 modules 537 active[39m 
- [90m...@2.30.0_dayjs@1.11.13_moment@2.30.1_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/rc-picker/es/PickerInput/Selector/Inp[39m
-[90mut.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (52%) [90m0/1 entries 16062/16141 dependencies 3839/4772 modules 524 active[39m 
- [90mjavascript/esm|/Users/jiangdaofeng/Desktop/基础项目/card/node_modules/.pnpm/lodash-es@4.17.21/node_modules/lodash-es/_nativeKeys.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (52%) [90m0/1 entries 16173/16250 dependencies 3863/4816 modules 557 active[39m 
- [90m...npm/@ant-design+cssinjs@1.23.0_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/@ant-design/cssinjs/es/theme/calc/calculat[39m
-[90mor.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (54%) [90m0/1 entries 16433/16511 dependencies 4037/4846 modules 446 active[39m 
- [90m../../node_modules/.pnpm/@antv+g2@5.3.5/node_modules/@antv/g2/esm/api/props.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (55%) [90m0/1 entries 16698/16723 dependencies 4107/4889 modules 527 active[39m 
- [90m../../node_modules/.pnpm/@antv+g2@5.3.5/node_modules/@antv/g2/esm/coordinate/fisheye.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (56%) [90m0/1 entries 17092/17128 dependencies 4258/4918 modules 513 active[39m 
- [90mjavascript/esm|/Users/jiangdaofeng/Desktop/基础项目/card/node_modules/.pnpm/lodash-es@4.17.21/node_modules/lodash-es/_equalObjects.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (55%) [90m0/1 entries 17616/17692 dependencies 4379/5251 modules 478 active[39m 
- [90m../../node_modules/.pnpm/@antv+g-plugin-canvas-picker@2.1.26/node_modules/@antv/g-plugin-canvas-picker/dist/index.esm.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (56%) [90m0/1 entries 17840/17918 dependencies 4462/5313 modules 443 active[39m 
- [90m../../node_modules/.pnpm/@antv+g2@5.3.5/node_modules/@antv/g2/esm/utils/container.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (56%) [90m0/1 entries 18123/18182 dependencies 4636/5444 modules 483 active[39m 
- [90m../../node_modules/.pnpm/@antv+util@3.3.11/node_modules/@antv/util/esm/lodash/to-integer.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (58%) [90m0/1 entries 18391/18400 dependencies 4818/5494 modules 503 active[39m 
- [90mjavascript/esm|/Users/jiangdaofeng/Desktop/基础项目/card/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/plus.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (59%) [90m0/1 entries 18640/18692 dependencies 4982/5537 modules 453 active[39m 
- [90m../../node_modules/.pnpm/@antv+g2@5.3.5/node_modules/@antv/g2/esm/shape/label/position/topLeft.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (59%) [90m0/1 entries 18945/18976 dependencies 5091/5647 modules 486 active[39m 
- [90m../../node_modules/.pnpm/@antv+component@2.1.5/node_modules/@antv/component/esm/shapes/Ellipse.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (61%) [90m0/1 entries 19058/19086 dependencies 5279/5667 modules 374 active[39m 
- [90mjavascript/esm|/Users/jiangdaofeng/Desktop/基础项目/card/node_modules/.pnpm/d3-format@3.1.0/node_modules/d3-format/src/formatRounded.[39m
-[90mjs[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (61%) [90m0/1 entries 19243/19309 dependencies 5377/5715 modules 316 active[39m 
- [90mbabel-loader [34m›[39m[90m ../../node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/constant.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (63%) [90m0/1 entries 19424/19483 dependencies 5579/5789 modules 210 active[39m 
- [90m...ipt/esm|/Users/jiangdaofeng/Desktop/基础项目/card/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/[39m
-[90mcolors.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m building (63%) [90m0/1 entries 19756/19775 dependencies 5760/5894 modules 133 active[39m 
- [90m../../node_modules/.pnpm/lodash@4.17.21/node_modules/lodash/_baseToString.js[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m sealing (70%) [90mfinish module graph[39m 
- [90mInnerGraphPlugin[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m sealing (71%) [90mdependencies optimization[39m 
- [90mFlagDependencyUsagePlugin[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m sealing (71%)  
- [90mdependencies optimization[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m sealing (75%) [90mchunk optimization[39m 
- [90mRemoveEmptyChunksPlugin[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m sealing (78%)  
- [90mchunk modules optimization[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m sealing (87%)  
- [90mcode generation[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m sealing (88%)  
- [90mruntime requirements[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m sealing (92%) [90masset processing[39m 
- [90mCssMinimizerPlugin[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m sealing (92%) [90masset processing[39m 
- [90mRealContentHashPlugin[39m
-
-[2K[1A[2K[1A[2K[1A[2K[1A[2K[G
-[32m✔ Webpack[39m
-[90m  Compiled successfully in 9.30s[39m
-
-[36minfo[39m  - Memory Usage: 585.57 MB (RSS: 972.56 MB)
-[36minfo[39m  - [esbuildHelperChecker] Checking esbuild helpers from your dist files...
-[36minfo[39m  - [esbuildHelperChecker] No conflicts found.
-
-[32m●[39m [32mWebpack[39m [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m cache (99%)  
- [90mshutdown[39m
-
-
-[36minfo[39m  - File sizes after gzip:
-
-  419.52 kB  [2mdist/[22m[36m575.async.js[39m
-  295.32 kB  [2mdist/[22m[36m321.async.js[39m
-  176.44 kB  [2mdist/[22m[36m846.async.js[39m
-  165.5 kB   [2mdist/[22m[36mumi.js[39m
-  140.33 kB  [2mdist/[22m[36m538.async.js[39m
-  140.2 kB   [2mdist/[22m[36m790.async.js[39m
-  113.2 kB   [2mdist/[22m[36m686.async.js[39m
-  47.71 kB   [2mdist/[22m[36m255.async.js[39m
-  36.73 kB   [2mdist/[22m[36m496.async.js[39m
-  36.35 kB   [2mdist/[22m[36m132.async.js[39m
-  21.72 kB   [2mdist/[22m[36m670.async.js[39m
-  17.45 kB   [2mdist/[22m[36m479.async.js[39m
-  14.42 kB   [2mdist/[22m[36m47.async.js[39m
-  14.25 kB   [2mdist/[22m[36m536.async.js[39m
-  12.3 kB    [2mdist/[22m[36msrc__pages__system__files__index.async.js[39m
-  9.11 kB    [2mdist/[22m[36m510.async.js[39m
-  8.59 kB    [2mdist/[22m[36m476.async.js[39m
-  8.24 kB    [2mdist/[22m[36msrc__pages__wechat__payments__index.async.js[39m
-  6.7 kB     [2mdist/[22m[36mlayouts__index.async.js[39m
-  6.09 kB    [2mdist/[22m[36m321.chunk.css[39m
-  5.87 kB    [2mdist/[22m[36msrc__pages__wechat__users__index.async.js[39m
-  5.65 kB    [2mdist/[22m[36msrc__pages__wechat__accounts__index.async.js[39m
-  5.64 kB    [2mdist/[22m[36m347.async.js[39m
-  5.47 kB    [2mdist/[22m[36msrc__pages__dashboard__index.async.js[39m
-  5.43 kB    [2mdist/[22m[36msrc__pages__orders__index.async.js[39m
-  5.31 kB    [2mdist/[22m[36msrc__pages__system__users__index.async.js[39m
-  5.22 kB    [2mdist/[22m[36m544.async.js[39m
-  4.58 kB    [2mdist/[22m[36m69.async.js[39m
-  4.43 kB    [2mdist/[22m[36msrc__pages__system__config__index.async.js[39m
-  4.22 kB    [2mdist/[22m[36msrc__pages__profile__index.async.js[39m
-  4.12 kB    [2mdist/[22m[36msrc__pages__system__menus__index.async.js[39m
-  3.53 kB    [2mdist/[22m[36m976.async.js[39m
-  3.42 kB    [2mdist/[22m[36msrc__pages__system__roles__index.async.js[39m
-  3.39 kB    [2mdist/[22m[36mlayouts__index.chunk.css[39m
-  3.36 kB    [2mdist/[22m[36msrc__pages__login__index.async.js[39m
-  3.16 kB    [2mdist/[22m[36m932.async.js[39m
-  2.25 kB    [2mdist/[22m[36msrc__pages__system__files__index.chunk.css[39m
-  2.15 kB    [2mdist/[22m[36msrc__pages__login__first-time-change-password__index.async.js[39m
-  1.81 kB    [2mdist/[22m[36msrc__pages__login__index.chunk.css[39m
-  1.16 kB    [2mdist/[22m[36mumi.css[39m
-  643 B      [2mdist/[22m[36msrc__pages__profile__index.chunk.css[39m
-  394 B      [2mdist/[22m[36msrc__pages__login__first-time-change-password__index.chunk.css[39m
-
-[35mevent[39m - Build index.html
+info  - [你知道吗？] max g page 可以快速生成页面模板，详见 https://umijs.org/docs/guides/generator#页面生成器
+info  - Umi v4.4.11
+info  - Preparing...
+ℹ Compiling Webpack
+✔ Webpack: Compiled successfully in 11.03s
+info  - Memory Usage: 591.06 MB (RSS: 679.94 MB)
+
+info  - File sizes after gzip:
+
+  396.38 kB  dist/330.async.js
+  295.32 kB  dist/321.async.js
+  176.47 kB  dist/404.async.js
+  166.46 kB  dist/umi.js
+  140.34 kB  dist/538.async.js
+  140.21 kB  dist/790.async.js
+  113.2 kB   dist/686.async.js
+  47.71 kB   dist/255.async.js
+  36.73 kB   dist/496.async.js
+  36.35 kB   dist/132.async.js
+  26.7 kB    dist/994.async.js
+  21.72 kB   dist/670.async.js
+  17.45 kB   dist/479.async.js
+  14.42 kB   dist/47.async.js
+  14.25 kB   dist/536.async.js
+  12.41 kB   dist/src__pages__system__files__index.async.js
+  11.18 kB   dist/src__pages__products__index.async.js
+  9.12 kB    dist/510.async.js
+  8.59 kB    dist/476.async.js
+  6.77 kB    dist/src__pages__wechat__payments__index.async.js
+  6.7 kB     dist/layouts__index.async.js
+  6.49 kB    dist/src__pages__wechat__accounts__index.async.js
+  6.09 kB    dist/321.chunk.css
+  5.94 kB    dist/src__pages__wechat__users__index.async.js
+  5.47 kB    dist/src__pages__dashboard__index.async.js
+  5.31 kB    dist/src__pages__system__users__index.async.js
+  5.27 kB    dist/src__pages__orders__index.async.js
+  5.22 kB    dist/544.async.js
+  4.43 kB    dist/src__pages__system__config__index.async.js
+  4.22 kB    dist/src__pages__profile__index.async.js
+  4.12 kB    dist/src__pages__system__menus__index.async.js
+  4 kB       dist/581.async.js
+  3.53 kB    dist/976.async.js
+  3.48 kB    dist/src__pages__login__index.async.js
+  3.43 kB    dist/src__pages__system__roles__index.async.js
+  3.38 kB    dist/layouts__index.chunk.css
+  3.3 kB     dist/129.async.js
+  3.16 kB    dist/932.async.js
+  2.46 kB    dist/854.async.js
+  2.25 kB    dist/src__pages__system__files__index.chunk.css
+  2.15 kB    dist/src__pages__login__first-time-change-password__index.async.js
+  1.81 kB    dist/src__pages__login__index.chunk.css
+  1.16 kB    dist/umi.css
+  643 B      dist/src__pages__profile__index.chunk.css
+  394 B      dist/src__pages__login__first-time-change-password__index.chunk.css
+
+event - Build index.html

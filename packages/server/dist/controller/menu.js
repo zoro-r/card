@@ -18,11 +18,12 @@ exports.deleteMenuAPI = deleteMenuAPI;
 exports.batchDeleteMenusAPI = batchDeleteMenusAPI;
 const tool_1 = require("../utils/tool");
 const menu_1 = require("../service/menu");
+const platform_1 = require("../utils/platform");
 // 获取菜单列表
 function getMenuListAPI(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { page = 1, pageSize = 10, name, type, status, platformId = 'default' } = ctx.request.query;
+            const { page = 1, pageSize = 10, name, type, status, platformId = (0, platform_1.getDefaultPlatformId)() } = ctx.request.query;
             const result = yield (0, menu_1.getMenuList)({
                 page: parseInt(page),
                 pageSize: parseInt(pageSize),
@@ -42,7 +43,7 @@ function getMenuListAPI(ctx) {
 function getMenuTreeAPI(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { platformId = 'default' } = ctx.request.query;
+            const { platformId = (0, platform_1.getDefaultPlatformId)() } = ctx.request.query;
             const result = yield (0, menu_1.getMenuTree)(platformId);
             ctx.body = (0, tool_1.success)(result);
         }
@@ -56,7 +57,7 @@ function getMenuByIdAPI(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { uuid } = ctx.params;
-            const { platformId = 'default' } = ctx.request.query;
+            const { platformId = (0, platform_1.getDefaultPlatformId)() } = ctx.request.query;
             const menu = yield (0, menu_1.getMenuById)(uuid, platformId);
             if (!menu) {
                 ctx.body = (0, tool_1.fail)('菜单不存在');
@@ -74,7 +75,7 @@ function createMenuAPI(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const menuData = ctx.request.body;
-            const { name, platformId = 'default' } = menuData;
+            const { name, platformId = (0, platform_1.getDefaultPlatformId)() } = menuData;
             // 验证必填字段
             if (!name) {
                 ctx.body = (0, tool_1.fail)('菜单名称不能为空');
@@ -94,7 +95,7 @@ function updateMenuAPI(ctx) {
         try {
             const { uuid } = ctx.params;
             const menuData = ctx.request.body;
-            const { platformId = 'default' } = menuData;
+            const { platformId = (0, platform_1.getDefaultPlatformId)() } = menuData;
             // 防止将菜单设置为自己的子菜单
             if (menuData.parentId === uuid) {
                 ctx.body = (0, tool_1.fail)('不能将菜单设置为自己的子菜单');
@@ -117,7 +118,7 @@ function deleteMenuAPI(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { uuid } = ctx.params;
-            const { platformId = 'default' } = ctx.request.query;
+            const { platformId = (0, platform_1.getDefaultPlatformId)() } = ctx.request.query;
             const menu = yield (0, menu_1.deleteMenu)(uuid, platformId);
             if (!menu) {
                 ctx.body = (0, tool_1.fail)('菜单不存在');
@@ -135,7 +136,7 @@ function batchDeleteMenusAPI(ctx) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { uuids } = ctx.request.body;
-            const { platformId = 'default' } = ctx.request.query;
+            const { platformId = (0, platform_1.getDefaultPlatformId)() } = ctx.request.query;
             if (!uuids || !Array.isArray(uuids) || uuids.length === 0) {
                 ctx.body = (0, tool_1.fail)('请提供要删除的菜单ID列表');
                 return;

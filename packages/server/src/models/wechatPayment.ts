@@ -101,20 +101,17 @@ const WechatPaymentSchema = new Schema<IWechatPayment>({
     type: Schema.Types.ObjectId,
     ref: 'Order',
     required: true,
-    index: true,
     comment: '关联的订单ID'
   },
   orderNo: {
     type: String,
     required: true,
-    index: true,
     comment: '订单号（冗余存储，便于搜索和关联）'
   },
   outTradeNo: {
     type: String,
     required: true,
     unique: true,
-    index: true,
     comment: '商户订单号'
   },
   transactionId: {
@@ -306,6 +303,7 @@ const WechatPaymentSchema = new Schema<IWechatPayment>({
 
 // 创建复合索引
 WechatPaymentSchema.index({ orderId: 1 }); // 订单ID索引
+WechatPaymentSchema.index({ orderNo: 1 }); // 订单号索引
 WechatPaymentSchema.index({ openid: 1, appId: 1 });
 WechatPaymentSchema.index({ status: 1, createdAt: -1 });
 WechatPaymentSchema.index({ transactionId: 1 }, { sparse: true });

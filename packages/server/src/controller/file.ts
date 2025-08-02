@@ -76,8 +76,9 @@ export async function uploadFileAPI(ctx: Context, next: Next): Promise<void> {
       fileSize: result.fileSize,
       fileType: result.fileType,
       uploadDate: result.uploadDate,
-      fileUrl: (result as any).fileUrl,
-      thumbnailUrl: (result as any).thumbnailUrl
+      fileUrl: `/api/files/preview/${result.uuid}`,
+      previewUrl: `/api/files/preview/${result.uuid}`,
+      downloadUrl: `/api/files/download/${result.uuid}`
     }, '文件上传成功');
   } catch (error: any) {
     console.error('文件上传失败:', error);
@@ -209,11 +210,11 @@ export async function getFileListAPI(ctx: Context, next: Next): Promise<void> {
 export async function downloadFileAPI(ctx: Context, next: Next): Promise<void> {
   try {
     const { uuid } = ctx.params;
-    
+
     // 尝试获取用户信息（可能为空，用于私有文件权限检查）
     let uploadBy: string | undefined;
     let platformId: string | undefined;
-    
+
     // 如果请求包含认证信息，提取用户数据
     if (ctx.state.user) {
       uploadBy = ctx.state.user.uuid;
@@ -247,7 +248,7 @@ export async function downloadFileAPI(ctx: Context, next: Next): Promise<void> {
     ctx.status = 200;
   } catch (error: any) {
     console.error('文件下载失败:', error);
-    
+
     // 根据错误类型设置不同的状态码
     if (error.message.includes('需要认证') || error.message.includes('无权限')) {
       ctx.status = 403;
@@ -256,7 +257,7 @@ export async function downloadFileAPI(ctx: Context, next: Next): Promise<void> {
     } else {
       ctx.status = 500;
     }
-    
+
     ctx.body = fail(error.message || '文件下载失败');
   }
 }

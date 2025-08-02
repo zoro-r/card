@@ -166,7 +166,6 @@ const OrderSchema = new Schema<IOrder>({
   orderNo: {
     type: String,
     required: true,
-    unique: true,
     comment: '订单号'
   },
   orderType: {

@@ -35,11 +35,12 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserRole = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
+const platform_1 = require("../utils/platform");
 const UserRoleSchema = new mongoose_1.Schema({
     userId: { type: String, required: true, index: true },
     roleId: { type: String, required: true, index: true },
     status: { type: String, default: 'active' },
-    platformId: { type: String, index: true },
+    platformId: { type: String, required: true, index: true, default: platform_1.getDefaultPlatformId },
 }, { timestamps: true });
 UserRoleSchema.index({ userId: 1, roleId: 1 }, { unique: true });
 exports.UserRole = mongoose_1.default.model('UserRole', UserRoleSchema);
