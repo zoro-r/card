@@ -81,19 +81,6 @@ export interface WechatPaymentListResponse {
   };
 }
 
-export interface WechatPaymentStats {
-  total: number;
-  totalAmount: number;
-  totalAmountYuan: string;
-  statusStats: {
-    [key: string]: {
-      count: number;
-      amount: number;
-      amountYuan: string;
-    };
-  };
-}
-
 export interface RefundParams {
   outTradeNo: string;
   refundFee: number;
@@ -147,23 +134,5 @@ export async function refundWechatPayment(accountId: string, data: RefundParams)
   }>(`/api/wechat/accounts/${accountId}/payment/refund`, {
     method: 'POST',
     data,
-  });
-}
-
-/**
- * 获取支付统计
- */
-export async function getWechatPaymentStats(
-  accountId: string, 
-  startDate?: string, 
-  endDate?: string
-) {
-  const params: any = {};
-  if (startDate) params.startDate = startDate;
-  if (endDate) params.endDate = endDate;
-  
-  return request<WechatPaymentStats>(`/api/admin/wechat/accounts/${accountId}/payments/stats`, {
-    method: 'GET',
-    params,
   });
 }

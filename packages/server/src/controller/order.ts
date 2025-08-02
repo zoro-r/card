@@ -402,30 +402,6 @@ export class OrderController {
   }
 
   /**
-   * 获取订单统计（管理后台）
-   */
-  static async getOrderStats(ctx: Context) {
-    try {
-      const { startDate, endDate } = ctx.query as {
-        startDate?: string;
-        endDate?: string;
-      };
-
-      const start = startDate ? new Date(startDate) : undefined;
-      const end = endDate ? new Date(endDate) : undefined;
-
-      // 获取订单统计（移除platformId过滤）
-      const orderService = new OrderService();
-      const stats = await orderService.getOrderStats(start, end);
-
-      ctx.body = success(stats, '获取订单统计成功');
-    } catch (error) {
-      console.error('获取订单统计失败:', error);
-      ctx.body = fail('获取订单统计失败');
-    }
-  }
-
-  /**
    * 更新订单备注（管理后台）
    */
   static async updateOrderRemark(ctx: Context) {

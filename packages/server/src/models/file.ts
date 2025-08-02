@@ -1,5 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import { v4 as uuidV4 } from 'uuid';
+import { getDefaultPlatformId } from '../utils/platform';
 
 /**
  * 文件模型接口定义
@@ -89,7 +90,7 @@ const fileSchema = new Schema<IFile>(
       type: String,
       required: true,
       index: true,
-      default: 'default'
+      default: getDefaultPlatformId
     },
     isPublic: {
       type: Boolean,

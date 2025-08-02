@@ -246,7 +246,7 @@ function MenuManagement() {
     {
       title: '操作',
       valueType: 'option',
-      width: 120,
+      width: 150,
       fixed: 'right',
       render: (_: any, record: any) => (
         <Space>

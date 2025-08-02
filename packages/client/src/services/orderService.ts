@@ -125,19 +125,6 @@ export interface OrderListResponse {
   };
 }
 
-export interface OrderStats {
-  total: number;
-  totalAmount: number;
-  totalAmountYuan: string;
-  statusStats: {
-    [key: string]: {
-      count: number;
-      amount: number;
-      amountYuan: string;
-    };
-  };
-}
-
 export interface ShipOrderParams {
   company: string;
   trackingNumber: string;
@@ -195,18 +182,5 @@ export async function updateOrderRemark(orderNo: string, sellerMessage: string) 
   }>(`/api/admin/orders/${orderNo}/remark`, {
     method: 'PUT',
     data: { sellerMessage },
-  });
-}
-
-/**
- * 获取订单统计
- */
-export async function getOrderStats(startDate?: string, endDate?: string) {
-  return request<OrderStats>(`/api/admin/orders/stats`, {
-    method: 'GET',
-    params: {
-      startDate,
-      endDate,
-    },
   });
 }

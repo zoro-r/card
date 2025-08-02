@@ -21,7 +21,6 @@ wechatRouter.put('/admin/wechat/accounts/:accountId/users/:userId/status', Wecha
 
 // 管理后台支付管理路由
 wechatRouter.get('/admin/wechat/accounts/:accountId/payments', WechatController.getPaymentList);
-wechatRouter.get('/admin/wechat/accounts/:accountId/payments/stats', WechatController.getPaymentStats);
 wechatRouter.get('/admin/wechat/accounts/:accountId/payments/:paymentId', WechatController.getPaymentDetail);
 
 export default function(router: Router) {

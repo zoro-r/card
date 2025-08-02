@@ -18,7 +18,6 @@ orderRouter.get('/orders/:orderNo/payment-status', OrderController.queryPaymentS
 orderRouter.get('/admin/orders', OrderController.getOrderList);
 orderRouter.get('/admin/orders/:orderNo', OrderController.getAdminOrderDetail);
 orderRouter.post('/admin/orders/:orderNo/ship', OrderController.shipOrder);
-orderRouter.get('/admin/orders/stats', OrderController.getOrderStats);
 orderRouter.put('/admin/orders/:orderNo/remark', OrderController.updateOrderRemark);
 
 export default function(router: Router) {

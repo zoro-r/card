@@ -1,16 +1,17 @@
 import { connectDB } from '../config/database';
 import { AdminUser } from '../models/user';
 import { hashPassword } from '../service/user';
+import { getDefaultPlatformId } from '../utils/platform';
 
 async function resetAdmin() {
   try {
     await connectDB();
     
-    const platformId = 'default';
+    const platformId = getDefaultPlatformId();
     const loginName = process.argv[2] || 'super'; // 从命令行参数获取用户名，默认为super
     const newPassword = process.argv[3] || 'super123'; // 从命令行参数获取新密码，默认为super123
     
-    console.log(`正在重置用户"${loginName}"的密码...`);
+    console.log(`正在重置用户"${loginName}"的密码... (平台ID: ${platformId})`);
     
     // 查找用户
     const user = await AdminUser.findOne({ loginName, platformId });

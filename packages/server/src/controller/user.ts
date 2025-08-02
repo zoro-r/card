@@ -21,6 +21,7 @@ import {
   updateUserProfile,
   firstTimeChangePassword
 } from '@/service/user';
+import { getDefaultPlatformId } from '@/utils/platform';
 
 // 用户登录
 export async function userLogin(ctx: Context) {
@@ -89,7 +90,7 @@ export async function getUserListAPI(ctx: Context) {
       email,
       phone,
       status, 
-      platformId = 'default' 
+      platformId = getDefaultPlatformId() 
     } = ctx.request.query as any;
 
     const result = await getUserList({
@@ -113,7 +114,7 @@ export async function getUserListAPI(ctx: Context) {
 export async function createUserAPI(ctx: Context) {
   try {
     const userData = ctx.request.body as any;
-    const { loginName, email, phone, password, platformId = 'default' } = userData;
+    const { loginName, email, phone, password, platformId = getDefaultPlatformId() } = userData;
 
     // 验证必填字段
     if (!loginName || !email || !password) {
@@ -164,7 +165,7 @@ export async function updateUserAPI(ctx: Context) {
   try {
     const { uuid } = ctx.params;
     const userData = ctx.request.body as any;
-    const { loginName, email, phone, password, platformId = 'default' } = userData;
+    const { loginName, email, phone, password, platformId = getDefaultPlatformId() } = userData;
 
     // 检查登录名是否已存在（排除当前用户）
     if (loginName) {
@@ -215,7 +216,7 @@ export async function updateUserAPI(ctx: Context) {
 export async function deleteUserAPI(ctx: Context) {
   try {
     const { uuid } = ctx.params;
-    const { platformId = 'default' } = ctx.request.query as any;
+    const { platformId = getDefaultPlatformId() } = ctx.request.query as any;
 
     const user = await deleteUser(uuid, platformId);
     
@@ -234,7 +235,7 @@ export async function deleteUserAPI(ctx: Context) {
 export async function batchDeleteUsersAPI(ctx: Context) {
   try {
     const { uuids } = ctx.request.body as any;
-    const { platformId = 'default' } = ctx.request.query as any;
+    const { platformId = getDefaultPlatformId() } = ctx.request.query as any;
 
     if (!uuids || !Array.isArray(uuids) || uuids.length === 0) {
       ctx.body = fail('请提供要删除的用户ID列表');
@@ -254,7 +255,7 @@ export async function updateUserRolesAPI(ctx: Context) {
   try {
     const { uuid } = ctx.params;
     const { roleIds } = ctx.request.body as any;
-    const { platformId = 'default' } = ctx.request.query as any;
+    const { platformId = getDefaultPlatformId() } = ctx.request.query as any;
 
     if (!Array.isArray(roleIds)) {
       ctx.body = fail('角色ID列表格式错误');
@@ -279,7 +280,7 @@ export async function resetUserPasswordAPI(ctx: Context) {
   try {
     const { uuid } = ctx.params;
     const { newPassword } = ctx.request.body as any;
-    const { platformId = 'default' } = ctx.request.query as any;
+    const { platformId = getDefaultPlatformId() } = ctx.request.query as any;
 
     if (!newPassword) {
       ctx.body = fail('新密码不能为空');

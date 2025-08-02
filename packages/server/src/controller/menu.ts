@@ -9,6 +9,7 @@ import {
   deleteMenu,
   batchDeleteMenus
 } from '@/service/menu';
+import { getDefaultPlatformId } from '@/utils/platform';
 
 // 获取菜单列表
 export async function getMenuListAPI(ctx: Context) {
@@ -19,7 +20,7 @@ export async function getMenuListAPI(ctx: Context) {
       name, 
       type, 
       status, 
-      platformId = 'default' 
+      platformId = getDefaultPlatformId() 
     } = ctx.request.query as any;
 
     const result = await getMenuList({
@@ -40,7 +41,7 @@ export async function getMenuListAPI(ctx: Context) {
 // 获取菜单树结构
 export async function getMenuTreeAPI(ctx: Context) {
   try {
-    const { platformId = 'default' } = ctx.request.query as any;
+    const { platformId = getDefaultPlatformId() } = ctx.request.query as any;
     
     const result = await getMenuTree(platformId);
     
@@ -54,7 +55,7 @@ export async function getMenuTreeAPI(ctx: Context) {
 export async function getMenuByIdAPI(ctx: Context) {
   try {
     const { uuid } = ctx.params;
-    const { platformId = 'default' } = ctx.request.query as any;
+    const { platformId = getDefaultPlatformId() } = ctx.request.query as any;
 
     const menu = await getMenuById(uuid, platformId);
     
@@ -73,7 +74,7 @@ export async function getMenuByIdAPI(ctx: Context) {
 export async function createMenuAPI(ctx: Context) {
   try {
     const menuData = ctx.request.body as any;
-    const { name, platformId = 'default' } = menuData;
+    const { name, platformId = getDefaultPlatformId() } = menuData;
 
     // 验证必填字段
     if (!name) {
@@ -97,7 +98,7 @@ export async function updateMenuAPI(ctx: Context) {
   try {
     const { uuid } = ctx.params;
     const menuData = ctx.request.body as any;
-    const { platformId = 'default' } = menuData;
+    const { platformId = getDefaultPlatformId() } = menuData;
 
     // 防止将菜单设置为自己的子菜单
     if (menuData.parentId === uuid) {
@@ -122,7 +123,7 @@ export async function updateMenuAPI(ctx: Context) {
 export async function deleteMenuAPI(ctx: Context) {
   try {
     const { uuid } = ctx.params;
-    const { platformId = 'default' } = ctx.request.query as any;
+    const { platformId = getDefaultPlatformId() } = ctx.request.query as any;
 
     const menu = await deleteMenu(uuid, platformId);
     
@@ -141,7 +142,7 @@ export async function deleteMenuAPI(ctx: Context) {
 export async function batchDeleteMenusAPI(ctx: Context) {
   try {
     const { uuids } = ctx.request.body as any;
-    const { platformId = 'default' } = ctx.request.query as any;
+    const { platformId = getDefaultPlatformId() } = ctx.request.query as any;
 
     if (!uuids || !Array.isArray(uuids) || uuids.length === 0) {
       ctx.body = fail('请提供要删除的菜单ID列表');

@@ -14,9 +14,6 @@ import {
   Drawer,
   Descriptions,
   Typography,
-  Statistic,
-  Row,
-  Col,
   InputNumber,
   Alert,
   Select,
@@ -24,8 +21,6 @@ import {
 import {
   EyeOutlined,
   ReloadOutlined,
-  DollarOutlined,
-  CreditCardOutlined,
   SyncOutlined,
   RollbackOutlined,
   ArrowLeftOutlined,
@@ -37,9 +32,7 @@ import {
   getWechatPaymentDetail,
   queryWechatPaymentStatus,
   refundWechatPayment,
-  getWechatPaymentStats,
   type WechatPayment,
-  type WechatPaymentStats,
   WechatPaymentStatus,
   WechatPaymentType,
   type RefundParams,
@@ -55,8 +48,6 @@ const WechatPaymentList: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [statsLoading, setStatsLoading] = useState(false);
-  const [stats, setStats] = useState<WechatPaymentStats | null>(null);
   const [detailDrawerVisible, setDetailDrawerVisible] = useState(false);
   const [refundModalVisible, setRefundModalVisible] = useState(false);
   const [currentPayment, setCurrentPayment] = useState<WechatPayment | null>(null);
@@ -100,17 +91,12 @@ const WechatPaymentList: React.FC = () => {
     fetchWechatAccounts();
   }, []);
 
-  // 当选中的微信账号改变时，触发表格重新加载和统计数据刷新
+  // 当选中的微信账号改变时，触发表格重新加载
   useEffect(() => {
     if (selectedWechatAccount && actionRef.current) {
       actionRef.current.reload();
-      fetchStats();
     }
   }, [selectedWechatAccount]);
-
-  useEffect(() => {
-    fetchStats();
-  }, []);
 
   // 处理从订单页面传递的URL参数
   useEffect(() => {
@@ -126,18 +112,6 @@ const WechatPaymentList: React.FC = () => {
       formRef.current.submit();
     }
   }, [searchParams]);
-
-  const fetchStats = async (startDate?: string, endDate?: string, accountId?: string) => {
-    setStatsLoading(true);
-    try {
-      const response = await getWechatPaymentStats(accountId || selectedWechatAccount, startDate, endDate);
-      setStats(response);
-    } catch (error) {
-      console.error('获取支付统计失败:', error);
-    } finally {
-      setStatsLoading(false);
-    }
-  };
 
   const handleViewDetail = async (payment: WechatPayment) => {
     try {
@@ -632,53 +606,6 @@ const WechatPaymentList: React.FC = () => {
         </div>
       </Card>
 
-      {/* 统计卡片 */}
-      {stats && (
-        <Row gutter={16} style={{ marginBottom: 16 }}>
-          <Col span={6}>
-            <Card>
-              <Statistic
-                title="总支付笔数"
-                value={stats.total}
-                prefix={<CreditCardOutlined />}
-                loading={statsLoading}
-              />
-            </Card>
-          </Col>
-          <Col span={6}>
-            <Card>
-              <Statistic
-                title="总支付金额"
-                value={stats.totalAmountYuan}
-                prefix={<DollarOutlined />}
-                precision={2}
-                loading={statsLoading}
-              />
-            </Card>
-          </Col>
-          <Col span={6}>
-            <Card>
-              <Statistic
-                title="成功支付"
-                value={stats.statusStats[WechatPaymentStatus.PAID]?.count || 0}
-                valueStyle={{ color: '#3f8600' }}
-                loading={statsLoading}
-              />
-            </Card>
-          </Col>
-          <Col span={6}>
-            <Card>
-              <Statistic
-                title="待支付"
-                value={stats.statusStats[WechatPaymentStatus.PENDING]?.count || 0}
-                valueStyle={{ color: '#faad14' }}
-                loading={statsLoading}
-              />
-            </Card>
-          </Col>
-        </Row>
-      )}
-
       <ProTable<WechatPayment>
         actionRef={actionRef}
         formRef={formRef}
@@ -693,11 +620,6 @@ const WechatPaymentList: React.FC = () => {
           }
 
           try {
-            // 更新统计数据（当日期范围改变时）
-            if (params.startDate || params.endDate) {
-              fetchStats(params.startDate, params.endDate, selectedWechatAccount);
-            }
-
             const response = await getWechatPaymentList({
               accountId: selectedWechatAccount, // 传递选中的微信账号ID
               page: params.current || 1,

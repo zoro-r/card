@@ -15,9 +15,6 @@ import {
   Drawer,
   Descriptions,
   Typography,
-  Statistic,
-  Row,
-  Col,
   Image,
   Steps,
   Timeline,
@@ -27,9 +24,7 @@ import {
   EyeOutlined,
   EditOutlined,
   ReloadOutlined,
-  ShoppingCartOutlined,
   TruckOutlined,
-  DollarOutlined,
   CreditCardOutlined,
   ArrowLeftOutlined,
 } from '@ant-design/icons';
@@ -39,9 +34,7 @@ import {
   getOrderDetail,
   shipOrder,
   updateOrderRemark,
-  getOrderStats,
   type Order,
-  type OrderStats,
   OrderStatus,
   PaymentMethod,
   type ShipOrderParams,
@@ -57,8 +50,6 @@ const OrderList: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
-  const [statsLoading, setStatsLoading] = useState(false);
-  const [stats, setStats] = useState<OrderStats | null>(null);
   const [detailDrawerVisible, setDetailDrawerVisible] = useState(false);
   const [shipModalVisible, setShipModalVisible] = useState(false);
   const [remarkModalVisible, setRemarkModalVisible] = useState(false);
@@ -66,24 +57,6 @@ const OrderList: React.FC = () => {
   
   const [shipForm] = Form.useForm();
   const [remarkForm] = Form.useForm();
-
-  const fetchStats = async (startDate?: string, endDate?: string) => {
-    setStatsLoading(true);
-    try {
-      const response = await getOrderStats(startDate, endDate);
-      
-      // 直接使用response，request工具已经提取了data
-      setStats(response);
-    } catch (error) {
-      console.error('获取订单统计失败:', error);
-    } finally {
-      setStatsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchStats();
-  }, []);
 
   // 处理URL参数中的搜索关键字
   useEffect(() => {
@@ -435,64 +408,12 @@ const OrderList: React.FC = () => {
 
   return (
     <div>
-      {/* 统计卡片 */}
-      {stats && (
-        <Row gutter={16} style={{ marginBottom: 16 }}>
-          <Col span={6}>
-            <Card>
-              <Statistic
-                title="总订单数"
-                value={stats.total}
-                prefix={<ShoppingCartOutlined />}
-                loading={statsLoading}
-              />
-            </Card>
-          </Col>
-          <Col span={6}>
-            <Card>
-              <Statistic
-                title="总金额"
-                value={stats.totalAmountYuan}
-                prefix={<DollarOutlined />}
-                precision={2}
-                loading={statsLoading}
-              />
-            </Card>
-          </Col>
-          <Col span={6}>
-            <Card>
-              <Statistic
-                title="待支付"
-                value={stats.statusStats[OrderStatus.PENDING]?.count || 0}
-                valueStyle={{ color: '#faad14' }}
-                loading={statsLoading}
-              />
-            </Card>
-          </Col>
-          <Col span={6}>
-            <Card>
-              <Statistic
-                title="待发货"
-                value={stats.statusStats[OrderStatus.PAID]?.count || 0}
-                valueStyle={{ color: '#1890ff' }}
-                loading={statsLoading}
-              />
-            </Card>
-          </Col>
-        </Row>
-      )}
-
       <ProTable<Order>
         actionRef={actionRef}
         formRef={formRef}
         columns={columns}
         request={async (params) => {
           try {
-            // 更新统计数据（当日期范围改变时）
-            if (params.startDate || params.endDate) {
-              fetchStats(params.startDate, params.endDate);
-            }
-
             const response = await getOrderList({
               page: params.current || 1,
               limit: params.pageSize || 20,

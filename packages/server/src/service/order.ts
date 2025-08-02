@@ -463,43 +463,4 @@ export class OrderService {
       throw error;
     }
   }
-
-  /**
-   * 获取订单统计
-   * @param startDate 开始日期
-   * @param endDate 结束日期
-   * @returns 统计数据
-   */
-  async getOrderStats(
-    startDate?: Date,
-    endDate?: Date
-  ): Promise<any> {
-    try {
-      const stats = await Order.getOrderStats(startDate, endDate);
-
-      // 格式化统计数据
-      const result: any = {
-        total: 0,
-        totalAmount: 0,
-        statusStats: {}
-      };
-
-      stats.forEach(stat => {
-        result.total += stat.count;
-        result.totalAmount += stat.totalAmount;
-        result.statusStats[stat._id] = {
-          count: stat.count,
-          amount: stat.totalAmount,
-          amountYuan: (stat.totalAmount / 100).toFixed(2)
-        };
-      });
-
-      result.totalAmountYuan = (result.totalAmount / 100).toFixed(2);
-
-      return result;
-    } catch (error) {
-      console.error('获取订单统计失败:', error);
-      throw new Error('获取订单统计失败');
-    }
-  }
 }

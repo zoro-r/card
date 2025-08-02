@@ -5,14 +5,15 @@ import { Menu } from '../models/menu';
 import { UserRole } from '../models/userRole';
 import { RoleMenu } from '../models/roleMenu';
 import { hashPassword } from '../service/user';
+import { getDefaultPlatformId } from '../utils/platform';
 
 async function initData() {
   try {
     await connectDB();
     
-    const platformId = 'default';
+    const platformId = getDefaultPlatformId();
     
-    console.log('开始初始化数据...');
+    console.log(`开始初始化数据... (平台ID: ${platformId})`);
     
     // 1. 创建角色（不包含permissions字段）
     const roles = [

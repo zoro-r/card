@@ -11,6 +11,7 @@ import {
   updateRoleMenus,
   getRoleMenus
 } from '@/service/role';
+import { getDefaultPlatformId } from '@/utils/platform';
 
 // 获取角色列表
 export async function getRoleListAPI(ctx: Context) {
@@ -21,7 +22,7 @@ export async function getRoleListAPI(ctx: Context) {
       name, 
       code, 
       status, 
-      platformId = 'default' 
+      platformId = getDefaultPlatformId() 
     } = ctx.request.query as any;
 
     const result = await getRoleList({
@@ -43,7 +44,7 @@ export async function getRoleListAPI(ctx: Context) {
 export async function getRoleByIdAPI(ctx: Context) {
   try {
     const { uuid } = ctx.params;
-    const { platformId = 'default' } = ctx.request.query as any;
+    const { platformId = getDefaultPlatformId() } = ctx.request.query as any;
 
     const role = await getRoleById(uuid, platformId);
     
@@ -62,7 +63,7 @@ export async function getRoleByIdAPI(ctx: Context) {
 export async function createRoleAPI(ctx: Context) {
   try {
     const roleData = ctx.request.body as any;
-    const { name, code, menuIds, platformId = 'default' } = roleData;
+    const { name, code, menuIds, platformId = getDefaultPlatformId() } = roleData;
 
     // 验证必填字段
     if (!name || !code) {
@@ -102,7 +103,7 @@ export async function updateRoleAPI(ctx: Context) {
   try {
     const { uuid } = ctx.params;
     const roleData = ctx.request.body as any;
-    const { code, menuIds, platformId = 'default' } = roleData;
+    const { code, menuIds, platformId = getDefaultPlatformId() } = roleData;
 
     // 检查角色代码是否已存在（排除当前角色）
     if (code) {
@@ -141,7 +142,7 @@ export async function updateRoleAPI(ctx: Context) {
 export async function deleteRoleAPI(ctx: Context) {
   try {
     const { uuid } = ctx.params;
-    const { platformId = 'default' } = ctx.request.query as any;
+    const { platformId = getDefaultPlatformId() } = ctx.request.query as any;
 
     const role = await deleteRole(uuid, platformId);
     
@@ -160,7 +161,7 @@ export async function deleteRoleAPI(ctx: Context) {
 export async function batchDeleteRolesAPI(ctx: Context) {
   try {
     const { uuids } = ctx.request.body as any;
-    const { platformId = 'default' } = ctx.request.query as any;
+    const { platformId = getDefaultPlatformId() } = ctx.request.query as any;
 
     if (!uuids || !Array.isArray(uuids) || uuids.length === 0) {
       ctx.body = fail('请提供要删除的角色ID列表');
@@ -179,7 +180,7 @@ export async function batchDeleteRolesAPI(ctx: Context) {
 export async function getRoleMenusAPI(ctx: Context) {
   try {
     const { uuid } = ctx.params;
-    const { platformId = 'default' } = ctx.request.query as any;
+    const { platformId = getDefaultPlatformId() } = ctx.request.query as any;
 
     const menuIds = await getRoleMenus(uuid, platformId);
     
@@ -194,7 +195,7 @@ export async function updateRoleMenusAPI(ctx: Context) {
   try {
     const { uuid } = ctx.params;
     const { menuIds } = ctx.request.body as any;
-    const { platformId = 'default' } = ctx.request.query as any;
+    const { platformId = getDefaultPlatformId() } = ctx.request.query as any;
 
     if (!Array.isArray(menuIds)) {
       ctx.body = fail('菜单ID列表格式错误');
