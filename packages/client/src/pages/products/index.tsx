@@ -1,37 +1,36 @@
 import React, { useState, useRef } from 'react';
-import { PageContainer } from '@ant-design/pro-components';
-import { 
-  ProTable, 
-  ProColumns, 
+import {
+  ProTable,
+  ProColumns,
   ActionType
 } from '@ant-design/pro-components';
-import { 
-  Button, 
-  Space, 
-  Tag, 
-  Image, 
-  Popconfirm, 
-  message, 
+import {
+  Button,
+  Space,
+  Tag,
+  Image,
+  Popconfirm,
+  message,
   Modal,
   Switch,
   Tooltip
 } from 'antd';
-import { 
-  PlusOutlined, 
-  EditOutlined, 
+import {
+  PlusOutlined,
+  EditOutlined,
   DeleteOutlined,
   EyeOutlined,
   StarOutlined,
   FireOutlined
 } from '@ant-design/icons';
-import { 
-  getProductList, 
-  deleteProduct, 
+import {
+  getProductList,
+  deleteProduct,
   batchDeleteProducts,
   batchUpdateStatus,
   updateProduct,
-  Product, 
-  ProductStatus, 
+  Product,
+  ProductStatus,
   CourseType,
   CourseDifficulty,
   ProductQueryParams
@@ -368,17 +367,7 @@ const ProductManagement: React.FC = () => {
   ];
 
   return (
-    <PageContainer
-      header={{
-        title: '课程管理',
-        breadcrumb: {
-          items: [
-            { title: '课程管理' },
-            { title: '课程列表' },
-          ],
-        },
-      }}
-    >
+    <>
       <ProTable<Product>
         columns={columns}
         actionRef={actionRef}
@@ -450,7 +439,7 @@ const ProductManagement: React.FC = () => {
           showQuickJumper: true,
         }}
       />
-      
+
       <ProductFormModal
         visible={modalVisible}
         onCancel={() => setModalVisible(false)}
@@ -458,7 +447,7 @@ const ProductManagement: React.FC = () => {
         productId={editingProductId}
         readonly={modalMode === 'view'}
       />
-    </PageContainer>
+    </>
   );
 };
 
