@@ -7,6 +7,7 @@ import wechatRouter from './wechat';
 import orderRouter from './order';
 import wechatAccountRouter from './wechatAccount';
 import productRouter from './product';
+import companyRouter from './company';
 import { configRouter, publicRouter } from './config';
 
 export function initRouter(app: any) {
@@ -21,7 +22,9 @@ export function initRouter(app: any) {
   orderRouter(router);
   wechatAccountRouter(router);
   productRouter(router);
-
+  
+  // 注册企业管理路由
+  companyRouter(router);
   // 注册配置路由
   app.use(configRouter.routes());
   app.use(configRouter.allowedMethods());
